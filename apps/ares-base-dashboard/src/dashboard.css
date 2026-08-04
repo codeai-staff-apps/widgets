@@ -1,0 +1,72 @@
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  font-family: var(--font-family-main);
+}
+
+.page section {
+  margin-bottom: 24px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.countdown,
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.countdown {
+  display: flex;
+  gap: 24px;
+}
+
+.countdown li {
+  display: flex;
+  flex-direction: column;
+}
+
+.habitats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.habitats legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font: inherit;
+}
+
+/*
+ * The design system draws the checkbox tick with a Font Awesome glyph. The
+ * runtime ships no Font Awesome face and the CSP forbids fetching one, so it
+ * renders as a missing-character box. Substitute a plain check; the real fix
+ * belongs in packages/runtime.
+ */
+.page .checklist input[type='checkbox']:checked + i::before {
+  content: '✓';
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
