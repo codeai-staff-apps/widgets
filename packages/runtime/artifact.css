@@ -1,0 +1,31 @@
+/*
+ * Runtime stylesheet for the CLAUDE-ARTIFACT bundle target only.
+ *
+ * Artifacts enforce a CSP that blocks every external host and the bundle
+ * must be a single self-contained file, so this variant ships the design
+ * tokens WITHOUT the webfont set (3MB of woff2 would balloon the file) and
+ * WITHOUT the dsco.code.org Font Awesome import (blocked by the artifact
+ * CSP). Text falls back through the token stacks to system fonts; DS icon
+ * glyphs may not render — prefer artifact-publishing apps that don't rely
+ * on them.
+ */
+@import './tokens/fontVariables.css';
+@import './tokens/shapeAndSpacingVariables.css';
+@import './tokens/primitiveColors.css';
+@import './tokens/colors.css';
+@import './tokens/brandOverrides.css';
+
+body {
+  font-family: var(--font-family-main);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
