@@ -21,3 +21,21 @@
 @import './tokens/primitiveColors.css';
 @import './tokens/colors.css';
 @import './tokens/brandOverrides.css'; /* umbrella: pulls in all brand files */
+
+/* Baseline the document: bare HTML outside DS/Typography components should
+ * still get the brand font, and MUI's default transitions should respect
+ * reduced-motion without every app carrying its own guard. */
+body {
+  font-family: var(--font-family-main);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
