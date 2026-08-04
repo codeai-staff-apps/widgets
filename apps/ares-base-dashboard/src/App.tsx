@@ -7,6 +7,7 @@ import {useEffect, useRef, useState} from 'react';
 
 import {CHECKLIST, HABITATS, nextLaunchDate, remainingUntil} from './mission';
 import type {Remaining} from './mission';
+import {visuallyHidden} from './shared';
 import './dashboard.css';
 
 const PLACEHOLDER = '--';
@@ -87,7 +88,7 @@ export default function App() {
               </li>
             ))}
           </ul>
-          <p className="srOnly">
+          <p style={visuallyHidden}>
             {remaining
               ? `Launch in ${remaining.days} days, ${remaining.hours} hours.`
               : 'Launch time not yet calculated.'}

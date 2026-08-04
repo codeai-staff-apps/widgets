@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import {useState} from 'react';
 
 import {CRITERIA, INSTRUCTIONS, LEVELS, MAX_SCORE} from './rubricData';
-import useLiveAnnouncer from './useLiveAnnouncer';
+import {useAnnounce, visuallyHidden} from './shared';
 import './rubric.css';
 
 type Selections = (number | null)[];
@@ -20,7 +20,7 @@ export default function App() {
   const [selections, setSelections] = useState<Selections>(() =>
     CRITERIA.map(() => null),
   );
-  const {message, announce} = useLiveAnnouncer();
+  const announce = useAnnounce();
 
   const total = selections.reduce<number>((sum, points) => sum + (points ?? 0), 0);
   const answered = selections.filter(points => points !== null).length;
@@ -53,7 +53,7 @@ export default function App() {
 
       <TableContainer>
         <Table>
-          <caption className="srOnly">
+          <caption style={visuallyHidden}>
             Capstone Project Rubric. Five criteria by four evidence levels;
             select one evidence level per criterion.
           </caption>
@@ -111,10 +111,6 @@ export default function App() {
             : `${answered} of ${CRITERIA.length} criteria scored`}
         </Typography>
         <Button type="secondary" color="black" text="Reset" onClick={reset} />
-      </div>
-
-      <div className="srOnly" role="status" aria-live="polite">
-        {message}
       </div>
     </main>
   );
