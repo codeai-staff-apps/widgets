@@ -1,7 +1,7 @@
 import Alert from '@code-dot-org/component-library/alert';
+import Button from '@code-dot-org/component-library/button';
 import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import BarCard from './BarCard';
@@ -80,9 +80,7 @@ export default function App() {
           />
 
           <div>
-            <Button variant="contained" onClick={() => machine.goTo('choices')}>
-              {intro.startButtonLabel}
-            </Button>
+            <Button text={intro.startButtonLabel} onClick={() => machine.goTo('choices')} />
           </div>
           <FooterNote />
         </Stack>
@@ -139,9 +137,12 @@ export default function App() {
           />
 
           <div>
-            <Button variant="outlined" onClick={() => machine.goTo('choices')}>
-              {summary.restartButtonLabel}
-            </Button>
+            <Button
+              text={summary.restartButtonLabel}
+              type="secondary"
+              color="black"
+              onClick={() => machine.goTo('choices')}
+            />
           </div>
           <FooterNote />
         </Stack>

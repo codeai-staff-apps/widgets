@@ -1,5 +1,7 @@
 import Alert from '@code-dot-org/component-library/alert';
+import DsButton from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
+// MUI Button only for the choice list: see the comment on those buttons below.
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -33,7 +35,7 @@ export default function ChoicesScreen({onNext}: {onNext: () => void}) {
   const [picked, setPicked] = useState<Choice | null>(null);
   const [showReaction, setShowReaction] = useState(false);
   const [showNext, setShowNext] = useState(false);
-  const nextButton = useRef<HTMLButtonElement>(null);
+  const nextButton = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
   const timers = useRef<number[]>([]);
 
   useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
@@ -75,6 +77,9 @@ export default function ChoicesScreen({onNext}: {onNext: () => void}) {
       {choices.map(choice => {
         const isPicked = picked?.key === choice.key;
         return (
+          // Stays MUI: the design system's Button takes a `text` string, so it
+          // cannot host the letter/prose row, and it has no full-width or
+          // text-align API for a block-shaped answer option.
           <Button
             key={choice.key}
             fullWidth
@@ -130,9 +135,11 @@ export default function ChoicesScreen({onNext}: {onNext: () => void}) {
 
       {showNext && (
         <div>
-          <Button ref={nextButton} variant="contained" onClick={onNext}>
-            {choicesScreen.nextButtonLabel}
-          </Button>
+          <DsButton
+            ref={nextButton}
+            text={choicesScreen.nextButtonLabel}
+            onClick={onNext}
+          />
         </div>
       )}
     </Stack>
