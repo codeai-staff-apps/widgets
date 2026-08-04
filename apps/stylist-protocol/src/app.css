@@ -1,0 +1,228 @@
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--spacing-p-l);
+  /* The runtime defines the token but sets no default font, so anything not
+     wrapped in Typography would fall back to the UA serif. */
+  font-family: var(--font-family-main);
+  color: var(--text-neutral-primary);
+}
+
+.activityGrid {
+  display: grid;
+  gap: var(--spacing-p-l);
+  align-items: start;
+}
+
+/* The original split 50/50 at every width with no breakpoint at all. */
+@media (min-width: 60rem) {
+  .activityGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.codeColumn {
+  display: grid;
+  gap: var(--spacing-p-s);
+}
+
+.codeLine {
+  display: block;
+}
+
+.lineNumber {
+  display: inline-block;
+  width: 2.5ch;
+  margin-inline-end: 1ch;
+  text-align: right;
+  color: var(--text-neutral-secondary);
+}
+
+.codeLineButton {
+  /* A code row, not a chip: no padding tricks, but tall enough to hit. */
+  min-height: 24px;
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.codeLineButton:hover {
+  background: var(--background-brand-purple-extra-light);
+}
+
+.codeLine.isHighlighted,
+.codeLine.isSelected {
+  background: var(--background-brand-purple-extra-light);
+}
+
+.codeLine.isTodo {
+  font-style: italic;
+}
+
+/* The rows the AI's helper function added at step 5. */
+.codeLine.isAdded {
+  box-shadow: inset 3px 0 0 var(--border-success-primary);
+}
+
+.card {
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-md);
+  padding: var(--spacing-p-m);
+  margin-block: var(--spacing-p-m);
+}
+
+.dialogue {
+  margin: var(--spacing-p-s) 0;
+  padding-inline-start: var(--spacing-p-m);
+  border-inline-start: 3px solid var(--border-brand-primary);
+}
+
+.dialogueQuote {
+  margin: 0;
+}
+
+.dialogueSpeaker {
+  margin-top: var(--spacing-p-xxs);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-neutral-secondary);
+}
+
+.progress {
+  display: grid;
+  gap: var(--spacing-p-xxs);
+  font-size: 0.9rem;
+  color: var(--text-neutral-secondary);
+}
+
+.stepsPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+}
+
+.optionList,
+.answerButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s);
+  margin-bottom: var(--spacing-p-m);
+}
+
+.optionList {
+  flex-direction: column;
+  align-items: start;
+}
+
+.optionChosen {
+  outline: 2px solid var(--border-brand-primary);
+}
+
+.sequenceList,
+.promptChoices,
+.recap,
+.feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sequenceList,
+.promptChoices {
+  display: grid;
+  gap: var(--spacing-p-s);
+  margin-bottom: var(--spacing-p-m);
+}
+
+.sequenceItem,
+.promptCard {
+  /* WCAG 2.5.5: the source's 30-40px rows were under the target size. */
+  min-height: 44px;
+  width: 100%;
+  display: flex;
+  gap: var(--spacing-p-s);
+  align-items: center;
+  text-align: start;
+  padding: var(--spacing-p-s);
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-md);
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.promptCard {
+  flex-direction: column;
+  align-items: start;
+}
+
+.sequenceItem:disabled,
+.promptCard:disabled {
+  cursor: default;
+}
+
+.sequenceItem.isPlaced,
+.promptCard.isChosen {
+  border-color: var(--border-brand-primary);
+  background: var(--background-brand-purple-extra-light);
+}
+
+.sequenceBadge {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--shape-round);
+  border: 1px solid var(--border-neutral-secondary);
+  font-weight: 700;
+}
+
+.promptLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-neutral-secondary);
+}
+
+.feed li {
+  padding: var(--spacing-p-s) 0;
+  border-top: 1px solid var(--border-neutral-secondary);
+}
+
+.feedDay,
+.feedImage {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-neutral-secondary);
+}
+
+.feedImage {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-weight: 400;
+}
+
+.recapVerdict {
+  margin: var(--spacing-p-xxs) 0 0;
+  font-size: 0.9rem;
+  color: var(--text-neutral-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
