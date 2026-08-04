@@ -1,0 +1,6 @@
+{
+  "id": "fetch-chain-visualizer",
+  "name": "How fetch() Works: Step by Step",
+  "description": "Run a fetch().then().then() chain one link at a time and see what each one produces.",
+  "originalUrl": "https://amandadennard-dotcom.github.io/Unit5AIF2/fetch-chain-visualizer.html"
+}

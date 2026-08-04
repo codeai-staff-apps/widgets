@@ -1,0 +1,47 @@
+/*
+ * Array element pills. The four states are the point of the exercise — an item
+ * that stayed the same must look different from one that was rewritten — so
+ * these colours are load-bearing, not decoration. Colour is never the only
+ * cue: each card carries a word badge and the verdict names the outcome.
+ */
+.arrayItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.plain {
+  border-color: var(--borders-neutral-light);
+  color: var(--text-neutral-primary);
+}
+
+.same {
+  background: var(--background-brand-purple-extra-light);
+  color: var(--text-brand-purple-primary);
+}
+
+.new {
+  background: var(--background-success-extra-light);
+  color: var(--text-success-primary);
+}
+
+.changed,
+.removed {
+  background: var(--background-warning-extra-light);
+  color: var(--text-warning-primary);
+}
+
+.removed {
+  text-decoration: line-through;
+}
