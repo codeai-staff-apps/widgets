@@ -1,0 +1,82 @@
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+  font-family: var(--font-family-main);
+  color: var(--text-neutral-primary);
+}
+
+.steps {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--borders-neutral-light);
+  border-left: 4px solid var(--borders-brand-purple-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+}
+
+.stepPosition {
+  flex: none;
+  width: 1.5em;
+  color: var(--text-neutral-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stepText {
+  flex: 1;
+}
+
+.step code {
+  padding: 1px 4px;
+  border-radius: var(--shape-sm, 4px);
+  background: var(--background-neutral-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+.mark {
+  flex: none;
+  font-size: 13px;
+}
+
+.mark--right {
+  color: var(--text-success-primary);
+}
+
+.mark--wrong {
+  color: var(--text-error-primary);
+}
+
+/* The original's 20px reorder controls were the only pointer path on touch. */
+.moveButton {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--borders-neutral-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.moveButton:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-strong);
+  outline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}

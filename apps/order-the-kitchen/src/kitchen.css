@@ -1,0 +1,137 @@
+.page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+  font-family: var(--font-family-main);
+  color: var(--text-neutral-primary);
+}
+
+.challenge {
+  margin-top: 40px;
+}
+
+.code {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-black-fixed);
+  color: var(--text-neutral-white-fixed);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+.columns {
+  display: grid;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+@media (min-width: 680px) {
+  .columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.deck {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--borders-neutral-light);
+  border-left: 4px solid var(--borders-brand-purple-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-strong);
+  outline-offset: 2px;
+}
+
+.card--right {
+  border-left-color: var(--borders-success-primary);
+  background: var(--background-success-extra-light);
+}
+
+.card--wrong {
+  border-left-color: var(--borders-warning-primary);
+  background: var(--background-warning-extra-light);
+}
+
+.cardText {
+  flex: 1;
+}
+
+.mark {
+  flex: none;
+  font-size: 13px;
+  color: var(--text-neutral-secondary);
+}
+
+/* The original's reorder buttons were 20x16px, the only touch path it had. */
+.moveButton {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--borders-neutral-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.moveButton:disabled {
+  color: var(--text-neutral-disabled);
+  cursor: default;
+}
+
+.moveButton:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-strong);
+  outline-offset: 2px;
+}
+
+.terminal {
+  min-height: 160px;
+  padding: 12px;
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-black-fixed);
+  color: var(--text-neutral-white-fixed);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+.prompt {
+  color: var(--text-brand-teal-primary-fixed);
+}
+
+.timerRow {
+  margin-top: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .line {
+    animation: fadein 0.3s ease;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+}
