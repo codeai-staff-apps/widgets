@@ -1,7 +1,8 @@
+import Button from '@code-dot-org/component-library/button';
 import Image from '@code-dot-org/component-library/image';
+import {SimpleList} from '@code-dot-org/component-library/list';
 import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import ScenarioScreen from './ScenarioScreen';
@@ -36,9 +37,7 @@ export default function App() {
           </Typography>
           <Image className="photo" src={intro.image} altText={intro.imageAlt} loading="eager" />
           <div>
-            <Button variant="contained" onClick={() => machine.goTo(SCREENS[1])}>
-              {intro.startButtonLabel}
-            </Button>
+            <Button text={intro.startButtonLabel} onClick={() => machine.goTo(SCREENS[1])} />
           </div>
         </Stack>
       </Screen>
@@ -65,18 +64,7 @@ export default function App() {
           <Typography semanticTag="p" visualAppearance="body-two" noMargin>
             {wrapUp.introText}
           </Typography>
-          {/* Plain <ul>: the DS SimpleList marks items with an icon-font glyph,
-              and the runtime vendors no icon font, so its bullets are invisible.
-              Typography per item because the document body sets no font. */}
-          <ul>
-            {wrapUp.recapList.map(item => (
-              <li key={item}>
-                <Typography semanticTag="span" visualAppearance="body-two">
-                  {item}
-                </Typography>
-              </li>
-            ))}
-          </ul>
+          <SimpleList items={wrapUp.recapList.map(item => ({key: item, label: item}))} />
           <Image
             className="photo"
             src={wrapUp.image}
@@ -87,9 +75,12 @@ export default function App() {
             {wrapUp.outroText}
           </Typography>
           <div>
-            <Button variant="outlined" onClick={() => machine.goTo('intro')}>
-              {wrapUp.restartButtonLabel}
-            </Button>
+            <Button
+              text={wrapUp.restartButtonLabel}
+              type="secondary"
+              color="black"
+              onClick={() => machine.goTo('intro')}
+            />
           </div>
         </Stack>
       </Screen>

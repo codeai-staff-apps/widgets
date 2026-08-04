@@ -1,7 +1,9 @@
 import Alert from '@code-dot-org/component-library/alert';
+import DsButton from '@code-dot-org/component-library/button';
 import Image from '@code-dot-org/component-library/image';
 import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
+// MUI Button only for the choice list: see the comment on those buttons below.
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import {useState} from 'react';
@@ -77,6 +79,9 @@ export default function ScenarioScreen({
         {scenario.text}
       </Typography>
 
+      {/* Stays MUI: the design system's Button has no full-width or text-align
+          API, so a block-shaped answer option would need override CSS reaching
+          into the component's internals. */}
       {choices.map(choice => (
         <Button
           key={choice.text}
@@ -122,9 +127,7 @@ export default function ScenarioScreen({
           />
           <Image className="photo" src={scenario.afterImage} altText="" loading="eager" />
           <div>
-            <Button variant="contained" onClick={onNext}>
-              {labels.nextButtonLabel}
-            </Button>
+            <DsButton text={labels.nextButtonLabel} onClick={onNext} />
           </div>
         </>
       )}
