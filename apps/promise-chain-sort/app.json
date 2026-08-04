@@ -1,0 +1,6 @@
+{
+  "id": "promise-chain-sort",
+  "name": "Trace the Promise Chain",
+  "description": "Reorder five scrambled steps of a fetch() Promise chain into timeline order.",
+  "originalUrl": "https://amandadennard-dotcom.github.io/Unit5AIF2/promise-chain-sort.html"
+}
