@@ -57,24 +57,6 @@
   color: var(--text-error-primary);
 }
 
-/* The original's 20px reorder controls were the only pointer path on touch. */
-.moveButton {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--borders-neutral-primary);
-  border-radius: var(--shape-md, 8px);
-  background: var(--background-neutral-primary);
-  color: var(--text-neutral-primary);
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.moveButton:focus-visible {
-  outline: 3px solid var(--borders-brand-purple-strong);
-  outline-offset: 2px;
-}
-
 .actions {
   display: flex;
   gap: 12px;

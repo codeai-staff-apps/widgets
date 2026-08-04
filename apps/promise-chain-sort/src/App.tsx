@@ -87,22 +87,24 @@ export default function App() {
                 {marks[step.id] ? 'correct' : 'needs to move'}
               </span>
             )}
-            <button
-              type="button"
-              className="moveButton"
-              aria-label={`Move ${plainText(step)} up`}
+            <Button
+              isIconOnly
+              icon={{iconName: 'arrow-up', iconStyle: 'solid'}}
+              type="secondary"
+              color="black"
+              size="l"
+              ariaLabel={`Move ${plainText(step)} up`}
               onClick={() => move(step, -1)}
-            >
-              <span aria-hidden="true">↑</span>
-            </button>
-            <button
-              type="button"
-              className="moveButton"
-              aria-label={`Move ${plainText(step)} down`}
+            />
+            <Button
+              isIconOnly
+              icon={{iconName: 'arrow-down', iconStyle: 'solid'}}
+              type="secondary"
+              color="black"
+              size="l"
+              ariaLabel={`Move ${plainText(step)} down`}
               onClick={() => move(step, 1)}
-            >
-              <span aria-hidden="true">↓</span>
-            </button>
+            />
           </li>
         ))}
       </ol>
@@ -117,7 +119,6 @@ export default function App() {
         <Alert
           isImmediateImportance={false}
           aria-live="off"
-          showIcon={false} // the design system's icons need FontAwesome, which the CSP blocks
           type={allCorrect ? 'success' : 'warning'}
           text={allCorrect ? ALL_CORRECT : NOT_YET}
         />
