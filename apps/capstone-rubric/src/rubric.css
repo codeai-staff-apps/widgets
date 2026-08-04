@@ -1,0 +1,46 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Score cells are picked as a whole, so the button fills its cell. */
+.scoreBtn {
+  width: 100%;
+  min-height: 96px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 12px;
+  border-color: var(--borders-neutral-primary);
+}
+
+.scoreBtnSelected {
+  background-color: var(--background-success-light);
+  border-color: var(--border-success-primary);
+}
+
+/* State is carried by aria-pressed; the check keeps it from being colour-only. */
+.scoreBtnSelected::before {
+  content: '✓ ';
+}
+
+.totalBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: 16px;
+}
