@@ -173,24 +173,26 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
                     {marks[id] ? 'Correct' : 'Not quite'}
                   </span>
                 )}
-                <button
-                  type="button"
-                  className="moveButton"
+                <Button
+                  isIconOnly
+                  icon={{iconName: 'arrow-up', iconStyle: 'solid'}}
+                  type="secondary"
+                  color="black"
+                  size="l"
                   disabled={locked}
-                  aria-label={`Move ${cardById[id].text} up`}
+                  ariaLabel={`Move ${cardById[id].text} up`}
                   onClick={() => move(id, -1)}
-                >
-                  <span aria-hidden="true">↑</span>
-                </button>
-                <button
-                  type="button"
-                  className="moveButton"
+                />
+                <Button
+                  isIconOnly
+                  icon={{iconName: 'arrow-down', iconStyle: 'solid'}}
+                  type="secondary"
+                  color="black"
+                  size="l"
                   disabled={locked}
-                  aria-label={`Move ${cardById[id].text} down`}
+                  ariaLabel={`Move ${cardById[id].text} down`}
                   onClick={() => move(id, 1)}
-                >
-                  <span aria-hidden="true">↓</span>
-                </button>
+                />
               </li>
             ))}
           </ol>
@@ -242,7 +244,6 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
         <Alert
           isImmediateImportance={false}
           aria-live="off"
-          showIcon={false} // the design system's icons need FontAwesome, which the CSP blocks
           type={score === challenge.cards.length ? 'success' : 'warning'}
           text={`${score} of ${challenge.cards.length} in the right spot. ${challenge.resultExplanation}`}
         />

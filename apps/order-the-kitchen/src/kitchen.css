@@ -77,29 +77,6 @@
   color: var(--text-neutral-secondary);
 }
 
-/* The original's reorder buttons were 20x16px, the only touch path it had. */
-.moveButton {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--borders-neutral-primary);
-  border-radius: var(--shape-md, 8px);
-  background: var(--background-neutral-primary);
-  color: var(--text-neutral-primary);
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.moveButton:disabled {
-  color: var(--text-neutral-disabled);
-  cursor: default;
-}
-
-.moveButton:focus-visible {
-  outline: 3px solid var(--borders-brand-purple-strong);
-  outline-offset: 2px;
-}
-
 .terminal {
   min-height: 160px;
   padding: 12px;
