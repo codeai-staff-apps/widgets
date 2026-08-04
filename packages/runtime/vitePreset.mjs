@@ -10,12 +10,20 @@
  *                   the dev server needs websockets + inline scripts for HMR.
  */
 
+/*
+ * dsco.code.org is the design system's own asset CDN — a first-party
+ * carve-out, not third-party egress. It serves the Font Awesome Pro faces
+ * the component library's icons require; FA Pro is licensed, so the files
+ * cannot be vendored into this public repo. connect-src stays 'none'.
+ */
+const DSCO_CDN = 'https://dsco.code.org';
+
 export const CSP = [
   "default-src 'none'",
   "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'", // emotion/MUI inject inline <style>
+  `style-src 'self' 'unsafe-inline' ${DSCO_CDN}`, // emotion/MUI inline styles + FA css
   "img-src 'self' data:",
-  "font-src 'self' data:", // Vite inlines small woff2 files as data: URIs
+  `font-src 'self' data: ${DSCO_CDN}`, // Vite inlines small woff2 as data: URIs
   "connect-src 'none'",
   "base-uri 'none'",
   "form-action 'none'",

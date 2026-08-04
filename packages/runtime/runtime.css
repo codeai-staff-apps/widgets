@@ -4,6 +4,17 @@
  * variables, then brand overrides. Apps style against the CSS custom
  * properties these define (--font-family-main, --text-neutral-primary, ...).
  */
+/*
+ * Font Awesome (Pro, licensed — served from the design system's own CDN,
+ * cannot be vendored into a public repo). The component library draws its
+ * icons with these faces (dropdown chevrons, checkbox ticks, Alert/Close
+ * icons). Remote @imports are left as-is by Vite and resolved at runtime;
+ * the CSP allows dsco.code.org for styles and fonts.
+ */
+@import url('https://dsco.code.org/assets/font-awesome-pro/1779470619/css/fontawesome.min.css');
+@import url('https://dsco.code.org/assets/font-awesome-pro/1779470619/css/solid.min.css');
+@import url('https://dsco.code.org/assets/font-awesome-pro/1779470619/css/regular.min.css');
+
 @import './fonts/code.org/index.css';
 @import './tokens/fontVariables.css';
 @import './tokens/shapeAndSpacingVariables.css';
