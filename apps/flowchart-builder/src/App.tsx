@@ -164,7 +164,6 @@ export default function App() {
         <Alert
           isImmediateImportance={false}
           aria-live="off"
-          showIcon={false} // the design system's icons need FontAwesome, which the CSP blocks
           type={score === ZONES.length ? 'success' : 'warning'}
           text={score === ZONES.length ? ALL_CORRECT : partialMessage(score)}
         />

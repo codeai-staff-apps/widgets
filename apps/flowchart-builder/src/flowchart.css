@@ -118,7 +118,7 @@
    does not shift the flowchart under the pointer. */
 .zoneWrap {
   display: grid;
-  grid-template-columns: 1fr 44px;
+  grid-template-columns: 1fr 50px;
   gap: 4px;
   align-items: center;
 }
@@ -161,17 +161,6 @@
 }
 
 /* Sized to the WCAG 2.5.8 floor; the original was an 18px unfocusable span. */
-.zoneRemove {
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--borders-neutral-primary);
-  border-radius: var(--shape-round, 50%);
-  background: var(--background-neutral-primary);
-  color: var(--text-neutral-primary);
-  font-size: 14px;
-  cursor: pointer;
-}
-
 .actions {
   display: flex;
   gap: 12px;
@@ -179,8 +168,7 @@
 }
 
 .chip:focus-visible,
-.zone:focus-visible,
-.zoneRemove:focus-visible {
+.zone:focus-visible {
   outline: 3px solid var(--borders-brand-purple-strong);
   outline-offset: 2px;
 }

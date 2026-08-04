@@ -1,3 +1,5 @@
+import Button from '@code-dot-org/component-library/button';
+
 import {chipById, type Zone} from './data';
 import {useSelectAndPlace} from './shared';
 
@@ -35,14 +37,15 @@ export default function DropZone({zone, board, mark}: DropZoneProps) {
         )}
       </button>
       {chip && (
-        <button
-          type="button"
-          className="zoneRemove"
-          aria-label={`Remove ${chip.text} from ${zone.label}`}
+        <Button
+          isIconOnly
+          icon={{iconName: 'xmark', iconStyle: 'solid'}}
+          type="secondary"
+          color="black"
+          size="l"
+          ariaLabel={`Remove ${chip.text} from ${zone.label}`}
           onClick={() => board.remove(chip.id)}
-        >
-          <span aria-hidden="true">✕</span>
-        </button>
+        />
       )}
     </div>
   );
