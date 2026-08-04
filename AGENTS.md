@@ -31,6 +31,14 @@ scripts/            gen-manifest.mjs — builds the gallery manifest from
 
 ## Rules
 
+- **Anti-bespoke, Occam's razor.** Build the SIMPLEST thing that provides
+  equivalent functionality. Fidelity target is the original's *pedagogy and
+  interactions*, never its ornamentation: if a stock DS/MUI component does the
+  job with default styling, use it as-is — drop the original's custom
+  gradients, novelty fonts, decorative chrome. Custom CSS exists only where
+  the learning interaction itself demands it (e.g. a card must visibly flip).
+  No speculative props, config, or abstraction; no state beyond what the
+  interaction needs. If your implementation feels clever, simplify it.
 - **Component hierarchy: component-library first, MUI second, custom last.**
   Import DS components by subpath: `@code-dot-org/component-library/button`.
   Use MUI (`@mui/material` v7) only where no DS component exists. Hand-rolled
