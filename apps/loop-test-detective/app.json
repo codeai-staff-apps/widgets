@@ -1,0 +1,6 @@
+{
+  "id": "loop-test-detective",
+  "name": "Debugging AI-Generated Loops",
+  "description": "Run a six-check verification routine on a for loop an AI wrote, and find the bug it hid.",
+  "originalUrl": "https://amandadennard-dotcom.github.io/Unit4_testing/loop_testing_v2.html"
+}

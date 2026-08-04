@@ -1,0 +1,136 @@
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--spacing-p-l);
+  /* The runtime defines the token but sets no default font, so anything not
+     wrapped in Typography would fall back to the UA serif. */
+  font-family: var(--font-family-main);
+  color: var(--text-neutral-primary);
+}
+
+.activityGrid {
+  display: grid;
+  gap: var(--spacing-p-l);
+  align-items: start;
+}
+
+/* Side by side once both columns fit; stacked below that. The originals had
+   no breakpoint at all and clipped on narrow viewports. */
+@media (min-width: 60rem) {
+  .activityGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.codeColumn {
+  display: grid;
+  gap: var(--spacing-p-s);
+}
+
+.codeLine {
+  display: block;
+}
+
+.codeLine.isHighlighted {
+  background: var(--background-brand-purple-extra-light);
+  box-shadow: 0 0 0 2px var(--background-brand-purple-extra-light);
+}
+
+.card {
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-md);
+  padding: var(--spacing-p-m);
+  margin-block: var(--spacing-p-m);
+}
+
+.dialogue {
+  margin: var(--spacing-p-s) 0;
+  padding-inline-start: var(--spacing-p-m);
+  border-inline-start: 3px solid var(--border-brand-primary);
+}
+
+.dialogueQuote {
+  margin: 0;
+}
+
+.dialogueSpeaker {
+  margin-top: var(--spacing-p-xxs);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-neutral-secondary);
+}
+
+.answerButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s);
+  margin-bottom: var(--spacing-p-m);
+}
+
+.progress {
+  display: grid;
+  gap: var(--spacing-p-xxs);
+  font-size: 0.9rem;
+  color: var(--text-neutral-secondary);
+}
+
+.missionSteps {
+  margin: 0;
+  padding-inline-start: 1.5em;
+}
+
+.score {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-p-xs);
+  color: var(--text-neutral-secondary);
+}
+
+.scoreValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-neutral-primary);
+}
+
+.codeCompare {
+  display: grid;
+  gap: var(--spacing-p-s);
+  margin-block: var(--spacing-p-s);
+}
+
+@media (min-width: 48rem) {
+  .codeCompare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.recap {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.recapVerdict {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-xs);
+  margin: var(--spacing-p-xxs) 0;
+  font-size: 0.9rem;
+  color: var(--text-neutral-secondary);
+}
+
+.recapBadge {
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-round);
+  padding: 0 var(--spacing-p-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
