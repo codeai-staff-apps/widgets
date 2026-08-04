@@ -22,15 +22,26 @@ function renderSegments(segments: Segment[]) {
   });
 }
 
-export default function FlipCard({card}: {card: Card}) {
+export default function FlipCard({
+  card,
+  onFlip,
+}: {
+  card: Card;
+  onFlip: (card: Card, flipping: boolean) => void;
+}) {
   const [flipped, setFlipped] = useState(false);
+
+  const toggle = () => {
+    setFlipped(f => !f);
+    onFlip(card, !flipped);
+  };
 
   return (
     <button
       className="flipCard"
       aria-pressed={flipped}
       aria-label={`${card.term} — ${flipped ? 'showing definition, press to show term' : 'press to reveal definition'}`}
-      onClick={() => setFlipped(f => !f)}
+      onClick={toggle}
     >
       <div className="flipInner">
         <div className="flipFace flipFront" aria-hidden={flipped}>
@@ -48,9 +59,21 @@ export default function FlipCard({card}: {card: Card}) {
         </div>
         <div className="flipFace flipBack" aria-hidden={!flipped}>
           <span className="backLabel">{card.term}</span>
-          <Typography semanticTag="p" visualAppearance="body-two">
-            {renderSegments(card.definition)}
-          </Typography>
+          {card.body.kind === 'prose' ? (
+            <Typography semanticTag="p" visualAppearance="body-two">
+              {renderSegments(card.body.segments)}
+            </Typography>
+          ) : (
+            <ul className="bullets">
+              {card.body.items.map(item => (
+                <li key={item}>
+                  <Typography semanticTag="span" visualAppearance="body-two">
+                    {item}
+                  </Typography>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </button>

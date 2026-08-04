@@ -1,6 +1,6 @@
 {
   "id": "flip-cards",
   "name": "Vocabulary Flip Cards",
-  "description": "Flip cards for vocabulary practice — term on the front, definition on the back.",
+  "description": "Six vocabulary decks behind one flip card: term on the front, definition on the back. Pick a deck with ?deck=.",
   "originalUrl": "https://amandadennard-dotcom.github.io/Unit4_testing/vocab_flip_cards.html"
 }

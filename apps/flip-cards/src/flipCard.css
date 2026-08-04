@@ -3,17 +3,20 @@
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .flipCard {
   width: 320px;
-  height: 220px;
+  height: 240px;
   perspective: 1000px;
   cursor: pointer;
   border: none;
   background: none;
   padding: 0;
-  font-family: inherit;
+  font-family: var(--font-family-main);
   text-align: left;
 }
 
@@ -91,6 +94,11 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 10px;
+}
+
+.flipBack .bullets {
+  margin: 0;
+  padding-left: 20px;
 }
 
 @media (prefers-reduced-motion: reduce) {
