@@ -1,0 +1,8 @@
+{
+  "name": "@codeai-staff-apps/runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared runtime for widget apps: design tokens, brand fonts, and the Vite preset (base path + build-time CSP meta injection). Vendored from code-dot-org frontend/packages until published runtime exists.",
+  "main": "vitePreset.mjs"
+}

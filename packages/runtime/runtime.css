@@ -1,0 +1,12 @@
+/*
+ * Global stylesheet every widget app imports exactly once (in main.tsx).
+ * Order mirrors code-dot-org studio's __root.tsx: font faces, then token
+ * variables, then brand overrides. Apps style against the CSS custom
+ * properties these define (--font-family-main, --text-neutral-primary, ...).
+ */
+@import './fonts/code.org/index.css';
+@import './tokens/fontVariables.css';
+@import './tokens/shapeAndSpacingVariables.css';
+@import './tokens/primitiveColors.css';
+@import './tokens/colors.css';
+@import './tokens/brandOverrides.css'; /* umbrella: pulls in all brand files */

@@ -1,0 +1,57 @@
+name: build-and-deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GH_PACKAGES_TOKEN: ${{ secrets.READ_PACKAGES_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build gallery and all apps
+        run: |
+          set -euo pipefail
+          node scripts/gen-manifest.mjs > gallery/src/manifest.json
+          for dir in gallery apps/*/; do
+            [ -f "$dir/package.json" ] || continue
+            echo "::group::build $dir"
+            (cd "$dir" && npm install --no-audit --no-fund && npm run build)
+            echo "::endgroup::"
+          done
+          mkdir -p _site
+          cp -r gallery/dist/* _site/
+          for dir in apps/*/; do
+            id=$(basename "$dir")
+            cp -r "$dir/dist" "_site/$id"
+          done
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
