@@ -1,0 +1,31 @@
+/*
+ * The photographs are mood illustration, so they are cropped to a band rather
+ * than allowed to set the card's height — v2's `object-fit` rule, kept.
+ */
+.photo img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* Step meter. Decorative: the "Scenario N of 4" label carries the real count. */
+.progressDots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 28px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--background-brand-purple-extra-light);
+}
+
+.dot.done {
+  background: var(--background-brand-purple-primary);
+}
+
+.dot.active {
+  background: var(--background-brand-purple-light);
+}
