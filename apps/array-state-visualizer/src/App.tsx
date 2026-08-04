@@ -1,6 +1,6 @@
 import Alert from '@code-dot-org/component-library/alert';
+import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import {useState} from 'react';
 
@@ -20,10 +20,8 @@ export default function App() {
         </Typography>
         <Alert
           type="info"
-          // Standing directions, not an event: no live-region role, no icon
-          // (the runtime vendors no icon font).
+          // Standing directions, not an event: no live-region role.
           role="note"
-          showIcon={false}
           text={
             <>
               <strong>{directions.heading}</strong>
@@ -51,14 +49,14 @@ export default function App() {
 
       <div>
         <Button
-          variant="text"
+          text="Reset all"
+          type="tertiary"
+          color="black"
           onClick={() => {
             setRan({});
             announce(resetAnnouncement);
           }}
-        >
-          Reset all
-        </Button>
+        />
       </div>
     </Stack>
   );

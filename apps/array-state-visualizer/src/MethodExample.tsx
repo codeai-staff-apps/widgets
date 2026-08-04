@@ -1,7 +1,7 @@
 import Alert from '@code-dot-org/component-library/alert';
+import Button from '@code-dot-org/component-library/button';
 import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -59,9 +59,7 @@ export default function MethodExample({
       <Stack gap={2}>
         <CodeBlock summary={example.codeSummary}>{highlight(example.code)}</CodeBlock>
         <div>
-          <Button variant="contained" onClick={onRun}>
-            Run this code
-          </Button>
+          <Button text="Run this code" onClick={onRun} />
         </div>
         <Stack direction="row" gap={2} flexWrap="wrap">
           {example.cards.map(card => (
@@ -74,8 +72,6 @@ export default function MethodExample({
             // Not a live region: the run is already announced once, in full,
             // through useAnnounce(). Two channels would describe one click twice.
             role="note"
-            // The runtime vendors no icon font, so DS icons render as blank boxes.
-            showIcon={false}
             text={`${example.verdict.badge}: ${example.verdict.text}`}
           />
         )}
