@@ -1,0 +1,35 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+/*
+ * The design system draws the dropdown chevron with a Font Awesome glyph.
+ * The runtime ships no Font Awesome face and the CSP forbids fetching one, so
+ * that glyph renders as a missing-character box. Drop it and let the browser
+ * draw the select's own arrow. The real fix belongs in packages/runtime.
+ */
+.filters [class*='dropdownArrowDiv']::after {
+  content: '';
+  width: 0.6em;
+  height: 0.4em;
+  background-color: currentcolor;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.songGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
