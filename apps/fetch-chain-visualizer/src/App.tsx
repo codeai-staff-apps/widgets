@@ -1,6 +1,6 @@
 import Alert from '@code-dot-org/component-library/alert';
+import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import {useEffect, useId, useRef, useState} from 'react';
 
@@ -113,9 +113,7 @@ export default function App() {
       )}
 
       <div>
-        <Button variant="text" onClick={reset}>
-          {resetButtonLabel}
-        </Button>
+        <Button text={resetButtonLabel} type="tertiary" color="black" onClick={reset} />
       </div>
     </Stack>
   );

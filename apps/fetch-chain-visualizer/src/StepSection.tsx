@@ -1,6 +1,6 @@
 import Alert from '@code-dot-org/component-library/alert';
+import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -31,9 +31,7 @@ export default function StepSection({
       <Stack gap={2}>
         <CodeBlock summary={step.codeSummary}>{step.code}</CodeBlock>
         <div>
-          <Button variant="contained" disabled={!enabled} onClick={onRun}>
-            {step.buttonLabel}
-          </Button>
+          <Button text={step.buttonLabel} disabled={!enabled} onClick={onRun} />
         </div>
         <Card variant="outlined">
           <CardContent component={Stack} gap={1}>
