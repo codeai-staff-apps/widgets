@@ -1,0 +1,187 @@
+.page {
+  display: grid;
+  gap: var(--spacing-p-m);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-p-l);
+}
+
+/* --- the sample site ------------------------------------------------ */
+
+.site-frame {
+  overflow: hidden;
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+}
+
+.hotspot {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.hotspot > span:last-child {
+  display: block;
+}
+
+/*
+ * A white ring inside a dark ring, so the indicator keeps 3:1 non-text
+ * contrast over both the dark nav/hero/footer and the light gallery. The
+ * original used one flat #4C42CF, which failed over three of the four.
+ */
+.hotspot:hover,
+.hotspot:focus-visible,
+.hotspot[data-active='true'] {
+  outline: 3px solid #ffffff;
+  outline-offset: -3px;
+  box-shadow: inset 0 0 0 6px #1f1976;
+}
+
+.hotspot-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  padding: 2px 8px;
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semi-bold);
+  color: #1f1976;
+  background: #ffffff;
+  border: 1px solid #1f1976;
+  border-radius: var(--shape-round);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.hotspot:hover .hotspot-tag,
+.hotspot:focus-visible .hotspot-tag,
+.hotspot[data-active='true'] .hotspot-tag {
+  opacity: 1;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  color: #ffffff;
+  background: #0b0f2b;
+}
+
+.site-nav .logo {
+  font-family: var(--font-family-heading, sans-serif);
+  font-weight: var(--font-weight-bold);
+}
+
+.site-nav .links {
+  display: flex;
+  gap: 18px;
+  font-size: var(--font-size-body-sm);
+}
+
+.site-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding: 48px 24px;
+  color: #ffffff;
+  text-align: center;
+  background: radial-gradient(circle at 30% 20%, #2b2a6b 0%, #0b0f2b 70%);
+}
+
+.site-hero .hero-heading {
+  font-family: var(--font-family-heading, sans-serif);
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+}
+
+.site-hero .hero-body {
+  max-width: 40ch;
+}
+
+.site-hero .hero-cta {
+  padding: 10px 22px;
+  font-weight: var(--font-weight-semi-bold);
+  color: #0b0f2b;
+  background: #ffd166;
+  border-radius: var(--shape-sm);
+}
+
+.site-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 20px;
+  background: #f7f7fb;
+}
+
+.planet-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  padding: 12px;
+  color: var(--text-neutral-primary);
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e0e0e8;
+  border-radius: var(--shape-sm);
+}
+
+.planet-disc {
+  width: 64px;
+  height: 64px;
+}
+
+.planet-name {
+  font-weight: var(--font-weight-bold);
+}
+
+.planet-text {
+  font-size: var(--font-size-body-xs);
+}
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  font-size: var(--font-size-body-sm);
+  color: #ffffff;
+  background: #1f1976;
+}
+
+.site-footer .links {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .site-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .site-nav .links {
+    gap: 10px;
+    font-size: var(--font-size-body-xs);
+  }
+
+  .site-hero .hero-heading {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot-tag {
+    transition: none;
+  }
+}
