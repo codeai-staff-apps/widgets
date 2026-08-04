@@ -1,0 +1,26 @@
+.page {
+  display: grid;
+  gap: var(--spacing-p-m);
+  max-width: 820px;
+  margin: 0 auto;
+  padding: var(--spacing-p-l);
+}
+
+.options {
+  display: grid;
+  gap: var(--spacing-p-xs);
+  margin: 0;
+  padding: var(--spacing-p-m);
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+}
+
+.options legend {
+  padding: 0 var(--spacing-p-xs);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.nav-row {
+  display: flex;
+  gap: var(--spacing-p-s);
+}
