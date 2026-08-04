@@ -42,17 +42,6 @@
   font: inherit;
 }
 
-/*
- * The design system draws the checkbox tick with a Font Awesome glyph. The
- * runtime ships no Font Awesome face and the CSP forbids fetching one, so it
- * renders as a missing-character box. Substitute a plain check; the real fix
- * belongs in packages/runtime.
- */
-.page .checklist input[type='checkbox']:checked + i::before {
-  content: '✓';
-  font-family: inherit;
-}
-
 @media (prefers-reduced-motion: reduce) {
   * {
     transition-duration: 0.01ms !important;
