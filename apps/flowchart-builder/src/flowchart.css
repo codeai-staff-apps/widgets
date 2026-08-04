@@ -1,0 +1,200 @@
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+  font-family: var(--font-family-main);
+  color: var(--text-neutral-primary);
+}
+
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* Code chips and placed code read as code, so they keep a monospace face. */
+.chip,
+.zoneCode {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
+
+.chip {
+  padding: 10px 16px;
+  border: 2px solid var(--borders-brand-purple-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-brand-purple-extra-light);
+  color: var(--text-neutral-primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--background-brand-purple-light);
+  box-shadow: 0 0 0 3px var(--borders-brand-purple-primary);
+}
+
+.chip:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.node {
+  display: grid;
+  place-items: center;
+  padding: 12px 20px;
+  text-align: center;
+  font-weight: var(--font-weight-semi-bold, 600);
+}
+
+.oval {
+  border: 2px solid var(--borders-brand-purple-primary);
+  border-radius: 999px;
+  background: var(--background-brand-purple-extra-light);
+  color: var(--text-brand-purple-primary);
+}
+
+/* The diamond is the flowchart's decision vocabulary, so the shape is content. */
+.diamond {
+  width: 260px;
+  height: 130px;
+  padding: 0 40px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: var(--background-brand-purple-light);
+  color: var(--text-brand-purple-primary);
+}
+
+.terminal {
+  border: 2px solid;
+  border-radius: var(--shape-md, 8px);
+}
+
+.terminal--win {
+  border-color: var(--borders-success-primary);
+  background: var(--background-success-extra-light);
+  color: var(--text-success-primary);
+}
+
+.terminal--keep {
+  border-color: var(--borders-warning-primary);
+  background: var(--background-warning-extra-light);
+  color: var(--text-warning-primary);
+}
+
+.arrow {
+  color: var(--text-neutral-secondary);
+  line-height: 1;
+}
+
+.branches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+}
+
+.branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.branchLabel {
+  color: var(--text-neutral-secondary);
+  font-size: 14px;
+  font-weight: var(--font-weight-semi-bold, 600);
+}
+
+/* The remove control keeps its column even when absent, so filling a zone
+   does not shift the flowchart under the pointer. */
+.zoneWrap {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  gap: 4px;
+  align-items: center;
+}
+
+.zone {
+  min-width: 220px;
+  padding: 10px 16px;
+  border: 2px dashed var(--borders-brand-purple-light);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+  cursor: pointer;
+}
+
+.zone--pulse {
+  border-style: solid;
+  border-color: var(--borders-brand-purple-primary);
+  background: var(--background-brand-purple-extra-light);
+}
+
+.zone--correct {
+  border-style: solid;
+  border-color: var(--borders-success-primary);
+  background: var(--background-success-extra-light);
+}
+
+.zone--wrong {
+  border-style: solid;
+  border-color: var(--borders-error-primary);
+  background: var(--background-error-extra-light);
+}
+
+.zoneCode {
+  font-size: 14px;
+  color: var(--text-neutral-primary);
+}
+
+.zonePlaceholder {
+  font-size: 14px;
+  color: var(--text-neutral-secondary);
+}
+
+/* Sized to the WCAG 2.5.8 floor; the original was an 18px unfocusable span. */
+.zoneRemove {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--borders-neutral-primary);
+  border-radius: var(--shape-round, 50%);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+.chip:focus-visible,
+.zone:focus-visible,
+.zoneRemove:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-strong);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .chip,
+  .zone {
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .chip[aria-pressed='true'] {
+    transform: scale(1.05);
+  }
+}
