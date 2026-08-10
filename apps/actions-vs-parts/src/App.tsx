@@ -4,20 +4,14 @@ import Typography from '@code-dot-org/component-library/typography';
 import LinearProgress from '@mui/material/LinearProgress';
 import {useState} from 'react';
 
-import {ACTION_ID, BANK_ID, BRIDGE_NOTE, PART_ID, TERMS, ZONE_HINT, ZONE_NAMES} from './data';
+import {ACTION_ID, BANK_ID, BRIDGE_NOTE, PART_ID, TERMS, ZONE_NAMES} from './data';
 import './sort.css';
 import {useAnnounce, useSelectAndPlace} from './shared';
-import Tray from './Tray';
+import Zone from './Zone';
 
-interface Result {
-  correct: number;
-  byId: Record<string, boolean>;
-}
-
-/** Hints and the score read fine as plain text; the announcer does the speaking. */
-const Note = ({type, text}: {type: 'success' | 'warning'; text: string}) => (
-  <Alert isImmediateImportance={false} aria-live="off" showIcon={false} type={type} text={text} />
-);
+/** Where every term sits, so a grade can be discarded once the board moves on. */
+const signatureOf = (board: ReturnType<typeof useSelectAndPlace>) =>
+  TERMS.map(term => board.containerOf(term.id)).join('|');
 
 export default function App() {
   const announce = useAnnounce();
@@ -26,91 +20,107 @@ export default function App() {
     containers: Object.entries(ZONE_NAMES).map(([id, label]) => ({id, label})),
     bankId: BANK_ID,
   });
-  const [result, setResult] = useState<Result | null>(null);
+  const [checked, setChecked] = useState<{signature: string; correct: number} | null>(null);
 
-  const placed = TERMS.filter(term => board.containerOf(term.id) !== BANK_ID).length;
+  // The original left its marks on screen while the board kept changing; drop
+  // them instead of showing a grade that no longer describes the board.
+  const result = checked?.signature === signatureOf(board) ? checked : null;
+
+  const bankIds = board.itemsIn(BANK_ID);
+  const placed = TERMS.length - bankIds.length;
+
+  const gradeOf = (zoneId: string) => {
+    if (!result) {
+      return undefined;
+    }
+    const ids = board.itemsIn(zoneId);
+    if (ids.length === 0) {
+      return undefined;
+    }
+    return ids.every(id => TERMS.find(term => term.id === id)?.zone === zoneId)
+      ? ('correct' as const)
+      : ('incorrect' as const);
+  };
 
   const check = () => {
     board.select(null);
-    const byId = Object.fromEntries(
-      TERMS.map(term => [term.id, board.containerOf(term.id) === term.zone]),
-    );
-    const correct = Object.values(byId).filter(Boolean).length;
-    setResult({correct, byId});
+    const correct = TERMS.filter(term => board.containerOf(term.id) === term.zone).length;
+    setChecked({signature: signatureOf(board), correct});
     announce(`${correct} of ${TERMS.length} placed correctly.`);
   };
 
   const reset = () => {
     board.reset();
-    setResult(null);
+    setChecked(null);
     announce('Board reset. All terms returned to the bank.');
   };
-
-  /** Categories that hold at least one misplaced term, in the order they appear. */
-  const zonesWithErrors = [ACTION_ID, PART_ID].filter(zoneId =>
-    board.itemsIn(zoneId).some(id => result && !result.byId[id]),
-  );
 
   return (
     <main className="page">
       <Typography semanticTag="h1" visualAppearance="heading-lg" noMargin>
         Sort: Actions or Parts of the Page?
       </Typography>
-      <Typography semanticTag="p" visualAppearance="body-one">
-        Select a term below, then choose the category it belongs to. Place all eight before
-        checking your answers.
-      </Typography>
-      <Typography semanticTag="p" visualAppearance="body-two">
-        You can also drag a term onto a category, or select a placed term and put it back in the
-        bank.
-      </Typography>
+      <Alert
+        isImmediateImportance={false}
+        aria-live="off"
+        showIcon={false}
+        type="info"
+        text="Click a term below, then click the category it belongs to. Place all eight before checking your answers."
+      />
 
-      <Tray containerId={BANK_ID} title={ZONE_NAMES[BANK_ID]} board={board} results={result?.byId} />
+      <LinearProgress
+        variant="determinate"
+        value={(placed / TERMS.length) * 100}
+        aria-label={`${placed} of ${TERMS.length} terms placed`}
+        sx={{margin: '20px 0'}}
+      />
+
+      <div className="bank" aria-label="Unsorted terms" role="group">
+        {bankIds.map(id => (
+          <button {...board.getItemProps(id)} key={id} className="chip chip--pickable">
+            {TERMS.find(term => term.id === id)?.label}
+          </button>
+        ))}
+      </div>
 
       <div className="zones">
-        <Tray
+        <Zone
           containerId={ACTION_ID}
           title={ZONE_NAMES[ACTION_ID]}
           board={board}
-          results={result?.byId}
+          graded={gradeOf(ACTION_ID)}
         />
-        <Tray
+        <Zone
           containerId={PART_ID}
           title={ZONE_NAMES[PART_ID]}
           board={board}
-          results={result?.byId}
+          graded={gradeOf(PART_ID)}
         />
       </div>
 
-      <Typography semanticTag="p" visualAppearance="body-two" noMargin>
-        {placed} of {TERMS.length} placed
-      </Typography>
-      <LinearProgress
-        aria-hidden="true" // the count above carries the same information as text
-        variant="determinate"
-        value={(placed / TERMS.length) * 100}
-        sx={{marginTop: 1}}
-      />
-
       <div className="actions">
-        <Button
-          text="Check answers"
-          color="purple"
-          disabled={placed < TERMS.length || result !== null}
-          onClick={check}
-        />
+        <Button text="Check answers" color="purple" onClick={check} />
         <Button text="Reset" type="secondary" color="black" onClick={reset} />
       </div>
 
       {result && (
-        <div className="hints">
-          <Typography semanticTag="p" visualAppearance="heading-md" noMargin>
-            {result.correct} of {TERMS.length} placed correctly.
-          </Typography>
-          {zonesWithErrors.map(zoneId => (
-            <Note key={zoneId} type="warning" text={`${ZONE_NAMES[zoneId]} — ${ZONE_HINT}`} />
-          ))}
-          {result.correct === TERMS.length && <Note type="success" text={BRIDGE_NOTE} />}
+        <div className="results">
+          <Alert
+            isImmediateImportance={false}
+            aria-live="off"
+            showIcon={false}
+            type="info"
+            text={`${result.correct} of ${TERMS.length} placed correctly.`}
+          />
+          {result.correct === TERMS.length && (
+            <Alert
+              isImmediateImportance={false}
+              aria-live="off"
+              showIcon={false}
+              type="success"
+              text={BRIDGE_NOTE}
+            />
+          )}
         </div>
       )}
     </main>
