@@ -16,11 +16,11 @@
 @import url('https://dsco.code.org/assets/font-awesome-pro/1779470619/css/regular.min.css');
 
 @import './fonts/code.org/index.css';
-@import './tokens/fontVariables.css';
-@import './tokens/shapeAndSpacingVariables.css';
-@import './tokens/primitiveColors.css';
-@import './tokens/colors.css';
-@import './tokens/brandOverrides.css'; /* umbrella: pulls in all brand files */
+@import '@code-dot-org/component-library-styles/fontVariables.css';
+@import '@code-dot-org/component-library-styles/shapeAndSpacingVariables.css';
+@import '@code-dot-org/component-library-styles/primitiveColors.css';
+@import '@code-dot-org/component-library-styles/colors.css';
+@import '@code-dot-org/component-library-styles/brandOverrides.css'; /* umbrella: pulls in all brand files */
 
 /* Baseline the document: bare HTML outside DS/Typography components should
  * still get the brand font, and MUI's default transitions should respect
