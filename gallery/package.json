@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@code-dot-org/component-library": "0.1.0-alpha.2",
+    "@code-dot-org/component-library": "0.1.0-alpha.3",
     "@codeai-staff-apps/runtime": "file:../packages/runtime",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",

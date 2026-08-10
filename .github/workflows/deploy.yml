@@ -18,8 +18,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      GH_PACKAGES_TOKEN: ${{ secrets.READ_PACKAGES_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,6 +26,9 @@ jobs:
       - name: Build gallery and all apps
         run: |
           set -euo pipefail
+          # The runtime's design tokens must resolve from packages/runtime
+          # itself; npm does not install a file:-linked package's deps.
+          (cd packages/runtime && npm install --no-audit --no-fund)
           node scripts/gen-manifest.mjs > gallery/src/manifest.json
           for dir in gallery apps/*/; do
             [ -f "$dir/package.json" ] || continue

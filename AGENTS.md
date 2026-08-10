@@ -8,7 +8,8 @@ gallery at the site root.
 ## Layout
 
 ```
-packages/runtime/   design tokens + brand fonts + Vite preset (CSP injection).
+packages/runtime/   design tokens (from @code-dot-org/component-library-styles)
+                    + brand fonts + Vite preset (CSP injection).
                     Do not modify without platform review.
 template/           copy this to start an app: cp -r template apps/<app-id>
 gallery/            the index page linking all apps
@@ -23,11 +24,12 @@ scripts/            gen-manifest.mjs — builds the gallery manifest from
 1. `cp -r template apps/<app-id>` (kebab-case id).
 2. Fill in `app.json` (`id` MUST equal the directory name — it sets the Vite
    base path), `package.json` name, `index.html` title/lang.
-3. `export GH_PACKAGES_TOKEN=$(gh auth token)` — required for npm install
-   (the design system comes from GitHub Packages, which needs auth even for
-   reads).
+3. `(cd packages/runtime && npm install)` — once per checkout. The runtime's
+   design tokens come from `@code-dot-org/component-library-styles`, and npm
+   does not install a `file:`-linked package's dependencies for you.
 4. `npm install`, `npm run dev` to iterate, `npm run build` must pass (it
-   typechecks) before you commit.
+   typechecks) before you commit. The design system installs from public npm —
+   no auth token needed.
 
 ## Rules
 

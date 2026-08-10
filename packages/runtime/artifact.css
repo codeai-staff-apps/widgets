@@ -9,11 +9,11 @@
  * glyphs may not render — prefer artifact-publishing apps that don't rely
  * on them.
  */
-@import './tokens/fontVariables.css';
-@import './tokens/shapeAndSpacingVariables.css';
-@import './tokens/primitiveColors.css';
-@import './tokens/colors.css';
-@import './tokens/brandOverrides.css';
+@import '@code-dot-org/component-library-styles/fontVariables.css';
+@import '@code-dot-org/component-library-styles/shapeAndSpacingVariables.css';
+@import '@code-dot-org/component-library-styles/primitiveColors.css';
+@import '@code-dot-org/component-library-styles/colors.css';
+@import '@code-dot-org/component-library-styles/brandOverrides.css';
 
 body {
   font-family: var(--font-family-main);
