@@ -13,10 +13,15 @@
 }
 
 .tray {
+  position: relative;
   margin: 16px 0;
   border: 2px solid var(--borders-neutral-light);
   border-radius: var(--shape-md, 8px);
   overflow: hidden;
+}
+
+.tray--ready {
+  border-color: var(--borders-brand-purple-primary);
 }
 
 .trayTarget {
@@ -33,7 +38,19 @@
   cursor: pointer;
 }
 
-.trayTarget--ready {
+/*
+ * Stretch the heading button's hit area over the whole tray, so any click in
+ * the box places the selected term. `.trayTarget` must stay unpositioned for
+ * this to anchor to `.tray`. Terms are lifted above the overlay below, and the
+ * gaps between them are left to it.
+ */
+.trayTarget::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.tray--ready .trayTarget {
   background: var(--background-brand-purple-extra-light);
   color: var(--text-brand-purple-primary);
 }
@@ -53,7 +70,10 @@
   list-style: none;
 }
 
+/* Above the hit-area overlay, so a term keeps its own click. */
 .trayItems li {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 6px;
