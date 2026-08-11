@@ -27,20 +27,16 @@
   gap: var(--spacing-p-s);
 }
 
-.codeLine {
-  display: block;
-}
-
-.codeLine.isHighlighted {
-  background: var(--background-brand-purple-extra-light);
-  box-shadow: 0 0 0 2px var(--background-brand-purple-extra-light);
-}
-
 .card {
   border: 1px solid var(--border-neutral-secondary);
   border-radius: var(--shape-md);
   padding: var(--spacing-p-m);
   margin-block: var(--spacing-p-m);
+}
+
+.card.noPad {
+  padding: 0;
+  overflow: hidden;
 }
 
 .dialogue {
@@ -69,14 +65,26 @@
 
 .progress {
   display: grid;
-  gap: var(--spacing-p-xxs);
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: var(--spacing-p-s);
+  row-gap: var(--spacing-p-xxs);
   font-size: 0.9rem;
-  color: var(--text-neutral-secondary);
+  margin-bottom: var(--spacing-p-m);
 }
 
-.missionSteps {
-  margin: 0;
-  padding-inline-start: 1.5em;
+.progressCheckLabel {
+  font-weight: 700;
+  color: var(--text-brand-purple-primary);
+}
+
+.progressUnitLabel {
+  color: var(--text-neutral-tertiary);
+  font-size: 0.85rem;
+}
+
+.progressTrack {
+  grid-column: 1 / -1;
 }
 
 .score {
@@ -92,22 +100,23 @@
   color: var(--text-neutral-primary);
 }
 
-.codeCompare {
-  display: grid;
-  gap: var(--spacing-p-s);
-  margin-block: var(--spacing-p-s);
-}
-
-@media (min-width: 48rem) {
-  .codeCompare {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 .recap {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.recapRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-p-s);
+}
+
+.recapTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-p-xs);
+  flex-wrap: wrap;
 }
 
 .recapVerdict {
@@ -119,10 +128,466 @@
   color: var(--text-neutral-secondary);
 }
 
-.recapBadge {
-  border: 1px solid var(--border-neutral-secondary);
+.recapHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s);
+}
+
+.recapLegend {
+  display: flex;
+  gap: var(--spacing-p-m);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-neutral-tertiary);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legendDotIssue {
+  background: var(--background-brand-purple-primary);
+}
+
+.legendDotPass {
+  background: var(--borders-neutral-strong);
+}
+
+.classroomBox {
+  background: var(--background-brand-purple-extra-light);
+  border-color: var(--background-brand-purple-light);
+}
+
+/* ══ THE HERO / COMPLETION BANNER — the app's two indigo panels ══ */
+
+.hero {
+  background: var(--background-brand-primary);
+  border-radius: var(--shape-lg);
+  padding: var(--spacing-p-l) var(--spacing-p-xl, 2rem);
+  color: #fff;
+  display: flex;
+  gap: var(--spacing-p-l);
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--spacing-p-m);
+}
+
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.06);
+  top: -50px;
+  right: -50px;
+}
+
+.hero::after {
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.04);
+  bottom: -40px;
+  left: 20%;
+}
+
+.panelText {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.panelText h1 {
+  color: #fff;
+}
+
+.heroEyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 8px;
+}
+
+.heroSub {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+
+.heroImg {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 12px;
+  border: 2.5px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+/* ══ BLACK HEADER STRIPS — scenario card, bug callout ══ */
+
+.blackStrip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-p-s);
+}
+
+.blackStripLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.blackStripTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.scenarioBody {
+  display: flex;
+  gap: var(--spacing-p-m);
+  align-items: flex-start;
+  padding: var(--spacing-p-m);
+}
+
+.scenarioImg {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 10px;
+  border: 2px solid var(--border-neutral-secondary);
+  flex-shrink: 0;
+  display: block;
+}
+
+.bugCalloutBody {
+  padding: var(--spacing-p-m);
+  display: grid;
+  gap: var(--spacing-p-s);
+}
+
+/* ══ THE MISSION GRID ══ */
+
+.missionSteps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-p-xs);
+  margin: 0 0 var(--spacing-p-m);
+  padding: 0;
+}
+
+.hairline {
+  border: none;
+  border-top: 1px solid var(--border-neutral-secondary);
+  margin: var(--spacing-p-s) 0;
+}
+
+/* ══ CHARACTER DIALOGUE — the mirrored speech bubbles ══ */
+
+.charRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-p-s);
+  margin-bottom: var(--spacing-p-m);
+}
+
+.charImg {
+  width: 68px;
+  height: 68px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 10px;
+  border: 2px solid var(--border-neutral-secondary);
+  flex-shrink: 0;
+  display: block;
+}
+
+.charName {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+
+.charName--teacher {
+  color: var(--text-brand-purple-primary);
+}
+
+.charName--student {
+  color: var(--text-neutral-secondary);
+}
+
+.charBubble {
+  margin: 0;
+  background: #fff;
+  border: 1.5px solid var(--border-neutral-secondary);
+  border-radius: 0 12px 12px 12px;
+  padding: 9px 13px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.charBubble--teacher {
+  border-radius: 12px 0 12px 12px;
+  border-color: var(--background-brand-purple-light);
+  background: #faf9ff;
+}
+
+/* ══ THE DARK EDITOR SURFACES ══
+   Shared by the activity's IDE panel, the intro's static code preview, and
+   the summary's bug-vs-fix compare. This dark box, its line numbers, its
+   syntax colours and — above all — the highlight wash that moves to the
+   line under discussion are how the app points at the bug; no DS/MUI
+   component does any of this. */
+
+.codeDark,
+.ide {
+  background: #1e1e2e;
+  border-radius: var(--shape-md);
+  overflow: hidden;
+  font-family: monospace;
+}
+
+.codeDarkHeader,
+.ideTopbar {
+  background: #181825;
+  border-bottom: 1px solid #2d2d42;
+  display: flex;
+  align-items: center;
+}
+
+.codeDarkHeader {
+  gap: 7px;
+  padding: 8px 14px;
+}
+
+.ideDots {
+  display: flex;
+  gap: 5px;
+  padding: 9px 12px;
+}
+
+.ideDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.ideDotR {
+  background: #ff5f57;
+}
+
+.ideDotY {
+  background: #febc2e;
+}
+
+.ideDotG {
+  background: #28c840;
+}
+
+.codeDarkLabel {
+  font-size: 0.67rem;
+  color: #8a8fa6;
+  margin-left: 4px;
+}
+
+.ideTabs {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+}
+
+.ideTab {
+  padding: 7px 14px;
+  font-size: 0.68rem;
+  color: #6b7280;
+  border-right: 1px solid #2d2d42;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ideTabActive {
+  background: #1e1e2e;
+  color: #e2e8f0;
+}
+
+.ideTabDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6a62d9;
+}
+
+.codeDarkBody {
+  padding: 14px 18px;
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+.ideBody {
+  padding: 12px 0;
+  overflow-y: auto;
+  scrollbar-color: #2d2d42 transparent;
+}
+
+.codeLine {
+  display: flex;
+  align-items: center;
+  min-height: 21px;
+  font-size: 0.75rem;
+  line-height: 1.65;
+  position: relative;
+  transition: background 0.3s;
+  padding-right: 12px;
+}
+
+.codeLine.isHighlighted {
+  background: rgba(106, 98, 217, 0.18);
+}
+
+.codeLine.bugWash {
+  background: rgba(239, 68, 68, 0.15);
+  border-radius: 4px;
+}
+
+.codeLine.fixWash {
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 4px;
+}
+
+.lineNum {
+  width: 32px;
+  text-align: right;
+  padding-right: 12px;
+  color: #3d3d5c;
+  user-select: none;
+  flex-shrink: 0;
+  font-size: 0.67rem;
+}
+
+.lineCode {
+  color: #cdd6f4;
+  flex: 1;
+}
+
+/* Code is whitespace-significant: indentation and inter-token spacing must
+   survive, and this wrapper keeps them out of flex-item collapsing. */
+.codeText {
+  white-space: pre;
+}
+
+/* Syntax colours, scoped to the dark editor surfaces so these short class
+   names never leak into the rest of the page. #6c7086 (the original's
+   comment colour) is 3.4:1 on #1e1e2e and these comments are content
+   ("// Expected:", "// Actual:"), so it is lightened to #8A8FA6 for AA. */
+.ide .kw,
+.codeDark .kw {
+  color: #cba6f7;
+}
+
+.ide .fn,
+.codeDark .fn {
+  color: #89b4fa;
+}
+
+.ide .num,
+.codeDark .num {
+  color: #fab387;
+}
+
+.ide .op,
+.codeDark .op {
+  color: #89dceb;
+}
+
+.ide .punc,
+.codeDark .punc {
+  color: #ffffff;
+}
+
+.ide .var,
+.codeDark .var {
+  color: #cdd6f4;
+}
+
+.ide .cm,
+.codeDark .cm {
+  color: #8a8fa6;
+  font-style: italic;
+}
+
+.bugTag {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ef4444;
+  color: #fff;
+  font-family: var(--font-family-main);
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 2px 7px;
   border-radius: var(--shape-round);
-  padding: 0 var(--spacing-p-xs);
+}
+
+.ideConsole {
+  background: #11111b;
+  border-top: 1px solid #2d2d42;
+  padding: 8px 14px;
+  min-height: 54px;
+  flex-shrink: 0;
+}
+
+.consoleLabel {
+  font-size: 0.6rem;
+  color: #8a8fa6;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.consoleOut {
+  font-size: 0.73rem;
+  color: #8a8fa6;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.consoleOut .revealed {
+  color: #a6e3a1;
+}
+
+.consoleOut .warn {
+  color: #f38ba8;
 }
 
 @media (prefers-reduced-motion: reduce) {

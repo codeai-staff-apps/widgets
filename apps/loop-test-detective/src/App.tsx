@@ -1,15 +1,21 @@
 import Alert from '@code-dot-org/component-library/alert';
 import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import LinearProgress from '@mui/material/LinearProgress';
 import {useEffect, useState} from 'react';
 
 import './app.css';
+import studentImg from './assets/student_veo.png';
+import teacherImg from './assets/teacher_veo.png';
 import CheckScreen from './CheckScreen';
 import CodePanel from './CodePanel';
 import {resolveContent} from './content/resolve';
 import Dialogue from './Dialogue';
-import {CodeBlock, Screen, useAnnounce, useScreenMachine} from './shared';
+import {renderLine} from './highlightCode';
+import {Screen, useAnnounce, useScreenMachine} from './shared';
 import SummaryScreen from './SummaryScreen';
 
 const {lang, chrome, scenario, fellBack} = resolveContent(window.location.search);
@@ -19,6 +25,17 @@ const SCREEN_IDS = ['intro', ...CHECK_IDS, 'summary'];
 
 const progressLabel = (checkNumber: number) =>
   chrome.progressOf.replace('{n}', String(checkNumber));
+
+const CODE_PREVIEW_LINES = [
+  scenario.code.comment,
+  '',
+  scenario.code.loop,
+  scenario.code.body,
+  scenario.code.close,
+  '',
+  scenario.code.expected,
+  scenario.code.actualUnknown,
+];
 
 export default function App() {
   const announce = useAnnounce();
@@ -30,7 +47,7 @@ export default function App() {
     onEnter: id => {
       const index = CHECK_IDS.indexOf(id);
       if (index >= 0) {
-        announce(progressLabel(index + 1));
+        announce(`${progressLabel(index + 1)}. ${scenario.checks[index].title}`);
       }
     },
   });
@@ -67,16 +84,17 @@ export default function App() {
         heading={chrome.introTitle}
         headingTag="h1"
         headingAppearance="heading-lg"
+        panelClassName="hero"
+        eyebrow={chrome.eyebrow && <p className="heroEyebrow">{chrome.eyebrow}</p>}
+        afterHeading={<p className="heroSub">{chrome.introSub}</p>}
+        panelEnd={
+          <img
+            className="heroImg"
+            src={teacherImg}
+            alt={chrome.heroImgAlt ?? chrome.teacherImgAlt}
+          />
+        }
       >
-        {chrome.eyebrow && (
-          <Typography semanticTag="p" visualAppearance="overline-two">
-            {chrome.eyebrow}
-          </Typography>
-        )}
-        <Typography semanticTag="p" visualAppearance="body-one">
-          {chrome.introSub}
-        </Typography>
-
         {fellBack && (
           <Alert type="info" size="s" isImmediateImportance={false} text={chrome.fallbackNote} />
         )}
@@ -86,49 +104,87 @@ export default function App() {
         )}
 
         {chrome.scenarioCard && (
-          <section className="card">
-            <Typography semanticTag="p" visualAppearance="overline-two">
-              {chrome.scenarioCard.label}
-            </Typography>
-            <Typography semanticTag="h2" visualAppearance="heading-sm">
-              {chrome.scenarioCard.header}
-            </Typography>
-            <Dialogue speaker={chrome.scenarioCard.studentLabel}>
-              {chrome.scenarioCard.quote}
-            </Dialogue>
-            <Typography semanticTag="p" visualAppearance="body-two" noMargin>
-              {chrome.scenarioCard.body}
-            </Typography>
+          <section className="card noPad">
+            <Box
+              sx={{bgcolor: '#000', color: '#fff', px: 2.25, py: 1.25}}
+              className="blackStrip"
+            >
+              <span className="blackStripLabel">{chrome.scenarioCard.label}</span>
+              <span className="blackStripTitle">{chrome.scenarioCard.header}</span>
+            </Box>
+            <div className="scenarioBody">
+              <img
+                className="scenarioImg"
+                src={studentImg}
+                alt={chrome.scenarioCard.imgAlt ?? chrome.studentImgAlt}
+              />
+              <div>
+                <Dialogue speaker={chrome.scenarioCard.studentLabel}>
+                  {chrome.scenarioCard.quote}
+                </Dialogue>
+                <Typography semanticTag="p" visualAppearance="body-two" noMargin>
+                  {chrome.scenarioCard.body}
+                </Typography>
+              </div>
+            </div>
           </section>
         )}
 
-        <CodeBlock>
-          {[
-            scenario.code.comment,
-            '',
-            scenario.code.loop,
-            scenario.code.body,
-            scenario.code.close,
-            '',
-            scenario.code.expected,
-            scenario.code.actualUnknown,
-          ].join('\n')}
-        </CodeBlock>
+        <div className="codeDark" role="group" aria-label="Alex's loop code">
+          <div className="codeDarkHeader" aria-hidden="true">
+            <span className="ideDot ideDotR" />
+            <span className="ideDot ideDotY" />
+            <span className="ideDot ideDotG" />
+            <span className="codeDarkLabel">script.js — Alex's AI-generated loop</span>
+          </div>
+          <div className="codeDarkBody">
+            {CODE_PREVIEW_LINES.map((line, i) => (
+              <div key={i} className="codeLine">
+                {renderLine(line, `preview-${i}`)}
+              </div>
+            ))}
+          </div>
+        </div>
 
         <section className="card">
           <Typography semanticTag="h2" visualAppearance="heading-sm">
             {chrome.missionHeading}
           </Typography>
-          <Typography semanticTag="p" visualAppearance="body-two">
-            {chrome.missionText}
-          </Typography>
           {chrome.missionSteps && (
             <ol className="missionSteps">
-              {chrome.missionSteps.map(step => (
-                <li key={step}>{step}</li>
+              {chrome.missionSteps.map((step, i) => (
+                <li key={step}>
+                  <Chip
+                    avatar={
+                      <Avatar
+                        sx={{
+                          width: 20,
+                          height: 20,
+                          fontSize: '0.65rem',
+                          fontWeight: 900,
+                          bgcolor: 'primary.main',
+                          color: '#fff',
+                        }}
+                      >
+                        {i + 1}
+                      </Avatar>
+                    }
+                    label={step}
+                    sx={{
+                      width: '100%',
+                      justifyContent: 'flex-start',
+                      bgcolor: 'var(--background-neutral-secondary)',
+                      border: '1.5px solid var(--border-neutral-secondary)',
+                    }}
+                  />
+                </li>
               ))}
             </ol>
           )}
+          <hr className="hairline" />
+          <Typography semanticTag="p" visualAppearance="body-two" noMargin>
+            {chrome.missionText}
+          </Typography>
         </section>
 
         <div>
@@ -150,11 +206,15 @@ export default function App() {
         <div>
           {inActivity && (
             <p className="progress">
-              <span>{progressLabel(checkIndex + 1)}</span>
+              <span className="progressCheckLabel">
+                {progressLabel(checkIndex + 1)} — {scenario.checks[checkIndex].title}
+              </span>
+              <span className="progressUnitLabel">{chrome.unitTag}</span>
               <LinearProgress
                 aria-hidden="true"
                 variant="determinate"
                 value={((checkIndex + 1) / scenario.checks.length) * 100}
+                className="progressTrack"
               />
             </p>
           )}
@@ -178,6 +238,7 @@ export default function App() {
             scenario={scenario}
             chrome={chrome}
             highlight={scenario.checks[checkIndex].highlight}
+            checkIndex={checkIndex}
             revealed={revealed}
           />
         )}

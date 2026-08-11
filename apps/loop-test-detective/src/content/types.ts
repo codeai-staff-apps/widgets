@@ -78,12 +78,16 @@ export interface Chrome {
   introTitle: string;
   introSub: string;
   introTeacherLine?: string;
+  /** Alt text for the teacher photo in the hero banner. Falls back to `teacherImgAlt`. */
+  heroImgAlt?: string;
   scenarioCard?: {
     label: string;
     header: string;
     studentLabel: string;
     quote: string;
     body: string;
+    /** Alt text for the student photo. Falls back to `studentImgAlt`. */
+    imgAlt?: string;
   };
   missionHeading: string;
   missionText: string;
@@ -94,10 +98,16 @@ export interface Chrome {
   progressOf: string;
   teacherName: string;
   studentName: string;
+  /** Alt text for the teacher photo in the activity's character area and takeaway. */
+  teacherImgAlt: string;
+  /** Alt text for the student photo in the activity's character area. */
+  studentImgAlt: string;
   btnPasses: string;
   btnIssue: string;
   btnNext: string;
   btnResults: string;
+  /** Shown, aria-hidden, on the buggy loop line once revealed. */
+  bugTagLabel: string;
   consoleLabel: string;
   consoleInitial: string;
   youSaidPasses: string;
@@ -108,6 +118,8 @@ export interface Chrome {
   summaryEyebrow?: string;
   summaryTitle: string;
   summarySub: string;
+  /** Alt text for the teacher photo in the completion header. Falls back to `teacherImgAlt`. */
+  summaryImgAlt?: string;
   recapTitle?: string;
   issueLabel?: string;
   passLabel?: string;
