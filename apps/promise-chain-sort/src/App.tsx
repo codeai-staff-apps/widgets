@@ -1,7 +1,7 @@
 import Alert from '@code-dot-org/component-library/alert';
 import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
-import {useState} from 'react';
+import {Fragment, useState} from 'react';
 
 import {ALL_CORRECT, NOT_YET, plainText, STEPS, STEPS_ID, type Segment, type Step} from './data';
 import './chain.css';
@@ -39,6 +39,24 @@ export default function App() {
     setMarks(null);
   };
 
+  // Picking up a step — by click, keyboard activation, or the first pointer-move
+  // past the drag threshold — clears feedback the same way the original's
+  // dragstart/touchstart handlers called clearFeedbackStyles().
+  const pickUp = (step: Step) => {
+    const {onPointerDown, onClick, ...rest} = board.getItemProps(step.id);
+    return {
+      ...rest,
+      onPointerDown: (e: Parameters<typeof onPointerDown>[0]) => {
+        setMarks(null);
+        onPointerDown(e);
+      },
+      onClick: () => {
+        setMarks(null);
+        onClick();
+      },
+    };
+  };
+
   const check = () => {
     const right: number[] = [];
     const wrong: number[] = [];
@@ -70,47 +88,69 @@ export default function App() {
         Mini Checkpoint
       </Typography>
       <Typography semanticTag="p" visualAppearance="body-one">
-        Put the steps into timeline order with each step's up and down buttons. Then check your
-        answer before moving on.
+        Drag the steps into timeline order, or move them with each step's up and down buttons.
+        Then check your answer before moving on.
       </Typography>
 
-      <ol className="steps">
+      <ol className={board.selectedId ? 'steps steps--armed' : 'steps'}>
+        <li className="slotRow">
+          <button {...board.getTargetProps(STEPS_ID, {index: 0})} className="slot" />
+        </li>
         {order.map((step, index) => (
-          <li key={step.id} className="step">
-            <span className="stepPosition" aria-hidden="true">
-              {index + 1}
-            </span>
-            <span className="stepText">{renderSegments(step.segments)}</span>
-            {marks && (
-              <span className={marks[step.id] ? 'mark mark--right' : 'mark mark--wrong'}>
-                <span aria-hidden="true">{marks[step.id] ? '✓' : '✗'} </span>
-                {marks[step.id] ? 'correct' : 'needs to move'}
+          <Fragment key={step.id}>
+            <li
+              className={
+                'step' +
+                (marks ? (marks[step.id] ? ' step--right' : ' step--wrong') : '') +
+                (board.selectedId === step.id ? ' step--picked' : '')
+              }
+            >
+              <button {...pickUp(step)} className="handle" aria-label={`Pick up ${plainText(step)}`}>
+                <span aria-hidden="true">⠿</span>
+              </button>
+              <span className="stepPosition" aria-hidden="true">
+                {index + 1}
               </span>
-            )}
-            <Button
-              isIconOnly
-              icon={{iconName: 'arrow-up', iconStyle: 'solid'}}
-              type="secondary"
-              color="black"
-              size="l"
-              ariaLabel={`Move ${plainText(step)} up`}
-              onClick={() => move(step, -1)}
-            />
-            <Button
-              isIconOnly
-              icon={{iconName: 'arrow-down', iconStyle: 'solid'}}
-              type="secondary"
-              color="black"
-              size="l"
-              ariaLabel={`Move ${plainText(step)} down`}
-              onClick={() => move(step, 1)}
-            />
-          </li>
+              <span className="stepText">{renderSegments(step.segments)}</span>
+              {marks && (
+                <span className={marks[step.id] ? 'mark mark--right' : 'mark mark--wrong'}>
+                  <span aria-hidden="true">{marks[step.id] ? '✓ ' : '✗ '}</span>
+                  {marks[step.id] ? 'correct' : 'needs to move'}
+                </span>
+              )}
+              <Button
+                isIconOnly
+                icon={{iconName: 'arrow-up', iconStyle: 'solid'}}
+                type="secondary"
+                color="black"
+                size="l"
+                ariaLabel={`Move ${plainText(step)} up`}
+                onClick={() => move(step, -1)}
+              />
+              <Button
+                isIconOnly
+                icon={{iconName: 'arrow-down', iconStyle: 'solid'}}
+                type="secondary"
+                color="black"
+                size="l"
+                ariaLabel={`Move ${plainText(step)} down`}
+                onClick={() => move(step, 1)}
+              />
+            </li>
+            <li className="slotRow">
+              <button {...board.getTargetProps(STEPS_ID, {index: index + 1})} className="slot" />
+            </li>
+          </Fragment>
         ))}
       </ol>
 
       <div className="actions">
-        <Button text="Check order" color="purple" onClick={check} />
+        <Button
+          text="Check Order"
+          iconRight={{iconName: 'check', iconStyle: 'solid'}}
+          color="purple"
+          onClick={check}
+        />
         <Button text="Reset" type="secondary" color="black" onClick={reset} />
       </div>
 
