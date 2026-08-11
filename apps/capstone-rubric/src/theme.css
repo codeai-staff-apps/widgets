@@ -1,0 +1,18 @@
+/* Layer 1 — re-token the design system for the rubric's indigo/lavender
+   palette. Must use :root[data-brand] (specificity 0,2,0): a plain :root{}
+   ties with the DS's [data-brand=codeai-next] block and loses on source
+   order.
+
+   The codeai-next light brand already resolves to this app's purple family
+   (--background-brand-primary: #4c42cf, --background-brand-light: #e4e2f8,
+   --brand-purple-95: #1f1976) — nothing to restate there. The only real
+   delta is the success ramp: the DS mint (#d8ffdc / #34bd43) is not the
+   rubric's "selected" green (#ccf1d0 / #5cb86b). */
+:root[data-brand] {
+  --background-success-light: #ccf1d0; /* .scoreBtnSelected fill */
+  --background-success-mid: #7cdb87;
+  --border-success-primary: #5cb86b; /* .scoreBtnSelected border */
+  --border-success-light: #7cdb87;
+  --text-success-primary: #1f7028; /* AA on #ccf1d0 */
+  --text-success-primary-fixed: #003f25;
+}

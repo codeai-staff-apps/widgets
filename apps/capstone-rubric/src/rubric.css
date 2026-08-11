@@ -1,9 +1,35 @@
+/* Layer 3 — the lavender field the whole app floats on. The 90px bottom
+   padding clears the sticky total bar, as in the original. */
+body {
+  background: #e4e2f8;
+  padding-bottom: 90px;
+}
+
 .page {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px;
 }
 
+/* Typography has no colour prop, so the heading's indigo comes from here. */
+.page h1 {
+  color: #1f1976;
+}
+
+/* Makes TableContainer's horizontal overflow real instead of squeezing 20
+   prose cells into unreadable columns. */
+.rubricTable {
+  min-width: 820px;
+}
+
+/* Point sub-line under each column's evidence-level name. */
+.pts {
+  display: block;
+  font-weight: 500;
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
 
 /* Score cells are picked as a whole, so the button fills its cell. */
 .scoreBtn {
@@ -24,12 +50,4 @@
 /* State is carried by aria-pressed; the check keeps it from being colour-only. */
 .scoreBtnSelected::before {
   content: '✓ ';
-}
-
-.totalBar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 16px;
-  padding-top: 16px;
 }
