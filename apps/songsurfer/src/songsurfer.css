@@ -1,21 +1,77 @@
-.page {
+/* Layer 3 — the signature 80s-arcade motifs no token or MUI prop can supply:
+   the navy page ground, the cyan-ringed/magenta-bloomed console panel, and
+   the phosphor glow on every glyph (one inherited text-shadow, resolved per
+   element via `currentColor` so each element glows in its own colour). */
+
+body {
+  background-color: #1a1a2e;
+  min-height: 100vh;
+}
+
+.console {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid var(--ss-cyan);
+  box-shadow: 0 0 15px var(--ss-magenta-glow);
+  background: rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 5px currentColor;
+}
+
+.title {
+  margin-bottom: 24px;
+  text-align: center;
+  /* Layer 1b: re-scope the token the DS Typography component reads for
+     `color`, rather than fighting its own class on specificity. */
+  --text-neutral-primary: var(--ss-yellow);
+  text-shadow: 0 0 10px var(--ss-yellow), 0 0 20px var(--ss-yellow);
 }
 
 .filters {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
   align-items: flex-end;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.count {
+  --text-neutral-primary: var(--ss-magenta-text);
 }
 
 .songGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 30px;
+  justify-items: center;
+  width: 100%;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.songTitle {
+  --text-neutral-primary: var(--ss-yellow);
+}
+
+.artistName {
+  --text-neutral-primary: var(--ss-cyan);
+}
+
+.genreMood {
+  --text-neutral-primary: var(--ss-magenta-text);
+}
+
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  --text-neutral-primary: var(--ss-magenta-text);
 }
