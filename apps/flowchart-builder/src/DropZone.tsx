@@ -26,14 +26,19 @@ export default function DropZone({zone, board, mark}: DropZoneProps) {
     <div className="zoneWrap">
       <button
         {...board.getTargetProps(zone.id)}
-        className={['zone', mark && `zone--${mark}`, pulsing && 'zone--pulse']
+        className={[
+          'zone',
+          zone.tint && !mark && `zone--${zone.tint}`,
+          mark && `zone--${mark}`,
+          pulsing && 'zone--pulse',
+        ]
           .filter(Boolean)
           .join(' ')}
       >
         {chip ? (
-          <span className="zoneCode">{chip.text}</span>
+          <span className={`zoneCode zoneCode--${chip.tone}`}>{chip.text}</span>
         ) : (
-          <span className="zonePlaceholder">drop zone</span>
+          <span className="zonePlaceholder">drop code here</span>
         )}
       </button>
       {chip && (

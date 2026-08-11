@@ -6,11 +6,73 @@
   color: var(--text-neutral-primary);
 }
 
+/* Layer 3 — the instruction bar and feedback bar wrap the DSCO Alert in a
+   plain div so the border/radius/tone rescoping never has to fight the
+   Alert's own CSS specificity. */
+.instructionWrap {
+  border-left: 4px solid var(--border-brand-purple-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.feedbackWrap {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+/* Layer 1b — the DSCO Alert always reads `--background-*-extra-light` for
+   its fill, but the original uses a DIFFERENT shade for this banner than for
+   the Yes/No branch tint (success) or the No-branch/Keep-Trying tint
+   (warning). Rescope locally rather than fight the shared ramp. */
+.feedbackWrap.feedback--correct {
+  --background-success-extra-light: #dcfce7;
+  --text-neutral-primary: #166534;
+  border: 2px solid var(--border-success-primary);
+}
+
+.feedbackWrap.feedback--partial {
+  --background-warning-extra-light: #fef9c3;
+  --text-neutral-primary: #854d0e;
+  border: 2px solid #fbbf24;
+}
+
 .bank {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 8px;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #c9d4f0;
+}
+
+.dot--filled {
+  background: #a5b4fc;
+}
+
+.dot--correct {
+  background: #22c55e;
+}
+
+.dot--incorrect {
+  background: #ff6b6b;
 }
 
 /* Code chips and placed code read as code, so they keep a monospace face. */
@@ -30,8 +92,42 @@
   cursor: pointer;
 }
 
+/* The six-colour chip coding: `if (score > 100)` and `} else {` share a tone
+   because they are the same construct — that is a teaching signal, not
+   decoration, so it survives as data (Chip.tone) rather than six components. */
+.chip--start {
+  background: #1e3a5f;
+  color: #7dd3fc;
+  border-color: #0ea5e9;
+}
+
+.chip--if-else {
+  background: #312e81;
+  /* Nudged from the original #c084fc (4.3:1 on this fill) to clear 4.5:1 AA. */
+  color: #c98cff;
+  border-color: #4f46e5;
+}
+
+.chip--win {
+  background: #14532d;
+  color: #86efac;
+  border-color: #16a34a;
+}
+
+.chip--keep {
+  background: #7c2d12;
+  color: #fdba74;
+  border-color: #ea580c;
+}
+
+.chip--end {
+  background: #1e293b;
+  color: #cbd5e1;
+  border-color: #475569;
+}
+
 .chip[aria-pressed='true'] {
-  background: var(--background-brand-purple-light);
+  /* A ring only — a background here would erase the chip's tone colour. */
   box-shadow: 0 0 0 3px var(--borders-brand-purple-primary);
 }
 
@@ -52,7 +148,8 @@
   place-items: center;
   padding: 12px 20px;
   text-align: center;
-  font-weight: var(--font-weight-semi-bold, 600);
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-black);
 }
 
 .oval {
@@ -62,14 +159,38 @@
   color: var(--text-brand-purple-primary);
 }
 
-/* The diamond is the flowchart's decision vocabulary, so the shape is content. */
+/* The diamond is the flowchart's decision vocabulary, so the shape is
+   content. A rotated inner box (not clip-path, which clips borders away)
+   carries the 3px stroke; the label sits on top, unrotated. */
 .diamond {
-  width: 260px;
-  height: 130px;
-  padding: 0 40px;
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  position: relative;
+  width: 180px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.diamond::before {
+  content: '';
+  position: absolute;
+  width: 110px;
+  height: 68px;
   background: var(--background-brand-purple-light);
+  border: 3px solid var(--borders-brand-purple-primary);
+  transform: rotate(45deg);
+}
+
+.diamondLabel {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  text-align: center;
   color: var(--text-brand-purple-primary);
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-black);
+  font-size: 0.82rem;
+  line-height: 1.2;
 }
 
 .terminal {
@@ -79,7 +200,7 @@
 
 .terminal--win {
   border-color: var(--borders-success-primary);
-  background: var(--background-success-extra-light);
+  background: var(--background-success-light);
   color: var(--text-success-primary);
 }
 
@@ -89,9 +210,32 @@
   color: var(--text-warning-primary);
 }
 
+/* The drawn connector: a rule with a triangular head, replacing the '↓' glyph. */
 .arrow {
-  color: var(--text-neutral-secondary);
-  line-height: 1;
+  width: 2px;
+  height: 24px;
+  background: var(--borders-neutral-strong);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.arrow::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--borders-neutral-strong);
+}
+
+/* The horizontal split into Yes / No. */
+.branchBar {
+  width: 200px;
+  height: 2px;
+  background: var(--borders-neutral-strong);
+  margin: 8px auto 0;
 }
 
 .branches {
@@ -132,6 +276,16 @@
   cursor: pointer;
 }
 
+/* Branch tinting: the Yes zone reads as a win outcome, the No zones as a
+   keep-trying outcome, before any grading happens — pre-coloured by outcome. */
+.zone--yes {
+  background: var(--background-success-extra-light);
+}
+
+.zone--no {
+  background: var(--background-warning-extra-light);
+}
+
 .zone--pulse {
   border-style: solid;
   border-color: var(--borders-brand-purple-primary);
@@ -141,7 +295,7 @@
 .zone--correct {
   border-style: solid;
   border-color: var(--borders-success-primary);
-  background: var(--background-success-extra-light);
+  background: var(--background-success-light);
 }
 
 .zone--wrong {
@@ -152,7 +306,29 @@
 
 .zoneCode {
   font-size: 14px;
-  color: var(--text-neutral-primary);
+}
+
+/* The chip's colour identity, carried onto the zone. The original's bright
+   chip text (e.g. #86efac) would fail contrast on this white zone, so these
+   are darkened variants of the same tone rather than the literal chip hex. */
+.zoneCode--start {
+  color: #0b5c86;
+}
+
+.zoneCode--if-else {
+  color: #6b21a8;
+}
+
+.zoneCode--win {
+  color: #14532d;
+}
+
+.zoneCode--keep {
+  color: #9a3412;
+}
+
+.zoneCode--end {
+  color: #334155;
 }
 
 .zonePlaceholder {
@@ -160,7 +336,6 @@
   color: var(--text-neutral-secondary);
 }
 
-/* Sized to the WCAG 2.5.8 floor; the original was an 18px unfocusable span. */
 .actions {
   display: flex;
   gap: 12px;
