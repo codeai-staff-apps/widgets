@@ -1,0 +1,31 @@
+/* apps/museum-explorer/src/theme.css — Layer 1: re-token the design system
+   for "My Decent Docent"'s warm-paper page and purple-hero identity.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order. */
+:root[data-brand] {
+  /* surfaces: warm paper page, cool white cards */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #f7f5f2;
+  --background-neutral-tertiary: #ece9fb;
+
+  /* text */
+  --text-neutral-primary: #221d3b;
+  --text-neutral-secondary: #5c5678;
+  --text-neutral-white-fixed: #ffffff;
+
+  /* borders */
+  --borders-neutral-primary: #e4e0f3;
+
+  /* the purple family: links, headings, the info-panel underline colour */
+  --background-brand-purple-primary: #4c2889;
+  --background-brand-purple-strong: #241659;
+  --text-brand-purple-primary: #4c2889;
+  --borders-brand-purple-primary: #4c2889;
+
+  /* shared focus/caret colour for DS inputs and buttons — the hero's cream ring */
+  --borders-brand-teal-primary: #ffd98e;
+
+  /* error status */
+  --text-error-primary: #b23b3b;
+  --borders-error-primary: #b23b3b;
+}

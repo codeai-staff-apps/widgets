@@ -1,7 +1,6 @@
 import Button from '@code-dot-org/component-library/button';
 import Image from '@code-dot-org/component-library/image';
 import Link from '@code-dot-org/component-library/link';
-import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -38,6 +37,8 @@ export default function Detail({artwork, onClose}: DetailProps) {
   const backRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
 
   useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top: 0, behavior: reduceMotion ? 'auto' : 'smooth'});
     backRef.current?.focus();
   }, []);
 
@@ -64,6 +65,7 @@ export default function Detail({artwork, onClose}: DetailProps) {
         type="secondary"
         color="black"
         text="Back to gallery"
+        iconLeft={{iconName: 'arrow-left', iconStyle: 'solid'}}
         onClick={onClose}
       />
 
@@ -82,10 +84,13 @@ export default function Detail({artwork, onClose}: DetailProps) {
           <Typography semanticTag="p" visualAppearance="body-one">
             {artist}
           </Typography>
-          <Tags tagsList={[{label: artwork.objectDate || 'Date unknown'}]} />
+          {/* A plain span, not the DS Tags chip: Tags renders uppercase,
+              bold, teal-tinted text, which fights the original's plain,
+              muted, monospace date pill more than it helps. */}
+          <span className="date-pill">{artwork.objectDate || 'Date unknown'}</span>
 
           <div className="info-cards">
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{borderRadius: '14px'}}>
               <CardContent>
                 <Typography semanticTag="h3" visualAppearance="heading-xs">
                   Object Details
@@ -98,7 +103,7 @@ export default function Detail({artwork, onClose}: DetailProps) {
               </CardContent>
             </Card>
 
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{borderRadius: '14px'}}>
               <CardContent>
                 <Typography semanticTag="h3" visualAppearance="heading-xs">
                   Cultural Information
