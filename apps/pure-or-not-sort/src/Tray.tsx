@@ -22,9 +22,11 @@ interface TrayProps {
 export default function Tray({containerId, title, glyph, board, results}: TrayProps) {
   const ids = board.itemsIn(containerId);
   const locked = results !== undefined;
+  // 'bank' | 'pure' | 'side' — drives the two-tone zone colouring in sort.css.
+  const zone = containerId.startsWith('zone-') ? containerId.slice('zone-'.length) : containerId;
 
   return (
-    <div className="tray">
+    <div className="tray" data-zone={zone} data-dragover={board.hoveredTargetId === containerId || undefined}>
       <button
         {...board.getTargetProps(containerId)}
         className={board.selectedId && !locked ? 'trayTarget trayTarget--ready' : 'trayTarget'}
@@ -36,7 +38,12 @@ export default function Tray({containerId, title, glyph, board, results}: TrayPr
       <ul className="trayItems">
         {ids.map(id => (
           <li key={id}>
-            <button {...board.getItemProps(id)} className="chip" disabled={locked}>
+            <button
+              {...board.getItemProps(id)}
+              className="chip"
+              disabled={locked}
+              data-grade={results && (results[id] ? 'right' : 'wrong')}
+            >
               {methodById[id].label}
             </button>
             {results && (

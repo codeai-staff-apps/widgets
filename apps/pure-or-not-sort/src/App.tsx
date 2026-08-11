@@ -24,7 +24,7 @@ interface Result {
 }
 
 /** Hints and the score read fine as plain text; the announcer does the speaking. */
-const Note = ({type, text}: {type: 'success' | 'warning'; text: string}) => (
+const Note = ({type, text}: {type: 'success' | 'warning'; text: string | JSX.Element}) => (
   <Alert isImmediateImportance={false} aria-live="off" showIcon={false} type={type} text={text} />
 );
 
@@ -61,16 +61,26 @@ export default function App() {
   const wrong = METHODS.filter(method => result && !result.byId[method.id]);
   const right = METHODS.filter(method => result?.byId[method.id]);
 
+  const scoreLabel = result
+    ? scoreMessage(result.correct)
+    : placed === 0
+      ? 'place all methods to check'
+      : placed < METHODS.length
+        ? `${METHODS.length - placed} left to place`
+        : 'ready — check your answers!';
+
   return (
     <main className="page">
       <Typography semanticTag="h1" visualAppearance="heading-lg" noMargin>
         Pure or Not? Sorting What You Know
       </Typography>
-      <Typography semanticTag="p" visualAppearance="body-one">
-        Sort each method into the correct category — <strong>Pure / non-mutating</strong> or{' '}
-        <strong>Has side effects</strong>. Use what you saw in the visualizer to guide you, then
-        check your answers.
-      </Typography>
+      <div className="directions" role="note" aria-label="Activity directions">
+        <Typography semanticTag="p" visualAppearance="body-one" noMargin>
+          Sort each method into the correct category — <strong>Pure / non-mutating</strong> or{' '}
+          <strong>Has side effects</strong>. Use what you saw in the visualizer to guide you, then
+          check your answers.
+        </Typography>
+      </div>
       <Typography semanticTag="p" visualAppearance="body-two">
         Select a method, then choose a category. You can also drag a method onto a category.
       </Typography>
@@ -81,7 +91,7 @@ export default function App() {
         <Tray
           containerId={PURE_ID}
           title={ZONE_NAMES[PURE_ID]}
-          glyph="◆"
+          glyph="✦"
           board={board}
           results={result?.byId}
         />
@@ -101,45 +111,60 @@ export default function App() {
         aria-hidden="true" // the count above carries the same information as text
         variant="determinate"
         value={(placed / METHODS.length) * 100}
-        sx={{marginTop: 1}}
+        sx={{
+          marginTop: 1,
+          height: 4,
+          borderRadius: 2,
+          bgcolor: 'var(--background-brand-purple-extra-light)',
+        }}
       />
 
-      <div className="actions">
-        <Button
-          text="Check answers"
-          color="purple"
-          disabled={placed < METHODS.length || result !== null}
-          onClick={check}
-        />
-        <Button text="Reset" type="secondary" color="black" onClick={reset} />
+      <div className="bottomRow">
+        <div className="scoreArea">
+          <Typography semanticTag="p" visualAppearance="heading-md" noMargin className="scoreNum">
+            {result ? `${result.correct} / ${METHODS.length}` : '—'}
+          </Typography>
+          <Typography semanticTag="p" visualAppearance="body-two" noMargin>
+            {scoreLabel}
+          </Typography>
+        </div>
+        <div className="actions">
+          <Button text="Reset" type="secondary" color="black" onClick={reset} />
+          <Button
+            text="Check answers"
+            color="purple"
+            disabled={placed < METHODS.length || result !== null}
+            onClick={check}
+          />
+        </div>
       </div>
 
       {result && (
-        <>
-          <Typography semanticTag="p" visualAppearance="heading-md" noMargin>
-            {result.correct} / {METHODS.length}
-          </Typography>
-          <Typography semanticTag="p" visualAppearance="body-two">
-            {scoreMessage(result.correct)}
-          </Typography>
-          <div className="hints">
-            {wrong.length === 0 ? (
-              <Note type="success" text={ALL_CORRECT_HINT} />
-            ) : (
-              <>
-                {wrong.map(method => (
-                  <Note key={method.id} type="warning" text={`${method.label} — ${method.hint}`} />
-                ))}
-                {right.length > 0 && (
-                  <Note
-                    type="success"
-                    text={`You got ${right.map(method => method.label).join(', ')} correct.`}
-                  />
-                )}
-              </>
-            )}
-          </div>
-        </>
+        <div className="hints">
+          {wrong.length === 0 ? (
+            <Note type="success" text={ALL_CORRECT_HINT} />
+          ) : (
+            <>
+              {wrong.map(method => (
+                <Note
+                  key={method.id}
+                  type="warning"
+                  text={
+                    <>
+                      <code>{method.label}</code> — {method.hint}
+                    </>
+                  }
+                />
+              ))}
+              {right.length > 0 && (
+                <Note
+                  type="success"
+                  text={`You got ${right.map(method => method.label).join(', ')} correct.`}
+                />
+              )}
+            </>
+          )}
+        </div>
       )}
     </main>
   );

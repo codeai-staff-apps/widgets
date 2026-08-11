@@ -1,0 +1,68 @@
+/* Layer 1 — re-token the design system for the code.org purple identity.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's own [data-brand=codeai-next] block and loses on source order. */
+:root[data-brand] {
+  /* surfaces */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #f5f5f3;
+
+  /* text */
+  --text-neutral-primary: #1a1a1a;
+  --text-neutral-secondary: #666666;
+  --text-neutral-tertiary: #666666;
+
+  /* borders */
+  --border-neutral-primary: #aca8ea;
+  --border-neutral-secondary: #aca8ea;
+  --borders-neutral-primary: #aca8ea;
+  --borders-neutral-light: #aca8ea;
+
+  /* brand purple — drives the chip/tray look and the DSCO Button accent */
+  --background-brand-purple-primary: #4c42cf;
+  --background-brand-purple-strong: #1f1976;
+  --background-brand-purple-light: #cdc8f5;
+  --background-brand-purple-extra-light: #e4e2f8;
+  --background-brand-purple-hover: #e4e2f8;
+  --borders-brand-purple-primary: #aca8ea;
+  --borders-brand-purple-strong: #4c42cf;
+  --borders-brand-purple-light: #e4e2f8;
+  --text-brand-purple-primary: #1f1976;
+
+  /* selected + focus rings */
+  --background-selected-primary: #4c42cf;
+  --background-selected-strong: #1f1976;
+  --border-selected-primary: #4c42cf;
+  --border-selected-strong: #1f1976;
+  --text-selected-primary: #ffffff;
+  --border-focused-primary: #4c42cf;
+
+  /* info — the directions banner */
+  --background-info-light: #d5efff;
+  --background-info-primary: #06338d;
+  --border-info-primary: #06338d;
+  --borders-info-primary: #06338d;
+  --border-info-light: #d5efff;
+  --borders-info-light: #d5efff;
+  --text-info-primary: #06338d;
+
+  /* success — correct chips + the all-correct hint */
+  --background-success-light: #ccf1d0;
+  --background-success-primary: #7cdb87;
+  --border-success-primary: #7cdb87;
+  --borders-success-primary: #7cdb87;
+  --border-success-light: #ccf1d0;
+  --borders-success-light: #ccf1d0;
+  --text-success-primary: #003f25;
+
+  /* warning — the side-effects zone + wrong chips */
+  --background-warning-light: #ffe3ce;
+  --background-warning-mid: #ffd0a0;
+  --background-warning-primary: #ffa868;
+  --border-warning-primary: #ffa868;
+  --borders-warning-primary: #ffa868;
+  --border-warning-light: #ffe3ce;
+  --borders-warning-light: #ffe3ce;
+  --border-warning-strong: #f46800;
+  --borders-warning-strong: #f46800;
+  --text-warning-primary: #510000;
+}
