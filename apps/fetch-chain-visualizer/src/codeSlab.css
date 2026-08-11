@@ -1,0 +1,69 @@
+/* Layer 3 — the app's one bespoke surface: the dark code slab, its syntax
+   colours, the violet highlight pill, and the fade-in reveal. Everything
+   else (buttons, alerts, panel radii, the light-blue directions note) comes
+   free from theme.css + the MUI theme in AppShell.tsx. */
+
+/* Syntax colours inside the dark code slab (.codeSlab, set by CodeBlock's
+   tone="code"). Each colour is a category the lesson names out loud
+   (function, operator, comment) — the colour is part of the reading. */
+.codeSlab .fn {
+  color: #6fcaff;
+}
+.codeSlab .op {
+  color: #aca8ea;
+}
+.codeSlab .comment {
+  color: #aca8ea;
+  font-style: italic;
+}
+
+/* The highlight pill — the app's single most load-bearing visual: it points
+   at the exact token the current step is about. <mark> keeps it in the
+   accessibility tree; the UA's yellow default would be wrong here. */
+.codeSlab mark {
+  background: #4c42cf;
+  color: #ffffff;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-weight: 700;
+}
+
+/* Result-value syntax, on the white result box (.resultValue, tone="result").
+   #34bd43/#ffa868/#aca8ea are all under AA on white, so text uses the
+   darkened equivalents; fills/borders elsewhere keep the original hues. */
+.resultValue .key {
+  color: #1f1976;
+  font-weight: 700;
+}
+.resultValue .valS {
+  color: #167c3c;
+}
+.resultValue .valN {
+  color: #a6520b;
+}
+.resultValue .brace,
+.resultValue .dim,
+.resultValue .hint {
+  color: #6a659e;
+}
+.resultValue .hint {
+  font-size: 12px;
+}
+
+/* The fade-in reveal: result value and verdict both start hidden and
+   transition in once CodeBlock/StepSection flips them to "visible" a beat
+   after the step runs. The runtime's global prefers-reduced-motion guard
+   already neutralises this. */
+.resultValue,
+.verdict {
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.resultValue {
+  transform: translateY(4px);
+}
+.resultValue.visible,
+.verdict.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,4 +1,5 @@
 import '@codeai-staff-apps/runtime/runtime.css';
+import './theme.css';
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 
