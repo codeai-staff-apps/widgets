@@ -1,0 +1,28 @@
+/* Layer 1 — re-token the design system for the Mars/Ares palette.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order. */
+:root[data-brand] {
+  /* surfaces */
+  --background-neutral-primary: #1e0f27;
+  --background-neutral-secondary: #2a1734;
+  --background-neutral-tertiary: #34203f;
+  /* text */
+  --text-neutral-primary: #f4ede6;
+  --text-neutral-secondary: #c9bfc4;
+  --text-neutral-tertiary: #a89aa1;
+  /* borders */
+  --borders-neutral-primary: rgba(255, 255, 255, 0.18);
+  /* the DS "brand teal" + "selected" ramps drive checkbox/radio/button
+     accents — repoint them at the app's ember accent colour */
+  --background-brand-teal-primary: #f0a15f;
+  --background-brand-teal-strong: #e8735a;
+  --background-brand-teal-extra-light: rgba(240, 161, 95, 0.14);
+  --borders-brand-teal-primary: #f0a15f;
+  --borders-brand-teal-strong: #e8735a;
+  --background-selected-primary: #f0a15f;
+  --background-selected-strong: #e8735a;
+  --border-selected-primary: #f0a15f;
+  --text-selected-primary: #1e0f27;
+  /* tick/label colour that sits ON the accent fill */
+  --text-neutral-white-fixed: #1e0f27;
+}

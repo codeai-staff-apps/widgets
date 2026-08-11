@@ -1,3 +1,15 @@
+/* Layer 3 — the signature Mars motifs no token or MUI prop can supply. */
+
+body {
+  background: radial-gradient(
+    circle at 20% 10%,
+    #2a1330 0%,
+    #170a1f 45%,
+    #0d0714 100%
+  );
+  min-height: 100vh;
+}
+
 .page {
   max-width: 760px;
   margin: 0 auto;
@@ -9,6 +21,84 @@
   margin-bottom: 24px;
 }
 
+.page h1,
+.page h2 {
+  font-family: var(--font-family-heading);
+}
+
+.page header {
+  text-align: center;
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-family-heading);
+  letter-spacing: 0.08em;
+  background: rgba(230, 126, 34, 0.18);
+  color: var(--background-brand-teal-primary);
+  padding: 5px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(240, 161, 95, 0.35);
+  margin: 0 0 12px;
+}
+
+h1.title {
+  background: linear-gradient(
+    90deg,
+    var(--background-brand-teal-primary),
+    var(--background-brand-teal-strong)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 20px auto 26px;
+  padding: 12px 22px;
+  border-radius: 100px;
+  background: rgba(232, 115, 90, 0.15);
+  border: 1px solid rgba(232, 115, 90, 0.4);
+  color: var(--background-brand-teal-primary);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.status.ready {
+  background: rgba(92, 184, 107, 0.15);
+  border-color: rgba(92, 184, 107, 0.5);
+  color: #7fd992;
+  box-shadow: 0 0 24px rgba(92, 184, 107, 0.25);
+}
+
+.status p {
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
 
 .countdown,
 .checklist {
@@ -17,14 +107,75 @@
   padding: 0;
 }
 
+/* The countdown block — tiles and the pause control below them — stays
+   centred under the header, as in the original. */
+.page section:has(> .countdown) {
+  text-align: center;
+}
+
 .countdown {
   display: flex;
-  gap: 24px;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 12px;
 }
 
 .countdown li {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--borders-neutral-primary);
+}
+
+.countdown li :first-child {
+  font-family: var(--font-family-heading);
+  color: var(--background-brand-teal-primary);
+}
+
+.countdown li :last-child {
+  color: var(--text-neutral-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist li {
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* A completed row turns green — including the DS checkbox's own tick, which
+   follows the "selected" token ramp. Re-pointing those tokens on this row is
+   the layer-1 trick applied at a nested scope: no component override needed. */
+.checklist li.done {
+  --background-selected-primary: #5cb86b;
+  --background-selected-strong: #5cb86b;
+  --border-selected-primary: #5cb86b;
+  --background-brand-teal-primary: #5cb86b;
+  --background-brand-teal-strong: #5cb86b;
+  --borders-brand-teal-primary: #5cb86b;
+  --borders-brand-teal-strong: #5cb86b;
+
+  background: rgba(92, 184, 107, 0.1);
+  border-color: rgba(92, 184, 107, 0.35);
+}
+
+.checklist li.done label span {
+  color: #a9e0b3;
+  text-decoration: line-through;
+  text-decoration-color: rgba(169, 224, 179, 0.5);
 }
 
 .habitats {
@@ -40,6 +191,40 @@
   padding: 0;
   margin-bottom: 8px;
   font: inherit;
+}
+
+.habitats .habitatCard {
+  flex: 1 1 120px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid var(--borders-neutral-primary);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+/* The DS's own selection dot is redundant with the card's border/background
+   treatment below, and the original has none. */
+.habitats .habitatCard > i {
+  display: none;
+}
+
+.habitatIcon {
+  order: -1;
+  font-size: 22px;
+}
+
+.habitats .habitatCard:hover {
+  border-color: var(--borders-brand-teal-primary);
+}
+
+.habitats .habitatCard:has(input:checked) {
+  border-color: var(--border-selected-primary);
+  background: var(--background-brand-teal-extra-light);
 }
 
 @media (prefers-reduced-motion: reduce) {

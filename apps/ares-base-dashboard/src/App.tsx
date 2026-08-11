@@ -3,6 +3,8 @@ import Checkbox from '@code-dot-org/component-library/checkbox';
 import RadioButton from '@code-dot-org/component-library/radioButton';
 import Typography from '@code-dot-org/component-library/typography';
 import LinearProgress from '@mui/material/LinearProgress';
+import Paper from '@mui/material/Paper';
+import classNames from 'classnames';
 import {useEffect, useRef, useState} from 'react';
 
 import {CHECKLIST, HABITATS, nextLaunchDate, remainingUntil} from './mission';
@@ -45,16 +47,17 @@ export default function App() {
   return (
     <div className="page">
       <header>
-        <Typography semanticTag="p" visualAppearance="overline-two">
+        <Typography semanticTag="p" visualAppearance="overline-two" className="tag">
           Ares Base · Crew Dashboard
         </Typography>
-        <Typography semanticTag="h1" visualAppearance="heading-lg">
+        <Typography semanticTag="h1" visualAppearance="heading-lg" className="title">
           Mission to Mars
         </Typography>
         <Typography semanticTag="p" visualAppearance="body-two">
           Everything your crew needs before launch, in one place.
         </Typography>
-        <div role="status" aria-live="polite">
+        <div className={classNames('status', {ready})} role="status" aria-live="polite">
+          <span className="dot" aria-hidden="true" />
           <Typography semanticTag="p" visualAppearance="body-two">
             {ready ? 'Ready for launch' : 'Preparing for launch'}
           </Typography>
@@ -63,13 +66,11 @@ export default function App() {
 
       <main>
         <section aria-labelledby="countdown-heading">
-          <Typography
-            semanticTag="h2"
-            visualAppearance="heading-sm"
-            id="countdown-heading"
-          >
+          {/* The original has no visible heading here — the tiles speak for
+              themselves — but the section still needs an accessible name. */}
+          <h2 id="countdown-heading" style={visuallyHidden}>
             Launch countdown
-          </Typography>
+          </h2>
           {/*
             The seconds-by-seconds value is hidden from assistive tech — read
             aloud every tick it would be unusable. The coarse equivalent below
@@ -103,63 +104,78 @@ export default function App() {
         </section>
 
         <section aria-labelledby="crew-heading">
-          <Typography
-            semanticTag="h2"
-            visualAppearance="heading-sm"
-            id="crew-heading"
-          >
-            <span aria-hidden="true">🚀 </span>Crew Readiness
-          </Typography>
-          <Typography semanticTag="p" visualAppearance="body-two">
-            Tap each item as your crew completes it.
-          </Typography>
-          <ul className="checklist">
-            {CHECKLIST.map((item, i) => (
-              <li key={item}>
-                <Checkbox
-                  name={`crew-${i}`}
-                  label={item}
-                  checked={done[i]}
-                  onChange={() =>
-                    setDone(prev => prev.map((v, j) => (j === i ? !v : v)))
-                  }
-                />
-              </li>
-            ))}
-          </ul>
-          <LinearProgress
-            variant="determinate"
-            value={(completed / CHECKLIST.length) * 100}
-            aria-label={`Crew readiness: ${completed} of ${CHECKLIST.length} complete`}
-          />
+          <Paper variant="outlined" sx={{p: '20px 22px', borderRadius: '16px'}}>
+            <Typography
+              semanticTag="h2"
+              visualAppearance="heading-sm"
+              id="crew-heading"
+            >
+              <span aria-hidden="true">🚀 </span>Crew Readiness
+            </Typography>
+            <Typography semanticTag="p" visualAppearance="body-two">
+              Tap each item as your crew completes it.
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={(completed / CHECKLIST.length) * 100}
+              aria-label={`Crew readiness: ${completed} of ${CHECKLIST.length} complete`}
+              sx={{mb: 2}}
+            />
+            <ul className="checklist">
+              {CHECKLIST.map((item, i) => (
+                <li key={item} className={classNames({done: done[i]})}>
+                  <Checkbox
+                    name={`crew-${i}`}
+                    label={item}
+                    checked={done[i]}
+                    onChange={() =>
+                      setDone(prev => prev.map((v, j) => (j === i ? !v : v)))
+                    }
+                  />
+                </li>
+              ))}
+            </ul>
+          </Paper>
         </section>
 
         <section aria-labelledby="habitat-heading">
-          <Typography
-            semanticTag="h2"
-            visualAppearance="heading-sm"
-            id="habitat-heading"
-          >
-            <span aria-hidden="true">🏠 </span>Habitat Selection
-          </Typography>
-          <fieldset className="habitats">
-            <legend>Choose where your crew will live on the surface.</legend>
-            {HABITATS.map(option => (
-              <RadioButton
-                key={option.id}
-                name="habitat"
-                value={option.id}
-                label={option.name}
-                checked={habitatId === option.id}
-                onChange={() => setHabitatId(option.id)}
-              />
-            ))}
-          </fieldset>
-          <div role="status" aria-live="polite">
-            <Typography semanticTag="p" visualAppearance="body-two">
-              {habitat ? habitat.detail : 'Select a habitat to see details.'}
+          <Paper variant="outlined" sx={{p: '20px 22px', borderRadius: '16px'}}>
+            <Typography
+              semanticTag="h2"
+              visualAppearance="heading-sm"
+              id="habitat-heading"
+            >
+              <span aria-hidden="true">🏠 </span>Habitat Selection
             </Typography>
-          </div>
+            <fieldset className="habitats">
+              <legend>Choose where your crew will live on the surface.</legend>
+              {HABITATS.map(option => (
+                <RadioButton
+                  key={option.id}
+                  name="habitat"
+                  value={option.id}
+                  label={option.name}
+                  checked={habitatId === option.id}
+                  onChange={() => setHabitatId(option.id)}
+                  className="habitatCard"
+                >
+                  <span className="habitatIcon" aria-hidden="true">
+                    {option.icon}
+                  </span>
+                </RadioButton>
+              ))}
+            </fieldset>
+            <Paper
+              variant="outlined"
+              sx={{p: '14px 16px', borderRadius: '10px', mt: 2}}
+              role="status"
+              aria-live="polite"
+            >
+              <Typography semanticTag="p" visualAppearance="body-two">
+                {habitat ? habitat.detail : 'Select a habitat to see details.'}
+              </Typography>
+            </Paper>
+          </Paper>
         </section>
       </main>
 
