@@ -1,3 +1,39 @@
+/* Layer 3 — the signature motifs no token or MUI prop supplies: the
+   intro/summary backdrop glow, the elevated "shell" cards, Catppuccin
+   syntax colouring on the code the exercise is about, the line-highlight
+   washes, the TODO badge, two-tone speech bubbles, and the light phone
+   panel opposed to the dark IDE. */
+
+body {
+  background: linear-gradient(135deg, #0f1117 0%, #12112a 50%, #0f1117 100%);
+  min-height: 100vh;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::before {
+  top: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(106, 98, 217, 0.12) 0%, transparent 70%);
+}
+
+body::after {
+  bottom: -80px;
+  right: -80px;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.08) 0%, transparent 70%);
+}
+
 .page {
   max-width: 1120px;
   margin: 0 auto;
@@ -6,6 +42,54 @@
      wrapped in Typography would fall back to the UA serif. */
   font-family: var(--font-family-main);
   color: var(--text-neutral-primary);
+}
+
+/* The elevated outer card — intro and summary content, and (at a smaller
+   radius, via .stepCard) each step. */
+.shell {
+  background: var(--background-neutral-secondary);
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: 20px;
+  padding: var(--spacing-p-l);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  margin-block: var(--spacing-p-m);
+}
+
+.stepCard {
+  background: var(--background-neutral-secondary);
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: 14px;
+  padding: var(--spacing-p-m);
+}
+
+/* The recessed inner box — the intro notification and the summary recap rows. */
+.card {
+  background: var(--background-neutral-primary);
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+  padding: var(--spacing-p-m);
+  margin-block: var(--spacing-p-m);
+}
+
+.takeaway {
+  background: var(--background-info-light);
+  border: 1px solid var(--border-info-primary);
+  border-radius: var(--shape-md);
+  padding: var(--spacing-p-m);
+  margin-block: var(--spacing-p-m);
+}
+
+.takeaway strong {
+  color: var(--text-brand-primary);
+}
+
+.introTitleAccent {
+  color: var(--text-brand-primary);
+}
+
+.dataValue {
+  color: var(--text-warning-secondary);
+  font-weight: 700;
 }
 
 .activityGrid {
@@ -35,7 +119,7 @@
   width: 2.5ch;
   margin-inline-end: 1ch;
   text-align: right;
-  color: var(--text-neutral-secondary);
+  color: #3d3d5c;
 }
 
 .codeLineButton {
@@ -54,31 +138,73 @@
   background: var(--background-brand-purple-extra-light);
 }
 
-.codeLine.isHighlighted,
-.codeLine.isSelected {
-  background: var(--background-brand-purple-extra-light);
+/* "Look here" — the purple wash a step calls out on entry, and where a
+   wrong step-2 click landed. */
+.codeLine.isHighlighted {
+  background: rgba(106, 98, 217, 0.15);
 }
 
-.codeLine.isTodo {
+/* "The AI added this" — defined after .isHighlighted so it wins on
+   line-call once revealed, exactly as the source's own rule order did. */
+.codeLine.isAdded {
+  background: rgba(16, 185, 129, 0.12);
+}
+
+/* "You found it" — the correct step-2 click. */
+.codeLine.isSelected {
+  background: rgba(251, 191, 36, 0.15);
+  outline: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+.tok-kw {
+  color: #cba6f7;
+}
+.tok-fn {
+  color: #89b4fa;
+}
+.tok-str {
+  color: #a6e3a1;
+}
+.tok-num {
+  color: #fab387;
+}
+.tok-cm {
+  color: #6c7086;
   font-style: italic;
 }
-
-/* The rows the AI's helper function added at step 5. */
-.codeLine.isAdded {
-  box-shadow: inset 3px 0 0 var(--border-success-primary);
+.tok-op {
+  color: #89dceb;
+}
+.tok-todo {
+  color: #fbbf24;
+  font-style: italic;
+  font-weight: 600;
 }
 
-.card {
-  border: 1px solid var(--border-neutral-secondary);
-  border-radius: var(--shape-md);
-  padding: var(--spacing-p-m);
-  margin-block: var(--spacing-p-m);
+.todoBadge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-inline-start: 0.75em;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--background-warning-primary);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .dialogue {
   margin: var(--spacing-p-s) 0;
-  padding-inline-start: var(--spacing-p-m);
-  border-inline-start: 3px solid var(--border-brand-primary);
+  padding: var(--spacing-p-s) var(--spacing-p-m);
+  border-radius: 12px 12px 12px 4px;
+  background: var(--background-neutral-tertiary);
+}
+
+.dialogue.teacher {
+  border-radius: 12px 12px 4px 12px;
+  background: #112030;
+  border: 1px solid #1a3a52;
 }
 
 .dialogueQuote {
@@ -92,11 +218,42 @@
   color: var(--text-neutral-secondary);
 }
 
+.dialogue.teacher .dialogueSpeaker {
+  color: var(--text-success-secondary);
+}
+
 .progress {
   display: grid;
   gap: var(--spacing-p-xxs);
   font-size: 0.9rem;
   color: var(--text-neutral-secondary);
+}
+
+.stepDots {
+  display: flex;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stepDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--background-neutral-tertiary);
+  border: 1px solid var(--border-neutral-secondary);
+}
+
+.stepDot.isDone {
+  background: var(--background-success-primary);
+  border-color: var(--border-success-primary);
+}
+
+.stepDot.isActive {
+  background: var(--background-brand-primary);
+  border-color: var(--border-brand-strong);
 }
 
 .stepsPreview {
@@ -106,7 +263,6 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  font-weight: 600;
 }
 
 .optionList,
@@ -194,21 +350,72 @@
   color: var(--text-neutral-secondary);
 }
 
-.feed li {
+/* The phone feed — a light panel opposed to the dark IDE. Tokens are
+   re-scoped locally (Layer 1b) rather than hardcoded on every child, so the
+   DS Typography inside it picks up dark-on-light for free. */
+.phonePanel {
+  --background-neutral-primary: #fafafa;
+  --text-neutral-primary: #333333;
+  --text-neutral-secondary: #666666;
+  --border-neutral-secondary: #ececec;
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  border: 1px solid #e5e5e5;
+  border-radius: var(--shape-md);
+  overflow: hidden;
+  margin-block: var(--spacing-p-m);
+}
+
+.phoneHeader {
+  background: #ffd1dc;
+  padding: var(--spacing-p-s) var(--spacing-p-m);
+  text-align: center;
+  border-bottom: 1px solid #f0c4d0;
+  font-family: var(--font-family-heading);
+}
+
+.feed {
+  padding: var(--spacing-p-m);
+}
+
+.feedItem {
+  display: flex;
+  gap: var(--spacing-p-s);
+  align-items: center;
   padding: var(--spacing-p-s) 0;
   border-top: 1px solid var(--border-neutral-secondary);
 }
 
-.feedDay,
-.feedImage {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-neutral-secondary);
+.feedItem:first-child {
+  border-top: none;
 }
 
-.feedImage {
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-weight: 400;
+.feedItem.isNew {
+  border: 1px solid #ffd1dc;
+  border-radius: var(--shape-md);
+  padding-inline: var(--spacing-p-s);
+}
+
+.feedSwatch {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--shape-sm);
+  display: grid;
+  place-items: center;
+  padding: 2px;
+  color: #fff;
+  font-size: 0.55rem;
+  text-align: center;
+  word-break: break-all;
+}
+
+.feedDay {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-neutral-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .recapVerdict {

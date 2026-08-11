@@ -91,6 +91,13 @@ export interface ScreenProps {
   /** Pick the level that fits the page's outline; the first screen is usually the `h1`. */
   headingTag?: Extract<SemanticTag, 'h1' | 'h2' | 'h3'>;
   headingAppearance?: VisualAppearance;
+  /**
+   * Wraps the rendered heading element — e.g. to place it inside a coloured
+   * hero band with an eyebrow above and a subtitle below — without disturbing
+   * the focus-management below, which targets the heading by id regardless
+   * of where in the tree it ends up.
+   */
+  headingWrapper?: (heading: ReactNode) => ReactNode;
   children: ReactNode;
 }
 
@@ -101,6 +108,7 @@ export function Screen({
   heading,
   headingTag = 'h2',
   headingAppearance,
+  headingWrapper,
   children,
 }: ScreenProps) {
   const active = machine.is(id);
@@ -120,15 +128,19 @@ export function Screen({
     return null;
   }
 
+  const headingEl = (
+    <Typography
+      semanticTag={headingTag}
+      visualAppearance={headingAppearance ?? DEFAULT_APPEARANCE[headingTag]}
+      id={headingId}
+    >
+      {heading}
+    </Typography>
+  );
+
   return (
     <section aria-labelledby={headingId}>
-      <Typography
-        semanticTag={headingTag}
-        visualAppearance={headingAppearance ?? DEFAULT_APPEARANCE[headingTag]}
-        id={headingId}
-      >
-        {heading}
-      </Typography>
+      {headingWrapper ? headingWrapper(headingEl) : headingEl}
       {children}
     </section>
   );

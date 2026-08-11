@@ -1,0 +1,27 @@
+/* Layer 1 — re-token the design system for SongSurfer's 80s-arcade phosphor
+   palette. Must use :root[data-brand] (specificity 0,2,0): a plain :root{}
+   ties with the DS's own [data-brand=codeai-next] block and loses on source
+   order. */
+:root[data-brand] {
+  /* phosphor-green body text — also drives the SimpleDropdown label, select
+     text, and its Font Awesome chevron, which all read this same token. */
+  --text-neutral-primary: #00ff00;
+  /* cyan structural border — the SimpleDropdown's own border token. */
+  --borders-neutral-solid: #00ffff;
+  /* the select's own dark-grey surface, distinct from the navy page. */
+  --background-neutral-primary: #333333;
+  --background-neutral-tertiary: #555555;
+  /* the DS applies this token to the select's :focus-visible outline
+     regardless of colour scheme — repointing it gives the magenta focus
+     treatment the original has, with no component override. */
+  --borders-brand-teal-primary: #ff00ff;
+}
+
+/* App-only accent tokens (not DS tokens) used to re-scope
+   --text-neutral-primary locally per element — see songsurfer.css. */
+:root {
+  --ss-yellow: #ffea00;
+  --ss-cyan: #00ffff;
+  --ss-magenta-text: #ff4fff; /* #ff00ff lifted to clear AA at text sizes */
+  --ss-magenta-glow: #ff00ff; /* full-saturation, for borders/shadows only */
+}

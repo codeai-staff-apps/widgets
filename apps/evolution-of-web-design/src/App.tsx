@@ -12,7 +12,13 @@ import {Screen, useScreenMachine} from './shared';
 import {BRIDGE_NOTE, DIRECTIONS, shuffle, STOPS, TRY_AGAIN_NOTE, type Option, type Stop} from './stops';
 
 export default function App() {
-  const machine = useScreenMachine(STOPS.map((_, index) => String(index)));
+  const announce = useAnnounce();
+  const machine = useScreenMachine(STOPS.map((_, index) => String(index)), {
+    onEnter: id => {
+      const stop = STOPS[Number(id)];
+      announce(`${stop.era}. ${stop.question}`);
+    },
+  });
   // Shuffled once per page load, so an option never moves under the learner
   // when they navigate back to a stop they already saw.
   const optionOrder = useMemo(() => STOPS.map(stop => shuffle(stop.options)), []);
@@ -23,6 +29,17 @@ export default function App() {
         The Evolution of Web Design
       </Typography>
       <Alert type="info" role={undefined} text={DIRECTIONS} />
+
+      {/* Position meter for the four stops; the heading already carries the same
+          information in text, so this row is decorative. */}
+      <div className="dots" aria-hidden="true">
+        {STOPS.map((stop, index) => (
+          <span
+            key={stop.era}
+            className={`dot${index === machine.index ? ' active' : index < machine.index ? ' done' : ''}`}
+          />
+        ))}
+      </div>
 
       {STOPS.map((stop, index) => (
         <Screen
@@ -72,6 +89,9 @@ function StopView({stop, options, mockup, isFirst, isLast, onBack, onNext}: Stop
 
   return (
     <>
+      <Typography semanticTag="p" visualAppearance="overline-two" className="era-label" noMargin>
+        {stop.era}
+      </Typography>
       {/* Decorative: the era label and the question already say what it shows. */}
       <div className="mockup-frame" aria-hidden="true">
         {mockup}
@@ -79,16 +99,25 @@ function StopView({stop, options, mockup, isFirst, isLast, onBack, onNext}: Stop
 
       <fieldset className="options">
         <legend>{stop.question}</legend>
-        {options.map(option => (
-          <RadioButton
-            key={option.text}
-            name={groupName}
-            value={option.text}
-            label={option.text}
-            checked={chosen === option}
-            onChange={() => choose(option)}
-          />
-        ))}
+        {options.map(option => {
+          const isChosen = chosen === option;
+          return (
+            <RadioButton
+              key={option.text}
+              name={groupName}
+              value={option.text}
+              label={option.text}
+              checked={isChosen}
+              onChange={() => choose(option)}
+              // Layer 1b: re-scope the DS's text/accent tokens on the chosen
+              // option only, so it turns green for the primary fit and amber
+              // otherwise — the original's fastest feedback signal.
+              className={
+                isChosen ? `option chosen${option.primary ? ' primary-fit' : ''}` : 'option'
+              }
+            />
+          );
+        })}
       </fieldset>
 
       {chosen && (
@@ -97,7 +126,7 @@ function StopView({stop, options, mockup, isFirst, isLast, onBack, onNext}: Stop
           <Typography semanticTag="p" visualAppearance="body-three">
             {TRY_AGAIN_NOTE}
           </Typography>
-          {isLast && <Alert type="success" role={undefined} text={BRIDGE_NOTE} />}
+          {isLast && <Alert type="primary" role={undefined} text={BRIDGE_NOTE} />}
         </>
       )}
 

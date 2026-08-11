@@ -1,9 +1,15 @@
-import Button from '@code-dot-org/component-library/button';
+import FontAwesomeV6Icon from '@code-dot-org/component-library/fontAwesomeV6Icon';
 import Typography from '@code-dot-org/component-library/typography';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import MuiButton from '@mui/material/Button';
 
+import teacherImg from './assets/teacher_veo.png';
 import type {Chrome, Scenario} from './content/types';
 import Dialogue from './Dialogue';
-import {CodeBlock, Screen, type ScreenMachine} from './shared';
+import {renderLine} from './highlightCode';
+import {Screen, type ScreenMachine} from './shared';
 
 /**
  * The recap reports what the learner actually answered. Every English source
@@ -30,17 +36,25 @@ export default function SummaryScreen({
   const perfect = score === checks.length;
 
   return (
-    <Screen machine={machine} id={id} heading={chrome.summaryTitle} headingTag="h1">
-      {chrome.summaryEyebrow && (
-        <Typography semanticTag="p" visualAppearance="overline-two">
-          {chrome.summaryEyebrow}
-        </Typography>
-      )}
-      <Typography semanticTag="p" visualAppearance="body-one">
-        {chrome.summarySub}
-      </Typography>
-
-      <p className="score">
+    <Screen
+      machine={machine}
+      id={id}
+      heading={chrome.summaryTitle}
+      headingTag="h1"
+      panelClassName="hero"
+      eyebrow={
+        chrome.summaryEyebrow && <p className="heroEyebrow">{chrome.summaryEyebrow}</p>
+      }
+      afterHeading={<p className="heroSub">{chrome.summarySub}</p>}
+      panelEnd={
+        <img
+          className="heroImg"
+          src={teacherImg}
+          alt={chrome.summaryImgAlt ?? chrome.teacherImgAlt}
+        />
+      }
+    >
+      <p className="score" role="status">
         <span className="scoreValue">
           {score} / {checks.length}
         </span>
@@ -59,53 +73,116 @@ export default function SummaryScreen({
       )}
 
       {bugCallout && (
-        <section className="card">
-          <Typography semanticTag="p" visualAppearance="overline-two">
-            {bugCallout.label}
-          </Typography>
-          <Typography semanticTag="h2" visualAppearance="heading-sm">
-            {bugCallout.title}
-          </Typography>
-          <div className="codeCompare">
-            <CodeBlock>{`${bugCallout.aiLabel}\n${bugCallout.aiCode}\n${bugCallout.aiComment}`}</CodeBlock>
-            <CodeBlock>{`${bugCallout.fixLabel}\n${bugCallout.fixCode}\n${bugCallout.fixComment}`}</CodeBlock>
+        <section className="card noPad">
+          <Box sx={{bgcolor: '#000', color: '#fff', px: 2.25, py: 1.25}} className="blackStrip">
+            <span className="blackStripLabel">{bugCallout.label}</span>
+            <span className="blackStripTitle">{bugCallout.title}</span>
+          </Box>
+          <div className="bugCalloutBody">
+            <div className="codeDark" role="group" aria-label="Code comparison: bug versus fix">
+              <div className="codeDarkBody">
+                <div className="codeLine">{renderLine(bugCallout.aiLabel, 'ai-label')}</div>
+                <div className="codeLine bugWash">
+                  {renderLine(bugCallout.aiCode, 'ai-code')} <span className="cm">{bugCallout.aiComment}</span>
+                </div>
+                <div className="codeLine">&nbsp;</div>
+                <div className="codeLine">{renderLine(bugCallout.fixLabel, 'fix-label')}</div>
+                <div className="codeLine fixWash">
+                  {renderLine(bugCallout.fixCode, 'fix-code')} <span className="cm">{bugCallout.fixComment}</span>
+                </div>
+              </div>
+            </div>
+            <Typography semanticTag="p" visualAppearance="body-two" noMargin>
+              {bugCallout.explanation}
+            </Typography>
           </div>
-          <Typography semanticTag="p" visualAppearance="body-two">
-            {bugCallout.explanation}
-          </Typography>
         </section>
       )}
 
       {chrome.recapTitle && (
-        <Typography semanticTag="h2" visualAppearance="heading-sm">
-          {chrome.recapTitle}
-        </Typography>
+        <div className="recapHeader">
+          <Typography semanticTag="h2" visualAppearance="heading-sm" noMargin>
+            {chrome.recapTitle}
+          </Typography>
+          {chrome.issueLabel && chrome.passLabel && (
+            <div className="recapLegend">
+              <span className="legendItem">
+                <span className="legendDot legendDotIssue" aria-hidden="true" />
+                {chrome.issueLabel}
+              </span>
+              <span className="legendItem">
+                <span className="legendDot legendDotPass" aria-hidden="true" />
+                {chrome.passLabel}
+              </span>
+            </div>
+          )}
+        </div>
       )}
       <ul className="recap">
         {checks.map((check, i) => {
           const said = answers[i];
           const badge = check.correctIsIssue ? chrome.issueLabel : chrome.passLabel;
           return (
-            <li key={check.title} className="card">
-              <Typography semanticTag="h3" visualAppearance="heading-xs" noMargin>
-                {check.title}
-              </Typography>
-              {said !== null && (
-                <p className="recapVerdict">
-                  <span>{said ? chrome.youSaidIssue : chrome.youSaidPasses}</span>
-                  <span>
-                    {said === check.correctIsIssue
-                      ? chrome.verdictCorrect
-                      : chrome.verdictIncorrect}
-                  </span>
-                  {badge && <span className="recapBadge">{badge}</span>}
-                </p>
-              )}
-              {check.recapNote && (
-                <Typography semanticTag="p" visualAppearance="body-three" noMargin>
-                  {check.recapNote}
-                </Typography>
-              )}
+            <li key={check.title} className="card recapRow">
+              <Avatar
+                sx={{
+                  width: 26,
+                  height: 26,
+                  mt: '2px',
+                  fontSize: '0.7rem',
+                  fontWeight: 900,
+                  bgcolor: check.correctIsIssue
+                    ? 'var(--background-brand-purple-extra-light)'
+                    : 'var(--background-neutral-secondary)',
+                  color: check.correctIsIssue
+                    ? 'var(--text-brand-purple-primary)'
+                    : 'var(--text-neutral-tertiary)',
+                }}
+              >
+                {i + 1}
+              </Avatar>
+              <div>
+                <div className="recapTitleRow">
+                  <Typography semanticTag="h3" visualAppearance="heading-xs" noMargin>
+                    {check.title}
+                  </Typography>
+                  {/* Sibling of the heading, not inside it — a Chip nested in
+                      an <h3> would fold its own text into the heading's
+                      accessible name. */}
+                  {badge && (
+                    <Chip
+                      size="small"
+                      label={badge}
+                      sx={{
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        fontSize: '0.6rem',
+                        bgcolor: check.correctIsIssue
+                          ? 'var(--background-brand-purple-extra-light)'
+                          : 'var(--background-neutral-secondary)',
+                        color: check.correctIsIssue
+                          ? 'var(--text-brand-purple-primary)'
+                          : 'var(--text-neutral-tertiary)',
+                      }}
+                    />
+                  )}
+                </div>
+                {said !== null && (
+                  <p className="recapVerdict">
+                    <span>{said ? chrome.youSaidIssue : chrome.youSaidPasses}</span>
+                    <span>
+                      {said === check.correctIsIssue
+                        ? chrome.verdictCorrect
+                        : chrome.verdictIncorrect}
+                    </span>
+                  </p>
+                )}
+                {check.recapNote && (
+                  <Typography semanticTag="p" visualAppearance="body-three" noMargin>
+                    {check.recapNote}
+                  </Typography>
+                )}
+              </div>
             </li>
           );
         })}
@@ -116,7 +193,7 @@ export default function SummaryScreen({
       )}
 
       {chrome.classroom && (
-        <section className="card">
+        <section className="card classroomBox" role="note">
           <Typography semanticTag="h2" visualAppearance="heading-sm">
             {chrome.classroom.label}
           </Typography>
@@ -127,7 +204,19 @@ export default function SummaryScreen({
       )}
 
       <div>
-        <Button type="primary" color="purple" text={chrome.btnRestart} onClick={onRestart} />
+        {/* The DSCO Button's outline treatment only exists via its deprecated
+            "secondary purple" combination; a plain MUI outlined Button picks
+            up the theme's indigo `primary` colour with no warning and no
+            override, matching the original's transparent/indigo-border
+            restart button. */}
+        <MuiButton
+          variant="outlined"
+          color="primary"
+          startIcon={<FontAwesomeV6Icon iconName="rotate-left" iconStyle="solid" />}
+          onClick={onRestart}
+        >
+          {chrome.btnRestart}
+        </MuiButton>
       </div>
       {chrome.restartNote && (
         <Typography semanticTag="p" visualAppearance="body-three">

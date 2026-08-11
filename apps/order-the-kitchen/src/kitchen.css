@@ -1,3 +1,13 @@
+/* Layer 3 — the lavender worksheet motifs no token or MUI prop supplies:
+   the page field, the ticket surface + full-ticket grading fill, the ⠿-style
+   drag handle and insertion slots, the syntax-highlighted code block, and the
+   green-on-black terminal. Card/panel depth (.intro, .challenge) is MUI
+   Paper with sx, not CSS — see App.tsx / Challenge.tsx. */
+
+body {
+  background: #e4e2f8;
+}
+
 .page {
   max-width: 820px;
   margin: 0 auto;
@@ -6,19 +16,35 @@
   color: var(--text-neutral-primary);
 }
 
-.challenge {
-  margin-top: 40px;
-}
-
 .code {
   margin: 0;
-  padding: 16px;
+  padding: 18px;
   overflow-x: auto;
-  border-radius: var(--shape-md, 8px);
+  border-radius: 12px;
   background: var(--background-neutral-black-fixed);
-  color: var(--text-neutral-white-fixed);
+  color: #f8f8f2;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
+  line-height: 1.6;
+}
+
+.c-fn {
+  color: #4dabf7;
+}
+.c-str {
+  color: #69db7c;
+}
+.c-kw {
+  color: #c77dff;
+}
+.c-num {
+  color: #ffa94d;
+}
+.c-obj {
+  color: #ff6b6b;
+}
+.c-cmt {
+  color: #9aa0a6;
 }
 
 .columns {
@@ -34,8 +60,8 @@
 }
 
 .deck {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -45,26 +71,30 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid var(--borders-neutral-light);
-  border-left: 4px solid var(--borders-brand-purple-primary);
-  border-radius: var(--shape-md, 8px);
-  background: var(--background-neutral-primary);
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--background-neutral-secondary);
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.15s ease;
 }
 
 .card:focus-visible {
-  outline: 3px solid var(--borders-brand-purple-strong);
+  outline: 3px solid var(--borders-brand-purple-primary);
   outline-offset: 2px;
 }
 
+.card--picked {
+  opacity: 0.4;
+}
+
 .card--right {
-  border-left-color: var(--borders-success-primary);
   background: var(--background-success-extra-light);
+  border-color: var(--borders-success-primary);
 }
 
 .card--wrong {
-  border-left-color: var(--borders-warning-primary);
   background: var(--background-warning-extra-light);
+  border-color: var(--borders-warning-primary);
 }
 
 .cardText {
@@ -73,18 +103,100 @@
 
 .mark {
   flex: none;
-  font-size: 13px;
-  color: var(--text-neutral-secondary);
+  margin-left: 4px;
+  font-weight: 700;
+}
+
+.handle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--borders-brand-purple-primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: grab;
+}
+
+.handle[aria-pressed='true'] {
+  cursor: grabbing;
+}
+
+.handle:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-primary);
+  outline-offset: 2px;
+}
+
+.handle:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* Insertion slots between rows — the pointer/keyboard drop targets that
+   stand in for the original's live drag-over highlight. Always present and
+   focusable; the rule only draws once a ticket is picked up, and lights up
+   solid under the pointer or keyboard focus. */
+.slotRow {
+  list-style: none;
+}
+
+.slot {
+  display: block;
+  width: 100%;
+  height: 10px;
+  min-height: 0 !important;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slot::after {
+  display: block;
+  height: 3px;
+  margin: 0 2px;
+  border-radius: 2px;
+  background: transparent;
+  content: '';
+}
+
+.deck--armed .slot::after {
+  background: var(--background-neutral-tertiary);
+}
+
+.slot:hover::after,
+.slot:focus-visible::after {
+  background: var(--borders-brand-purple-primary);
+}
+
+.slot:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-primary);
+  outline-offset: 2px;
+}
+
+.slot:disabled {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slot::after {
+    transition: background-color 0.15s ease;
+  }
 }
 
 .terminal {
-  min-height: 160px;
-  padding: 12px;
-  border-radius: var(--shape-md, 8px);
+  min-height: 220px;
+  padding: 16px;
+  border-radius: 12px;
   background: var(--background-neutral-black-fixed);
-  color: var(--text-neutral-white-fixed);
+  color: #00ff00;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
+  line-height: 1.7;
 }
 
 .prompt {

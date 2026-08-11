@@ -1,0 +1,94 @@
+/* Layer 1 — re-token the design system for The Stylist's dark-indigo IDE
+   palette. Must use :root[data-brand] (specificity 0,2,0): a plain :root{}
+   ties with the DS's [data-brand=codeai-next] block and loses on source
+   order. */
+:root[data-brand] {
+  /* surfaces */
+  --background-neutral-primary: #0f1117;
+  --background-neutral-secondary: #12112a;
+  --background-neutral-tertiary: #1e2130;
+  --background-neutral-quaternary: #1e1e2e; /* editor */
+  --background-neutral-quinary: #11111b; /* console */
+  --background-neutral-black-fixed: #0f1117;
+
+  /* text */
+  --text-neutral-primary: #e2e8f0;
+  --text-neutral-secondary: #94a3b8;
+  --text-neutral-tertiary: #7c8aa0; /* #64748b lifted: 4.6:1 on #0f1117 */
+  --text-neutral-quaternary: #64748b;
+  --text-neutral-placeholder: #64748b;
+  --text-neutral-white-fixed: #ffffff;
+
+  /* borders */
+  --border-neutral-primary: #2a2560;
+  --border-neutral-secondary: #2d3350;
+  --border-neutral-solid: #2d2d42;
+  --borders-neutral-primary: #2a2560;
+  --borders-neutral-light: #2d3350;
+  --borders-neutral-strong: #a29ff0;
+
+  /* brand — #6a62d9 indigo */
+  --background-brand-primary: #6a62d9;
+  --background-brand-strong: #5548c8;
+  --background-brand-mid: rgba(106, 98, 217, 0.28);
+  --background-brand-light: rgba(106, 98, 217, 0.18);
+  --background-brand-purple-primary: #6a62d9;
+  --background-brand-purple-strong: #5548c8;
+  --background-brand-purple-light: rgba(106, 98, 217, 0.18);
+  --background-brand-purple-extra-light: rgba(106, 98, 217, 0.1);
+  --background-brand-purple-hover: rgba(106, 98, 217, 0.18);
+  --background-brand-teal-primary: #6a62d9;
+  --background-brand-teal-strong: #5548c8;
+  --border-brand-primary: #6a62d9;
+  --border-brand-strong: #a29ff0;
+  --border-brand-light: rgba(106, 98, 217, 0.25);
+  --borders-brand-purple-primary: #6a62d9;
+  --borders-brand-purple-strong: #a29ff0;
+  --text-brand-primary: #a29ff0;
+  --text-brand-secondary: #c4c1f7;
+  --text-brand-purple-primary: #a29ff0;
+
+  /* selected + focus */
+  --background-selected-primary: #6a62d9;
+  --background-selected-strong: #5548c8;
+  --border-selected-primary: #a29ff0;
+  --border-selected-strong: #a29ff0;
+  --text-selected-primary: #ffffff;
+  --border-focused-primary: #a29ff0;
+
+  /* success — pass results, the AI-added lines, the teacher name-tag */
+  --background-success-light: rgba(16, 185, 129, 0.1);
+  --background-success-mid: rgba(16, 185, 129, 0.22);
+  --background-success-primary: #10b981;
+  --background-success-strong: #059669;
+  --border-success-primary: #10b981;
+  --border-success-light: rgba(16, 185, 129, 0.3);
+  --text-success-primary: #6ee7b7;
+  --text-success-secondary: #34d399;
+  --borders-success-primary: #10b981;
+
+  /* error — fail results */
+  --background-error-light: rgba(239, 68, 68, 0.1);
+  --background-error-mid: rgba(239, 68, 68, 0.22);
+  --background-error-primary: #ef4444;
+  --border-error-primary: #ef4444;
+  --border-error-light: rgba(239, 68, 68, 0.25);
+  --text-error-primary: #fca5a5;
+  --text-error-secondary: #f87171;
+  --borders-error-primary: #ef4444;
+
+  /* warning / amber — TODO, selected line, the data values in the notification */
+  --background-warning-light: rgba(251, 191, 36, 0.08);
+  --background-warning-mid: rgba(251, 191, 36, 0.15);
+  --background-warning-primary: #fbbf24;
+  --border-warning-primary: #fbbf24;
+  --border-warning-light: rgba(251, 191, 36, 0.25);
+  --text-warning-primary: #fde68a;
+  --text-warning-secondary: #fbbf24;
+  --borders-warning-primary: #fbbf24;
+
+  /* info — the takeaway panel */
+  --background-info-light: rgba(106, 98, 217, 0.1);
+  --border-info-primary: rgba(106, 98, 217, 0.25);
+  --text-info-primary: #c4c1f7;
+}

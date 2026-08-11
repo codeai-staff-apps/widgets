@@ -1,0 +1,99 @@
+/* Layer 1 — re-token the design system for the app's light indigo identity.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order.
+   app.css already reads --background-brand-purple-extra-light,
+   --border-brand-primary, --border-neutral-secondary, --shape-md and the
+   spacing scale, so cards, dialogue rules and the code highlight re-colour
+   with no component CSS change. */
+:root[data-brand] {
+  /* surfaces — the light app shell */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #f5f5f7;
+  --background-neutral-tertiary: #f0eeff;
+  --background-neutral-white-fixed: #ffffff;
+  --background-neutral-black-fixed: #000000;
+  --background-neutral-primary-inverse: #1e1e2e;
+
+  /* text — #aaa on #f5f5f7 is 2.3:1; darkened for AA */
+  --text-neutral-primary: #000000;
+  --text-neutral-secondary: #4f4f57;
+  --text-neutral-tertiary: #6b6b73;
+  --text-neutral-placeholder: #6b6b73;
+  --text-neutral-white-fixed: #ffffff;
+  --text-neutral-inverse: #cdd6f4;
+
+  /* borders — the 1.5px card hairline */
+  --border-neutral-primary: #e5e5e5;
+  --border-neutral-secondary: #e5e5e5;
+  --borders-neutral-primary: #e5e5e5;
+  --borders-neutral-light: #f0eeff;
+  --borders-neutral-strong: #d1d5db;
+
+  /* indigo brand — hero, check header, buttons, progress, dialogue rule */
+  --background-brand-primary: #6a62d9;
+  --background-brand-strong: #4f47b8;
+  --background-brand-mid: #a29ff0;
+  --background-brand-light: #f0eeff;
+  --border-brand-primary: #6a62d9;
+  --border-brand-strong: #4f47b8;
+  --text-brand-primary: #443fa0; /* #6A62D9 is 4.4:1 on white; use the
+                                     literal indigo only for large/heavy text */
+  --text-brand-secondary: #554dc4;
+
+  --background-brand-purple-primary: #6a62d9;
+  --background-brand-purple-strong: #4f47b8;
+  --background-brand-purple-hover: #e4e1fb;
+  --background-brand-purple-light: #d4d1f5;
+  --background-brand-purple-extra-light: #f0eeff;
+  --borders-brand-purple-primary: #6a62d9;
+  --borders-brand-purple-strong: #a29ff0;
+  --borders-brand-purple-light: #d4d1f5;
+  --text-brand-purple-primary: #3d3a8c;
+  --text-brand-purple-secondary: #443fa0;
+
+  /* the DS's focus-visible ring on every button/control reads from the
+     "brand teal" ramp regardless of brand — repoint it to the app's indigo
+     so the original's "3px indigo ring on every button" survives */
+  --background-brand-teal-primary: #6a62d9;
+  --background-brand-teal-strong: #4f47b8;
+  --background-brand-teal-extra-light: #f0eeff;
+  --borders-brand-teal-primary: #6a62d9;
+  --borders-brand-teal-strong: #4f47b8;
+
+  /* selection + focus — the original's 3px indigo ring */
+  --background-selected-primary: #6a62d9;
+  --background-selected-strong: #4f47b8;
+  --border-selected-primary: #6a62d9;
+  --text-selected-primary: #ffffff;
+  --border-focused-primary: #6a62d9;
+
+  /* info — the app's ONLY feedback colour. The original renders correct and
+     incorrect in the same indigo; keep that. */
+  --background-info-primary: #6a62d9;
+  --background-info-light: #f0eeff;
+  --background-info-extra-light: #f0eeff;
+  --border-info-primary: #d4d1f5;
+  --borders-info-primary: #d4d1f5;
+  --text-info-primary: #3d3a8c;
+
+  /* success / error appear only in the summary's bug-vs-fix washes */
+  --background-success-extra-light: rgba(16, 185, 129, 0.12);
+  --border-success-primary: #10b981;
+  --borders-success-primary: #10b981;
+  --text-success-primary: #06603f;
+  --background-error-extra-light: rgba(239, 68, 68, 0.15);
+  --border-error-primary: #ef4444;
+  --borders-error-primary: #ef4444;
+  --text-error-primary: #b42318;
+
+  /* radii — 14px cards, 16px hero, 8-10px controls */
+  --shape-sm: 8px;
+  --shape-md: 14px;
+  --shape-lg: 16px;
+  --shape-round: 999px;
+}
+
+body {
+  background: var(--background-neutral-secondary);
+  min-height: 100vh;
+}

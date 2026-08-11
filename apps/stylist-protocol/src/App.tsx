@@ -1,11 +1,13 @@
 import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
+import Chip from '@mui/material/Chip';
 import LinearProgress from '@mui/material/LinearProgress';
 import {useEffect, useState} from 'react';
 
 import './app.css';
 import CodePanel from './CodePanel';
 import {CHROME, STEPS} from './content/content';
+import type {TextSegment} from './content/types';
 import Dialogue from './Dialogue';
 import {Screen, useAnnounce, useScreenMachine} from './shared';
 import StepScreen from './StepScreen';
@@ -19,6 +21,46 @@ const REVEAL_STEP = STEP_IDS[4];
 
 const progressLabel = (stepNumber: number) =>
   CHROME.progressOf.replace('{n}', String(stepNumber));
+
+const dotLabel = (template: string, stepNumber: number) =>
+  template.replace('{n}', String(stepNumber));
+
+const pillSx = {
+  bgcolor: 'rgba(106, 98, 217, 0.1)',
+  color: 'var(--text-brand-primary)',
+  border: '1px solid rgba(106, 98, 217, 0.25)',
+  borderRadius: '999px',
+  fontWeight: 700,
+  fontSize: '0.68rem',
+};
+
+const unitTagSx = {
+  bgcolor: 'rgba(106, 98, 217, 0.18)',
+  color: 'var(--text-brand-primary)',
+  border: '1px solid rgba(106, 98, 217, 0.4)',
+  borderRadius: '999px',
+  fontWeight: 700,
+  fontSize: '0.7rem',
+  letterSpacing: '1px',
+  textTransform: 'uppercase' as const,
+};
+
+/** Renders the amber-emphasised data values the notification calls out. */
+function Emphasized({segments}: {segments: TextSegment[]}) {
+  return (
+    <>
+      {segments.map((segment, i) =>
+        segment.emphasis ? (
+          <strong key={i} className="dataValue">
+            {segment.text}
+          </strong>
+        ) : (
+          segment.text
+        ),
+      )}
+    </>
+  );
+}
 
 export default function App() {
   const announce = useAnnounce();
@@ -81,65 +123,98 @@ export default function App() {
 
   const lineClickHandler =
     step?.interaction.type === 'clickline' && results[stepIndex] === null ? clickLine : undefined;
+  const clickTarget = step?.interaction.type === 'clickline' ? step.interaction.target : undefined;
 
   return (
     <main className="page">
       <Screen
         machine={machine}
         id="intro"
-        heading={CHROME.introTitle}
+        heading={
+          <>
+            {CHROME.introTitle} <span className="introTitleAccent">{CHROME.introTitleAccent}</span>
+          </>
+        }
         headingTag="h1"
         headingAppearance="heading-lg"
       >
-        <Typography semanticTag="p" visualAppearance="overline-two">
-          {CHROME.unitTag}
-        </Typography>
-        <Typography semanticTag="p" visualAppearance="body-one">
-          {CHROME.introSub}
-        </Typography>
-
-        <section className="card">
-          <Typography semanticTag="h2" visualAppearance="heading-sm">
-            <span aria-hidden="true">{CHROME.notifIcon} </span>
-            {CHROME.notifTitle}
+        <div className="shell">
+          <Chip label={CHROME.unitTag} size="small" sx={unitTagSx} />
+          <Typography semanticTag="p" visualAppearance="body-one">
+            {CHROME.introSub}
           </Typography>
-          <Typography semanticTag="p" visualAppearance="body-two">
-            {CHROME.notifDetails}
-          </Typography>
-          <Typography semanticTag="p" visualAppearance="body-three" noMargin>
-            {CHROME.notifItems}
-          </Typography>
-        </section>
 
-        <Dialogue speaker={CHROME.teacherName}>{CHROME.introTeacherLine}</Dialogue>
+          <section className="card">
+            <Typography semanticTag="h2" visualAppearance="heading-sm">
+              <span aria-hidden="true">{CHROME.notifIcon} </span>
+              {CHROME.notifTitle}
+            </Typography>
+            <Typography semanticTag="p" visualAppearance="body-two">
+              <Emphasized segments={CHROME.notifDetails} />
+            </Typography>
+            <Typography semanticTag="p" visualAppearance="body-three" noMargin>
+              <Emphasized segments={CHROME.notifItems} />
+            </Typography>
+          </section>
 
-        <ol className="stepsPreview">
-          {CHROME.stepsPreview.map(preview => (
-            <li key={preview}>{preview}</li>
-          ))}
-        </ol>
+          <Dialogue speaker={CHROME.teacherName} variant="teacher">
+            {CHROME.introTeacherLine}
+          </Dialogue>
 
-        <div>
-          <Button
-            type="primary"
-            color="purple"
-            text={CHROME.startBtn}
-            onClick={() => machine.goTo(STEP_IDS[0])}
-          />
+          <ol className="stepsPreview" aria-label="Protocol steps">
+            {CHROME.stepsPreview.map(preview => (
+              <li key={preview}>
+                <Chip label={preview} size="small" sx={pillSx} />
+              </li>
+            ))}
+          </ol>
+
+          <div>
+            <Button
+              type="primary"
+              color="purple"
+              text={CHROME.startBtn}
+              onClick={() => machine.goTo(STEP_IDS[0])}
+            />
+          </div>
         </div>
       </Screen>
 
       <div className={inActivity ? 'activityGrid' : undefined}>
         <div>
           {inActivity && (
-            <p className="progress">
+            <div className="progress">
               <span>{progressLabel(stepIndex + 1)}</span>
               <LinearProgress
                 aria-hidden="true"
                 variant="determinate"
                 value={((stepIndex + 1) / STEPS.length) * 100}
+                sx={{
+                  height: 3,
+                  borderRadius: 999,
+                  bgcolor: '#1e2130',
+                  '& .MuiLinearProgress-bar': {
+                    backgroundImage: 'linear-gradient(90deg, #6a62d9, #a29ff0)',
+                  },
+                }}
               />
-            </p>
+              <ol className="stepDots" aria-label="Step completion status">
+                {STEPS.map((_, i) => {
+                  const state = i < stepIndex ? 'isDone' : i === stepIndex ? 'isActive' : '';
+                  const label =
+                    i < stepIndex
+                      ? CHROME.dotDoneLabel
+                      : i === stepIndex
+                        ? CHROME.dotActiveLabel
+                        : CHROME.dotPendingLabel;
+                  return (
+                    <li key={STEP_IDS[i]} aria-label={dotLabel(label, i + 1)}>
+                      <span className={`stepDot ${state}`} aria-hidden="true" />
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
           )}
           {STEPS.map((entry, i) => (
             <StepScreen
@@ -163,6 +238,7 @@ export default function App() {
             consoleText={consoleText}
             onLineClick={lineClickHandler}
             selectedLine={selectedLine}
+            clickTarget={clickTarget}
           />
         )}
       </div>

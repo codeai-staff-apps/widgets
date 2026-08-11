@@ -29,8 +29,8 @@ export default function App() {
   );
 
   return (
-    <main className="page">
-      <Typography semanticTag="h1" visualAppearance="heading-lg">
+    <main className="console">
+      <Typography semanticTag="h1" visualAppearance="heading-lg" className="title">
         SongSurfer
       </Typography>
 
@@ -54,31 +54,70 @@ export default function App() {
       </div>
 
       <div role="status" aria-live="polite">
-        <Typography semanticTag="p" visualAppearance="body-two">
+        <Typography semanticTag="p" visualAppearance="body-two" className="count">
           {matches.length} {matches.length === 1 ? 'song' : 'songs'}
         </Typography>
       </div>
 
       {matches.length === 0 ? (
-        <Typography semanticTag="p" visualAppearance="body-two">
-          No songs match your filters.
-        </Typography>
+        <div className="songGrid">
+          <Typography
+            semanticTag="p"
+            visualAppearance="body-two"
+            className="noResults"
+          >
+            No songs match your filters.
+          </Typography>
+        </div>
       ) : (
         <ul className="songGrid">
           {matches.map(song => (
             <li key={song.title}>
-              <Card variant="outlined">
+              <Card
+                variant="outlined"
+                sx={{
+                  width: '100%',
+                  minWidth: 160,
+                  aspectRatio: '1',
+                  borderRadius: '50%',
+                  border: '2px solid #00ffff',
+                  boxShadow: '0 0 10px #00ff00',
+                  bgcolor: 'rgba(0, 0, 0, 0.5)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  '@media (prefers-reduced-motion: no-preference)': {
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: '0 0 20px #ff00ff',
+                    },
+                  },
+                }}
+              >
                 <CardContent>
-                  <Typography semanticTag="h2" visualAppearance="heading-xs">
+                  <Typography
+                    semanticTag="h2"
+                    visualAppearance="heading-xs"
+                    className="songTitle"
+                  >
                     {song.title}
                   </Typography>
-                  <Typography semanticTag="p" visualAppearance="body-two" noMargin>
+                  <Typography
+                    semanticTag="p"
+                    visualAppearance="body-two"
+                    noMargin
+                    className="artistName"
+                  >
                     {song.artist}
                   </Typography>
                   <Typography
                     semanticTag="p"
                     visualAppearance="body-three"
                     noMargin
+                    className="genreMood"
                   >
                     {song.genre} | {song.mood}
                   </Typography>

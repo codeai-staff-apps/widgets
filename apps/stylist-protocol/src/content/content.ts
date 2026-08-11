@@ -1,14 +1,26 @@
-import type {Chrome, CodeLine, Post, Step, Summary} from './types';
+import type {Chrome, CodeLine, CodeSegment, Post, Step, Summary} from './types';
 
 export const CHROME: Chrome = {
   documentTitle: 'The Stylist — Push Protocol',
   unitTag: 'Unit 3 · Arrays & JavaScript',
-  introTitle: 'The Stylist: Incoming Booking!',
+  introTitle: 'The Stylist:',
+  introTitleAccent: 'Incoming Booking!',
   introSub: 'A new client just booked a shoot. Follow the 5-step protocol to guide Isabella through adding it to the feed using .push().',
   notifIcon: '📸',
   notifTitle: 'Update 1: Incoming Booking!',
-  notifDetails: 'A client booked a Streetwear Shoot for the end of the week! Isabella needs to push it to the schedule.',
-  notifItems: 'Title: "Streetwear Shoot" · Content: "Sneak peek at the new collection!" · Image: street.jpg',
+  notifDetails: [
+    {text: 'A client booked a '},
+    {text: 'Streetwear Shoot', emphasis: true},
+    {text: ' for the end of the week! Isabella needs to push it to the schedule.'},
+  ],
+  notifItems: [
+    {text: 'Title: '},
+    {text: '"Streetwear Shoot"', emphasis: true},
+    {text: ' · Content: '},
+    {text: '"Sneak peek at the new collection!"', emphasis: true},
+    {text: ' · Image: '},
+    {text: 'street.jpg', emphasis: true},
+  ],
   studentName: 'Isabella',
   teacherName: 'Ms. Rivera',
   introTeacherLine: "Isabella just got a new booking notification — but she's frozen staring at the code. Let's use the 5-step protocol to slow her down and build this together.",
@@ -25,6 +37,9 @@ export const CHROME: Chrome = {
   consoleLabel: '▸ Console',
   consoleInitial: '// Ready — follow the steps',
   progressOf: 'Step {n} of 5',
+  dotDoneLabel: 'Step {n}: complete',
+  dotActiveLabel: 'Step {n}: current',
+  dotPendingLabel: 'Step {n}: not yet started',
   btnNext: 'Next Step →',
   btnFinish: 'See Summary →',
   phoneTitle: 'My Feed',
@@ -33,132 +48,186 @@ export const CHROME: Chrome = {
   stepRetry: 'Answered incorrectly',
 };
 
+const kw = (text: string): CodeSegment => ({text, tok: 'kw'});
+const fn = (text: string): CodeSegment => ({text, tok: 'fn'});
+const str = (text: string): CodeSegment => ({text, tok: 'str'});
+const num = (text: string): CodeSegment => ({text, tok: 'num'});
+const cm = (text: string): CodeSegment => ({text, tok: 'cm'});
+const op = (text: string): CodeSegment => ({text, tok: 'op'});
+const plain = (text: string): CodeSegment => ({text});
+
 /**
  * script.js as the learner sees it. The source drew these with Catppuccin
- * syntax spans inside a fake editor; the rebuild keeps the text, the line
- * numbers the console message refers to, and which rows the AI's helper
- * function adds at step 5.
+ * syntax spans inside a fake editor; the rebuild keeps the same token
+ * boundaries so the differentiation the exercise depends on (step 1 is
+ * "read this code") survives.
  */
 export const CODE_LINES: CodeLine[] = [
+  {segments: [cm('// DOM ELEMENTS')]},
   {
-    text: '// DOM ELEMENTS',
+    segments: [
+      kw('let'),
+      plain(' '),
+      plain('post1Title'),
+      plain(' '),
+      op('='),
+      plain(' '),
+      plain('document'),
+      plain('.'),
+      fn('querySelector'),
+      plain('('),
+      str('"#post1-title"'),
+      plain(');'),
+    ],
   },
   {
-    text: 'let post1Title = document.querySelector("#post1-title");',
+    segments: [
+      kw('let'),
+      plain(' '),
+      plain('post1Content'),
+      plain(' '),
+      op('='),
+      plain(' '),
+      plain('document'),
+      plain('.'),
+      fn('querySelector'),
+      plain('('),
+      str('"#post1-content"'),
+      plain(');'),
+    ],
   },
+  {segments: [cm('// ... post2 through post5 ...')]},
+  {segments: [plain('')]},
+  {segments: [cm('// DATA LISTS (Parallel Arrays)')]},
+  {segments: [cm('// Index 0 = Monday, Index 1 = Tuesday, etc.')]},
   {
-    text: 'let post1Content = document.querySelector("#post1-content");',
-  },
-  {
-    text: '// ... post2 through post5 ...',
-  },
-  {
-    text: '',
-  },
-  {
-    text: '// DATA LISTS (Parallel Arrays)',
-  },
-  {
-    text: '// Index 0 = Monday, Index 1 = Tuesday, etc.',
-  },
-  {
-    text: 'let titles = ["Motivation Monday", "Tip Tuesday", "Work in Progress", "Throwback Thursday", "Fashion Friday"];',
     id: 'line-a3',
+    segments: [
+      kw('let'),
+      plain(' titles '),
+      op('='),
+      plain(' ['),
+      str('"Motivation Monday"'),
+      plain(', '),
+      str('"Tip Tuesday"'),
+      plain(', '),
+      str('"Work in Progress"'),
+      plain(', '),
+      str('"Throwback Thursday"'),
+      plain(', '),
+      str('"Fashion Friday"'),
+      plain('];'),
+    ],
   },
   {
-    text: 'let contents = ["Start strong!", "Mix metals.", "Sewing a hem.", "Old style.", "Weekend vibes."];',
     id: 'line-a4',
+    segments: [
+      kw('let'),
+      plain(' contents '),
+      op('='),
+      plain(' ['),
+      str('"Start strong!"'),
+      plain(', '),
+      str('"Mix metals."'),
+      plain(', '),
+      str('"Sewing a hem."'),
+      plain(', '),
+      str('"Old style."'),
+      plain(', '),
+      str('"Weekend vibes."'),
+      plain('];'),
+    ],
   },
   {
-    text: 'let images = ["/images/one.png", "/images/two.png", "/images/three.png", "/images/four.png", "/images/five.png"];',
     id: 'line-a5',
+    segments: [
+      kw('let'),
+      plain(' images '),
+      op('='),
+      plain(' ['),
+      str('"/images/one.png"'),
+      plain(', '),
+      str('"/images/two.png"'),
+      plain(', '),
+      str('"/images/three.png"'),
+      plain(', '),
+      str('"/images/four.png"'),
+      plain(', '),
+      str('"/images/five.png"'),
+      plain('];'),
+    ],
+  },
+  {segments: [plain('')]},
+  {segments: [cm('// DISPLAY LOGIC')]},
+  {segments: [kw('function'), plain(' '), fn('renderFeed'), plain('() {')]},
+  {segments: [plain('  '), cm('// Monday Slot (Index 0)')]},
+  {
+    segments: [
+      plain('  post1Title.textContent '),
+      op('='),
+      plain(' titles['),
+      num('0'),
+      plain('];'),
+    ],
   },
   {
-    text: '',
+    segments: [
+      plain('  post1Content.textContent '),
+      op('='),
+      plain(' contents['),
+      num('0'),
+      plain('];'),
+    ],
   },
+  {segments: [plain('  '), cm('// ... Tuesday through Friday ...')]},
+  {segments: [plain('}')]},
+  {segments: [plain('')]},
+  {segments: [cm('// START APP')]},
+  {id: 'line-call', segments: [cm('// addBooking(); ← will go here')]},
+  {id: 'line-render', segments: [fn('renderFeed'), plain('();')]},
+  {segments: [plain('')]},
+  {segments: [cm('// ─────────────────────────────')]},
   {
-    text: '// DISPLAY LOGIC',
-  },
-  {
-    text: 'function renderFeed() {',
-  },
-  {
-    text: '  // Monday Slot (Index 0)',
-  },
-  {
-    text: '  post1Title.textContent = titles[0];',
-  },
-  {
-    text: '  post1Content.textContent = contents[0];',
-  },
-  {
-    text: '  // ... Tuesday through Friday ...',
-  },
-  {
-    text: '}',
-  },
-  {
-    text: '',
-  },
-  {
-    text: '// START APP',
-  },
-  {
-    text: '// addBooking(); ← will go here',
-    id: 'line-call',
-  },
-  {
-    text: 'renderFeed();',
-    id: 'line-render',
-  },
-  {
-    text: '',
-  },
-  {
-    text: '// ─────────────────────────────',
-  },
-  {
-    text: '// HELPER FUNCTIONS — add new ones below',
     id: 'line-todo',
-    isTodo: true,
+    segments: [{text: '// HELPER FUNCTIONS — add new ones below', tok: 'todo'}],
   },
+  {segments: [plain('')]},
   {
-    text: '',
-  },
-  {
-    text: '// ← addBooking() will be written here',
     id: 'line-helper-placeholder',
+    segments: [cm('// ← addBooking() will be written here')],
     visibility: 'beforeReveal',
   },
   {
-    text: 'function addBooking() {',
     id: 'line-helper-fn',
+    segments: [kw('function'), plain(' '), fn('addBooking'), plain('() {')],
     visibility: 'afterReveal',
   },
   {
-    text: '  titles.push("Streetwear Shoot");',
     id: 'line-helper-1',
+    segments: [plain('  titles.'), fn('push'), plain('('), str('"Streetwear Shoot"'), plain(');')],
     visibility: 'afterReveal',
   },
   {
-    text: '  contents.push("Sneak peek at the new collection!");',
     id: 'line-helper-2',
+    segments: [
+      plain('  contents.'),
+      fn('push'),
+      plain('('),
+      str('"Sneak peek at the new collection!"'),
+      plain(');'),
+    ],
     visibility: 'afterReveal',
   },
   {
-    text: '  images.push("street.jpg");',
     id: 'line-helper-3',
+    segments: [plain('  images.'), fn('push'), plain('('), str('"street.jpg"'), plain(');')],
     visibility: 'afterReveal',
   },
-  {
-    text: '}',
-    id: 'line-helper-4',
-    visibility: 'afterReveal',
-  },
+  {id: 'line-helper-4', segments: [plain('}')], visibility: 'afterReveal'},
 ];
 
 /** What `line-call` becomes once the helper function exists. */
-export const CALL_REVEALED = 'addBooking();';
+export const CALL_REVEALED_SEGMENTS: CodeSegment[] = [fn('addBooking'), plain('();')];
 
 export const STEPS: Step[] = [
   {
@@ -313,36 +382,42 @@ export const POSTS: Post[] = [
     title: 'Motivation Monday',
     content: 'Start strong!',
     imageFile: 'one.png',
+    swatchColor: '#c0392b',
   },
   {
     day: 'TUESDAY',
     title: 'Tip Tuesday',
     content: 'Mix metals.',
     imageFile: 'two.png',
+    swatchColor: '#8e44ad',
   },
   {
     day: 'WEDNESDAY',
     title: 'Work in Progress',
     content: 'Sewing a hem.',
     imageFile: 'three.png',
+    swatchColor: '#2980b9',
   },
   {
     day: 'THURSDAY',
     title: 'Throwback Thursday',
     content: 'Old style.',
     imageFile: 'four.png',
+    swatchColor: '#9b1a5a',
   },
   {
     day: 'FRIDAY',
     title: 'Fashion Friday',
     content: 'Weekend vibes.',
     imageFile: 'five.png',
+    swatchColor: '#7d3c98',
   },
   {
     day: 'SATURDAY',
     title: 'Streetwear Shoot',
     content: 'Sneak peek at the new collection!',
     imageFile: 'street.jpg',
+    swatchColor: '#12112a',
   },
 ];
 
@@ -377,6 +452,7 @@ export const SUMMARY: Summary = {
       note: 'Confirmed 6th post appeared correctly in the feed',
     },
   ],
-  takeaway: "Key takeaway for your classroom: When students say they're 'stuck', they're usually skipping step 1 or 3 — they haven't understood what exists or planned what they need. The protocol redirects that impulse.",
-  btnRestart: 'Run the Protocol Again',
+  takeawayLead: 'Key takeaway for your classroom:',
+  takeaway: "When students say they're 'stuck', they're usually skipping step 1 or 3 — they haven't understood what exists or planned what they need. The protocol redirects that impulse.",
+  btnRestart: '↺ Run the Protocol Again',
 };

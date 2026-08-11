@@ -7,8 +7,8 @@
 }
 
 .steps {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
   margin: 16px 0;
   padding: 0;
   list-style: none;
@@ -18,11 +18,49 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
+  padding: 12px 14px;
   border: 1px solid var(--borders-neutral-light);
   border-left: 4px solid var(--borders-brand-purple-primary);
-  border-radius: var(--shape-md, 8px);
+  border-radius: 10px;
   background: var(--background-neutral-primary);
+  box-shadow: 0 1px 3px rgba(31, 25, 118, 0.08);
+}
+
+/* the correctness rail — the app's primary feedback channel, paired with the
+   word marker below so colour is never the only signal */
+.step--right {
+  border-left-color: var(--borders-success-primary);
+}
+
+.step--wrong {
+  border-left-color: var(--borders-error-primary);
+}
+
+.step--picked {
+  opacity: 0.6;
+}
+
+.handle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9691e0;
+  font-size: 16pt;
+  line-height: 1;
+  cursor: grab;
+}
+
+.handle[aria-pressed='true'] {
+  cursor: grabbing;
+}
+
+.handle:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-primary);
+  outline-offset: 2px;
 }
 
 .stepPosition {
@@ -37,8 +75,8 @@
 }
 
 .step code {
-  padding: 1px 4px;
-  border-radius: var(--shape-sm, 4px);
+  padding: 1px 5px;
+  border-radius: 4px;
   background: var(--background-neutral-secondary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.9em;
@@ -55,6 +93,59 @@
 
 .mark--wrong {
   color: var(--text-error-primary);
+}
+
+/* Insertion slots between rows — the pointer/keyboard drop targets that stand
+   in for the original's live-reordering "drag-over" rule. Always present and
+   focusable (a keyboard user can tab to any position); the rule only draws
+   once a step is picked up, and lights up solid on the slot under the
+   pointer or keyboard focus. */
+.slotRow {
+  list-style: none;
+}
+
+.slot {
+  display: block;
+  width: 100%;
+  height: 10px;
+  /* SelectAndPlace's shared targetStyle sets a 44px min-height as a generic
+     touch-target floor; this slot is a thin insertion rule between rows, not
+     a tap target on its own, so it opts back out. */
+  min-height: 0 !important;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slot::after {
+  display: block;
+  height: 3px;
+  margin: 0 2px;
+  border-radius: 2px;
+  background: transparent;
+  content: '';
+}
+
+.steps--armed .slot::after {
+  background: var(--background-brand-purple-extra-light);
+}
+
+.slot:hover::after,
+.slot:focus-visible::after {
+  background: var(--borders-brand-purple-primary);
+}
+
+.slot:focus-visible {
+  outline: 3px solid var(--borders-brand-purple-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slot::after {
+    transition: background-color 0.15s ease;
+  }
 }
 
 .actions {

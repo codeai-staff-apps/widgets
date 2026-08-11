@@ -2,7 +2,8 @@
  * Every "response" here is a literal string. The page names
  * api.openweathermap.org but never calls it, and neither does this rebuild.
  *
- * `**…**` marks a highlighted token; backticks mark inline code in prose.
+ * `**…**` marks a highlighted token, `|cls:text|` marks a syntax colour (see
+ * `highlight()` in markup.tsx), and backticks mark inline code in prose.
  */
 
 export interface Step {
@@ -30,9 +31,9 @@ export const directions = {
 
 export const fullChain = {
   heading: 'The full fetch() chain',
-  code: `fetch(**API_URL**)
-  .**then**(response => response.json())
-  .**then**(data => updateUI(data));`,
+  code: `|fn:fetch|(**API_URL**)
+  .**then**(response |op:=>| response.|fn:json|())
+  .**then**(data |op:=>| |fn:updateUI|(data));`,
   summary:
     'Three-line fetch chain: fetch API URL, then convert response to JSON, then update the UI with data.',
 };
@@ -42,14 +43,14 @@ export const verdictLabel = 'What just happened';
 export const steps: Step[] = [
   {
     number: 1,
-    heading: 'Step 1: fetch(API_URL) — Send the request',
-    code: 'fetch(API_URL) // send a request to the server',
+    heading: 'fetch(API_URL) — Send the request',
+    code: '|fn:fetch|(**API_URL**) |comment:// send a request to the server|',
     codeSummary: 'Line 1: fetch called with API_URL sends a request to the server',
     buttonLabel: 'Run Step 1',
     resultLabel: 'What the server receives',
     initialHint: 'not run yet',
-    result: `GET https://api.openweathermap.org/data/2.5/weather?q=Seattle
-→ Request sent. Waiting for server response...`,
+    result: `|dim:GET ||valS:https://api.openweathermap.org/data/2.5/weather?q=Seattle|
+|hint:→ Request sent. Waiting for server response...|`,
     verdictBody:
       'Your app sent an HTTP request to the API server at `API_URL`. The server got the request and started preparing a response. Nothing has come back yet — `fetch()` kicks off the process, but the response arrives asynchronously. Your app keeps running while it waits.',
     announce:
@@ -57,19 +58,19 @@ export const steps: Step[] = [
   },
   {
     number: 2,
-    heading: 'Step 2: .then(response => response.json()) — Parse the response',
-    code: '.then(response => response.json()) // convert to readable JSON',
+    heading: '.then(response => response.json()) — Parse the response',
+    code: '.**then**(response |op:=>| response.|fn:json|()) |comment:// convert to readable JSON|',
     codeSummary:
       'Line 2: the first then converts the raw response into readable JSON',
     buttonLabel: 'Run Step 2',
     resultLabel: 'What response.json() returns',
     initialHint: 'run step 1 first',
-    result: `{
-  "city": "Seattle",
-  "temperature": 75,
-  "description": "Sunny",
-  "coordinates": [47.60, -122.33]
-}`,
+    result: `|brace:{|
+  |key:"city"|: |valS:"Seattle"|,
+  |key:"temperature"|: |valN:75|,
+  |key:"description"|: |valS:"Sunny"|,
+  |key:"coordinates"|: [|valN:47.60|, |valN:-122.33|]
+|brace:}|`,
     verdictBody:
       "The server's raw response arrived as a stream of bytes — not yet usable as JavaScript. `response.json()` reads that stream and converts it into a JavaScript object. This is why there are two `.then()` calls: receiving the response and reading it as JSON are two separate steps. Think of it as: the first `.then()` opens the package; the second one uses what's inside.",
     announce:
@@ -77,18 +78,18 @@ export const steps: Step[] = [
   },
   {
     number: 3,
-    heading: 'Step 3: .then(data => updateUI(data)) — Use the data',
-    code: ".then(data => updateUI(data)); // update what's on screen",
+    heading: '.then(data => updateUI(data)) — Use the data',
+    code: ".**then**(data |op:=>| |fn:updateUI|(data)); |comment:// update what's on screen|",
     codeSummary:
       'Line 3: the second then passes the parsed data to updateUI to display it on screen',
     buttonLabel: 'Run Step 3',
     resultLabel: 'What appears on screen',
     initialHint: 'run step 2 first',
-    result: `// updateUI() reads from the data object and writes to the page
-city:        Seattle
-temperature: 75°F
-conditions:  Sunny
-// "coordinates" not displayed — the app only shows what it needs`,
+    result: `|hint:// updateUI() reads from the data object and writes to the page|
+|key:City:|        |valS:Seattle|
+|key:Temperature:| |valN:75°F|
+|key:Conditions:|  |valS:Sunny|
+|hint:// "coordinates" not displayed — the app only shows what it needs|`,
     verdictBody:
       '`data` is now the fully parsed JavaScript object from Step 2. `updateUI(data)` takes that object and writes specific values to the page — pulling `data.city`, `data.temperature`, or `data.description` and placing them into HTML elements. The JSON response had four keys; the app only displays three. That\'s why your students will see a clean UI even though the raw JSON has more in it.',
     announce:
@@ -119,3 +120,6 @@ export const resetAnnounce = 'Visualizer reset. All steps ready to run again.';
 export const UNLOCK_DELAY_MS = 400;
 /** The summary appears this long after step 3 runs. */
 export const SUMMARY_DELAY_MS = 500;
+/** Beat between mounting a fade-in reveal and starting its transition — a
+ * CSS transition can't animate from a class an element is born with. */
+export const REVEAL_DELAY_MS = 20;

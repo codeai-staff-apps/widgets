@@ -1,0 +1,21 @@
+/* Layer 1 — re-token the design system for the worksheet's white / indigo /
+   purple identity. Must use :root[data-brand] (specificity 0,2,0): the DS
+   defines these same tokens on [data-brand='codeai-next']:root, which ties
+   in specificity, so we rely on import order (this file loads after the
+   runtime stylesheet) to win the tie — same recipe as the Ares reference. */
+:root[data-brand] {
+  /* worksheet ink */
+  --text-neutral-primary: #222222;
+  --text-neutral-secondary: #555555;
+
+  /* the frame border */
+  --border-neutral-primary: #e4e2f8;
+
+  /* the pale-blue explanation panel (Alert type="info") */
+  --background-info-extra-light: #d5efff;
+  --text-info-primary-fixed: #06338d;
+
+  /* the completion note (Alert type="success") */
+  --background-success-extra-light: #e4e2f8;
+  --text-success-primary-fixed: #1f1976;
+}

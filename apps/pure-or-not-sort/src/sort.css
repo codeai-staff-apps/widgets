@@ -6,6 +6,14 @@
   color: var(--text-neutral-primary);
 }
 
+.directions {
+  background: var(--background-info-light);
+  color: var(--text-info-primary);
+  border-radius: 10px;
+  padding: 13px 16px;
+  margin: 12px 0;
+}
+
 .zones {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -14,9 +22,49 @@
 
 .tray {
   margin: 16px 0;
-  border: 2px solid var(--borders-neutral-light);
-  border-radius: var(--shape-md, 8px);
+  border: 1.5px dashed var(--borders-neutral-light);
+  border-radius: 10px;
   overflow: hidden;
+}
+
+/* Layer 1b: the two drop zones are colour-coded by MEANING, not decoration —
+   cool lavender for "pure", warm peach for "has side effects". Re-scoping the
+   brand-purple ramp on the side zone (rather than duplicating the chip and
+   "ready" target rules below in a peach variant) recolours both for free. */
+.tray[data-zone='bank'] {
+  background: var(--background-neutral-secondary);
+  border-color: var(--borders-neutral-light);
+}
+
+.tray[data-zone='pure'] {
+  background: var(--background-brand-purple-extra-light);
+  border-color: var(--borders-brand-purple-primary);
+}
+
+.tray[data-zone='side'] {
+  background: var(--background-warning-light);
+  border-color: var(--borders-warning-primary);
+
+  --background-brand-purple-extra-light: var(--background-warning-light);
+  --background-brand-purple-light: var(--background-warning-mid);
+  --borders-brand-purple-primary: var(--borders-warning-primary);
+  --borders-brand-purple-strong: var(--border-warning-strong);
+  --text-brand-purple-primary: var(--text-warning-primary);
+}
+
+.tray[data-dragover] {
+  border-style: solid;
+}
+
+.tray[data-zone='bank'][data-dragover] {
+  background: var(--background-brand-purple-extra-light);
+  border-color: var(--borders-brand-purple-strong);
+}
+
+.tray[data-zone='pure'][data-dragover],
+.tray[data-zone='side'][data-dragover] {
+  background: var(--background-brand-purple-light);
+  border-color: var(--borders-brand-purple-strong);
 }
 
 .trayTarget {
@@ -26,7 +74,7 @@
   border: 0;
   border-bottom: 2px solid var(--borders-neutral-light);
   background: var(--background-neutral-secondary);
-  color: var(--text-neutral-primary);
+  color: var(--text-brand-purple-primary);
   font: inherit;
   font-weight: var(--font-weight-semi-bold, 600);
   text-align: left;
@@ -35,7 +83,6 @@
 
 .trayTarget--ready {
   background: var(--background-brand-purple-extra-light);
-  color: var(--text-brand-purple-primary);
 }
 
 .trayTarget:disabled {
@@ -64,7 +111,7 @@
   border: 2px solid var(--borders-brand-purple-primary);
   border-radius: var(--shape-md, 8px);
   background: var(--background-brand-purple-extra-light);
-  color: var(--text-neutral-primary);
+  color: var(--text-brand-purple-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 14px;
   cursor: pointer;
@@ -79,6 +126,20 @@
   cursor: default;
 }
 
+/* Graded chip fills — a colour echo of the "correct"/"not quite" text mark
+   next to each chip, never the only signal. */
+.chip[data-grade='right'] {
+  background: var(--background-success-light);
+  border-color: var(--borders-success-primary);
+  color: var(--text-success-primary);
+}
+
+.chip[data-grade='wrong'] {
+  background: var(--background-warning-light);
+  border-color: var(--borders-warning-primary);
+  color: var(--text-warning-primary);
+}
+
 .mark {
   font-size: 13px;
 }
@@ -91,15 +152,37 @@
   color: var(--text-warning-primary);
 }
 
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.scoreArea {
+  color: var(--text-neutral-secondary);
+}
+
+.scoreArea .scoreNum {
+  color: var(--text-brand-purple-primary);
+}
+
 .actions {
   display: flex;
   gap: 12px;
-  margin: 20px 0;
 }
 
 .hints {
   display: grid;
   gap: 8px;
+  margin-top: 1rem;
+}
+
+.hints code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 700;
 }
 
 .chip:focus-visible,
@@ -114,5 +197,22 @@
     transition:
       background-color 0.15s ease,
       box-shadow 0.15s ease;
+  }
+
+  .chip[data-grade='wrong'] {
+    animation: chipShake 0.3s ease;
+  }
+}
+
+@keyframes chipShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
   }
 }

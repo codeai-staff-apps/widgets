@@ -1,0 +1,75 @@
+/* Layer 1 — re-token the design system for the "white teaching handout with
+   a deep-indigo code slab" palette. Must use :root[data-brand] (specificity
+   0,2,0): a plain :root{} ties with the DS's own [data-brand=codeai-next]
+   block and loses on source order. */
+:root[data-brand] {
+  /* surfaces — a white teaching handout */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #f7f6fd;
+  --background-neutral-tertiary: #e4e2f8;
+  --background-neutral-white-fixed: #ffffff;
+  --background-neutral-black-fixed: #1f1976;
+
+  /* text — #aca8ea is 2.0:1 on white, so the dim greys are darkened for AA */
+  --text-neutral-primary: #1a1a1a;
+  --text-neutral-secondary: #55507a;
+  --text-neutral-tertiary: #6a659e;
+  --text-neutral-white-fixed: #ffffff;
+  --text-neutral-inverse: #e4e2f8;
+  --text-neutral-placeholder: #6a659e;
+
+  /* borders */
+  --border-neutral-primary: #e4e2f8;
+  --border-neutral-secondary: #e4e2f8;
+  --borders-neutral-primary: #e4e2f8;
+  --borders-neutral-light: #e4e2f8;
+  --borders-neutral-strong: #aca8ea;
+
+  /* violet accent — drives Button, focus, selection, the step badge */
+  --background-brand-primary: #4c42cf;
+  --background-brand-strong: #1f1976;
+  --background-brand-mid: #aca8ea;
+  --background-brand-light: #e4e2f8;
+  --border-brand-primary: #4c42cf;
+  --border-brand-strong: #1f1976;
+  --text-brand-primary: #241e8c;
+  --text-brand-secondary: #4238be;
+
+  --background-brand-purple-primary: #4c42cf;
+  --background-brand-purple-strong: #1f1976;
+  --background-brand-purple-hover: #3b32b8;
+  --background-brand-purple-light: #e4e2f8;
+  --background-brand-purple-extra-light: #f2f1fc;
+  --borders-brand-purple-primary: #4c42cf;
+  --borders-brand-purple-strong: #1f1976;
+  --borders-brand-purple-light: #aca8ea;
+  --text-brand-purple-primary: #241e8c;
+  --text-brand-purple-secondary: #4238be;
+
+  /* selected / focus */
+  --background-selected-primary: #4c42cf;
+  --background-selected-strong: #1f1976;
+  --border-selected-primary: #4c42cf;
+  --border-selected-strong: #1f1976;
+  --text-selected-primary: #ffffff;
+  --border-focused-primary: #aca8ea;
+
+  /* info — the light-blue directions note, verbatim */
+  --background-info-primary: #d5efff;
+  --background-info-light: #d5efff;
+  --background-info-extra-light: #d5efff;
+  --border-info-primary: #06338d;
+  --borders-info-primary: #06338d;
+  --text-info-primary: #06338d;
+
+  /* success — used only for the summary panel and result strings.
+     #34bd43 is 2.5:1 on white; darkened for text, original kept for fills. */
+  --background-success-extra-light: #e4e2f8;
+  --border-success-primary: #aca8ea;
+  --borders-success-primary: #aca8ea;
+  --text-success-primary: #167c3c;
+
+  /* radii — the original is uniformly 10px */
+  --shape-md: 10px;
+  --shape-lg: 10px;
+}

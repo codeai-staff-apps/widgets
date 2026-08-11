@@ -2,6 +2,7 @@ import Alert from '@code-dot-org/component-library/alert';
 import Button from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
 import Stack from '@mui/material/Stack';
+import classNames from 'classnames';
 import {useEffect, useId, useRef, useState} from 'react';
 
 import {highlight, inlineCode} from './markup';
@@ -10,6 +11,7 @@ import StepSection from './StepSection';
 import {
   directions,
   fullChain,
+  REVEAL_DELAY_MS,
   resetAnnounce,
   resetButtonLabel,
   steps,
@@ -17,6 +19,7 @@ import {
   SUMMARY_DELAY_MS,
   UNLOCK_DELAY_MS,
 } from './steps';
+import './codeSlab.css';
 
 const INITIAL = {done: 0, unlocked: 1, summaryShown: false};
 
@@ -24,6 +27,7 @@ export default function App() {
   const announce = useAnnounce();
   const chainHeadingId = useId();
   const [state, setState] = useState(INITIAL);
+  const [summaryRevealed, setSummaryRevealed] = useState(false);
   const timers = useRef<number[]>([]);
 
   const cancelTimers = () => {
@@ -35,6 +39,15 @@ export default function App() {
   };
 
   useEffect(() => cancelTimers, []);
+
+  useEffect(() => {
+    if (!state.summaryShown) {
+      setSummaryRevealed(false);
+      return;
+    }
+    const id = window.setTimeout(() => setSummaryRevealed(true), REVEAL_DELAY_MS);
+    return () => window.clearTimeout(id);
+  }, [state.summaryShown]);
 
   const runStep = (number: number) => {
     setState(previous => ({...previous, done: number}));
@@ -81,7 +94,9 @@ export default function App() {
         <Typography semanticTag="h2" visualAppearance="heading-md" id={chainHeadingId}>
           {fullChain.heading}
         </Typography>
-        <CodeBlock summary={fullChain.summary}>{highlight(fullChain.code)}</CodeBlock>
+        <CodeBlock tone="code" summary={fullChain.summary}>
+          {highlight(fullChain.code)}
+        </CodeBlock>
       </section>
 
       {steps.map(step => (
@@ -96,9 +111,10 @@ export default function App() {
 
       {state.summaryShown && (
         <Alert
-          type="success"
+          type="info"
           role="note"
           showIcon={false}
+          className={classNames('verdict', {visible: summaryRevealed})}
           text={
             <>
               <strong>{summary.label}</strong>

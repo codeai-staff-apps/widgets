@@ -12,6 +12,8 @@ export interface Choice {
   text: string;
   outcome: {
     type: OutcomeType;
+    /** Decorative: the label text already says what it means. */
+    icon: string;
     label: string;
     body: string;
     reaction: string;
@@ -21,8 +23,8 @@ export interface Choice {
 export const footerNote = 'Where Data Comes From · Unit 5, Lesson 1';
 
 export const student = {
-  /** Decorative: the name is in the text beside it. */
-  avatar: '👨‍🏫',
+  /** Decorative: the name is in the text beside it. Jordan is the student. */
+  avatar: '👨‍🎓',
   name: 'Jordan, one of your students',
   quote: '"I found the API — it\'s just a URL, right? Like, the URL is the API?"',
 };
@@ -56,6 +58,7 @@ export const choices: Choice[] = [
     text: '"Yes, exactly — the URL is how you access the API. Good find!"',
     outcome: {
       type: 'miss',
+      icon: '🔍',
       label: 'This one lets the misconception stick',
       body: 'Confirming "yes, exactly" leaves Jordan thinking the URL and the API are the same thing. He\'ll carry that forward into Level 8 when he starts modifying `fetch()` parameters — and when something doesn\'t work, he won\'t know where to look. The observation deserved a "close, but" rather than a full confirm.',
       reaction: "Cool, so I just need to save the URL and I've got the API. Easy.",
@@ -67,6 +70,7 @@ export const choices: Choice[] = [
     text: '"Close — that URL is one address you use to reach the API. But the API is the whole system of rules behind it: what requests it accepts, what format it sends data back in, what parameters you can use. The URL is the door; the API is the building."',
     outcome: {
       type: 'best',
+      icon: '💡',
       label: 'Strongest response — validates and extends',
       body: '"Close" is doing a lot of work here. It honours what Jordan found without confirming the incomplete version. The door-and-building analogy is concrete: students can picture a building with multiple entrances, rules about who gets in, and what they\'re allowed to take. This keeps Jordan engaged rather than corrected — and sets up the documentation exploration that follows.',
       reaction:
@@ -79,6 +83,7 @@ export const choices: Choice[] = [
     text: '"Not quite — an API stands for Application Programming Interface. It\'s a set of rules that allows software to communicate. The URL is just one part of how you interact with it."',
     outcome: {
       type: 'ok',
+      icon: '🔎',
       label: 'Technically correct, but leads with the definition',
       body: 'The definition of API is accurate and worth knowing. But leading with "Application Programming Interface" when Jordan is holding a URL in his hand may not land — it\'s abstract where he needs concrete. This response corrects the misconception but doesn\'t build on what Jordan actually found. Pairing the definition with an analogy or a follow-up question would make it stronger.',
       reaction: 'Okay... so the URL is part of the interface? I think I get it. Sort of.',
@@ -90,6 +95,7 @@ export const choices: Choice[] = [
     text: '"Good instinct. Let\'s look at what else the API gives you beyond that one URL — open the documentation and tell me what other endpoints or parameters you see."',
     outcome: {
       type: 'ok',
+      icon: '🔎',
       label: 'Good redirect, but the misconception goes unaddressed',
       body: 'Sending Jordan into the documentation is a smart instructional move — discovery is better than explanation. But it sidesteps the misconception rather than addressing it. Jordan leaves this exchange still believing the URL is the API; the documentation exploration might resolve it, or it might not. A brief "close, but" before the redirect would make this much stronger.',
       reaction:

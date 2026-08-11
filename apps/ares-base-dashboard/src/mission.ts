@@ -6,24 +6,27 @@ export const CHECKLIST = [
   'Final supply manifest confirmed',
 ];
 
-export type Habitat = {id: string; name: string; detail: string};
+export type Habitat = {id: string; name: string; icon: string; detail: string};
 
 export const HABITATS: Habitat[] = [
   {
     id: 'dome',
     name: 'Dome',
+    icon: '🏙️',
     detail:
       "A large shared living space with natural light through reinforced dome panels. Spacious, but harder to insulate against Mars' temperature swings.",
   },
   {
     id: 'underground',
     name: 'Underground',
+    icon: '⛏️',
     detail:
       'Built into the terrain for the best protection from radiation and stable temperatures year-round. No natural light, and it can feel cramped.',
   },
   {
     id: 'inflatable',
     name: 'Inflatable',
+    icon: '⛺',
     detail:
       'Lightweight and the fastest to set up, with room to expand later. Less durable than the other two options long-term.',
   },

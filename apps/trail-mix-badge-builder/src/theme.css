@@ -1,0 +1,81 @@
+/* Layer 1 — re-token the design system for the kraft-paper scrapbook palette.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's own [data-brand=codeai-next] block and loses on source order. */
+:root[data-brand] {
+  /* surfaces — cream/oat kraft ramp */
+  --background-neutral-primary: #fffdf6;
+  --background-neutral-secondary: #faf3e3;
+  --background-neutral-tertiary: #f6efdd;
+  --background-neutral-quaternary: #ede6d6;
+
+  /* text — warm brown ramp */
+  --text-neutral-primary: #4a2c1f;
+  --text-neutral-secondary: #5c3d2e;
+  --text-neutral-tertiary: #8b5e3c;
+  --text-neutral-placeholder: #8b5e3c;
+  --text-neutral-white-fixed: #fffdf6;
+
+  /* borders — tan */
+  --border-neutral-primary: #c9a876;
+  --border-neutral-secondary: #c9a876;
+  --border-neutral-solid: #a9835b;
+  --borders-neutral-primary: #a9835b;
+  --borders-neutral-light: #c9a876;
+  --borders-neutral-strong: #8b5e3c;
+
+  /* brand = OLIVE. This is the app's "selected" accent; the DS brand-purple
+     ramp is deliberately repointed here (not swapped back to purple) so the
+     selected ingredient card and its DS-driven bits recolour for free. */
+  --background-brand-primary: #6b8e23;
+  --background-brand-strong: #4b6017;
+  --background-brand-purple-primary: #6b8e23;
+  --background-brand-purple-strong: #4b6017;
+  --background-brand-purple-light: #dce9c2;
+  --background-brand-purple-extra-light: #e7efd3;
+  --background-brand-purple-hover: #e7efd3;
+  --background-brand-teal-primary: #6b8e23;
+  --background-brand-teal-strong: #4b6017;
+  --border-brand-primary: #6b8e23;
+  --border-brand-strong: #4b6017;
+  --border-brand-light: #c9a876;
+  --borders-brand-purple-primary: #6b8e23;
+  --borders-brand-purple-strong: #4b6017;
+  --borders-brand-teal-primary: #6b8e23;
+  --borders-brand-teal-strong: #4b6017;
+  --text-brand-primary: #3f5417;
+  --text-brand-purple-primary: #3f5417;
+
+  /* selected + focus */
+  --background-selected-primary: #6b8e23;
+  --background-selected-strong: #4b6017;
+  --border-selected-primary: #6b8e23;
+  --border-selected-strong: #4b6017;
+  --text-selected-primary: #fffdf6;
+  --border-focused-primary: #6b8e23;
+
+  /* success — the Protein Powerhouse register */
+  --background-success-light: #dce9c2;
+  --background-success-primary: #6b8e23;
+  --background-success-strong: #4b6017;
+  --border-success-primary: #6b8e23;
+  --border-success-light: #dce9c2;
+  --text-success-primary: #3f5417;
+  --borders-success-primary: #6b8e23;
+
+  /* warning — the Sweet Tooth register */
+  --background-warning-light: #f3dcc2;
+  --background-warning-primary: #c97b2e;
+  --border-warning-primary: #c97b2e;
+  --border-warning-light: #f3dcc2;
+  --text-warning-primary: #7a3e0f;
+  --borders-warning-primary: #c97b2e;
+
+  /* info — the dashed directions banner (Alert's own CSS reads
+     --background-info-extra-light for its fill and --text-info-primary-fixed
+     for its icon; the dashed border itself has no DS knob, so app.css adds
+     it, keyed off --border-info-primary below). */
+  --background-info-extra-light: #f6efdd;
+  --border-info-primary: #a9835b;
+  --text-info-primary: #5c3d2e;
+  --text-info-primary-fixed: #5c3d2e;
+}

@@ -52,7 +52,15 @@ export default function App() {
     });
     try {
       const ids = await searchObjectIds(searchTerm);
-      const artworks = await Promise.all(shuffle(ids).map(fetchObject));
+      // Every id is looked up independently, exactly like a real search-then-
+      // lookup API: one rejected lookup (api.ts models this) should drop that
+      // piece, not fail the whole batch, so this settles all of them rather
+      // than short-circuiting on the first rejection.
+      const settled = await Promise.allSettled(shuffle(ids).map(fetchObject));
+      const artworks = settled
+        .filter((outcome): outcome is PromiseFulfilledResult<Artwork> => outcome.status === 'fulfilled')
+        .map(outcome => outcome.value)
+        .filter(artwork => Boolean(artwork.image));
       if (token === latestSearch.current) {
         setPhase({kind: 'results', query: searchTerm, artworks});
       }
@@ -102,9 +110,6 @@ export default function App() {
         <Typography semanticTag="p" visualAppearance="body-one">
           Museum Explorer App
         </Typography>
-      </header>
-
-      <main className="page">
         <form role="search" className="search" onSubmit={onSubmit}>
           <TextField
             name="search"
@@ -112,11 +117,26 @@ export default function App() {
             placeholder="Search artwork, artist, era…"
             value={query}
             onChange={event => setQuery(event.target.value)}
+            className="search-field"
           />
-          <Button text="Search" buttonTagTypeAttribute="submit" onClick={() => {}} />
+          {/* onClick is required by the underlying component whenever useAsLink
+              is false; the form's onSubmit is what actually runs the search. */}
+          <Button
+            text="Search"
+            buttonTagTypeAttribute="submit"
+            className="search-button"
+            onClick={() => {}}
+          />
         </form>
+      </header>
 
-        <div role="status" aria-live="polite" className="search-status">
+      <main className="page">
+        <div
+          role="status"
+          aria-live="polite"
+          className="search-status"
+          data-error={phase.kind === 'error' ? 'true' : undefined}
+        >
           <Typography semanticTag="p" visualAppearance="body-two">
             {statusText(phase)}
           </Typography>

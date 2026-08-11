@@ -1,0 +1,52 @@
+/* Layer 1 — re-token the design system for the code.org-purple worksheet.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order. */
+:root[data-brand] {
+  /* surfaces — white worksheet, lavender chip tint */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #f3f2fc;
+  --background-neutral-tertiary: #e4e2f8;
+
+  /* text */
+  --text-neutral-primary: #1f2937;
+  --text-neutral-secondary: #4b5563;
+  --text-neutral-tertiary: #6b7280;
+  --text-neutral-white-fixed: #ffffff;
+
+  /* borders */
+  --borders-neutral-primary: #d8d5f5;
+  --borders-neutral-light: #d8d5f5;
+  --border-neutral-primary: #d8d5f5;
+
+  /* accent: code.org purple drives buttons, rails, focus */
+  --background-brand-teal-primary: #4c42cf;
+  --background-brand-teal-strong: #1f1976;
+  --background-brand-teal-extra-light: #f3f2fc;
+  --borders-brand-teal-primary: #4c42cf;
+  --borders-brand-teal-strong: #1f1976;
+  --background-brand-purple-primary: #4c42cf;
+  --background-brand-purple-strong: #1f1976;
+  --background-brand-purple-extra-light: #f3f2fc;
+  --borders-brand-purple-primary: #4c42cf;
+  --borders-brand-purple-strong: #1f1976;
+  --text-brand-purple-primary: #4c42cf;
+
+  /* selected ramp (DS checkbox/radio/segmented accents) */
+  --background-selected-primary: #4c42cf;
+  --background-selected-strong: #1f1976;
+  --border-selected-primary: #4c42cf;
+  --text-selected-primary: #ffffff;
+
+  /* semantics — hue kept, luminance nudged to clear WCAG AA */
+  --borders-success-primary: #34964a; /* original rail #3fae56 */
+  --text-success-primary: #2e7d32;
+  --background-success-extra-light: #eaf7ec;
+  --borders-error-primary: #d9534f; /* original rail, 4.0:1 — fine as a 4px rail */
+  --text-error-primary: #b7312d;
+  --background-error-extra-light: #fdeceb;
+
+  /* the periwinkle result banner */
+  --background-info-primary: #6a62d9;
+  --background-info-extra-light: #edecfa;
+  --borders-info-primary: #6a62d9;
+}

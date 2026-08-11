@@ -1,6 +1,27 @@
+/* Layer 3 — the kraft-scrapbook motifs no token or MUI prop can supply. */
+
+body {
+  background-image: radial-gradient(circle at 12% 22%, rgba(139, 111, 71, 0.1) 2px, transparent 2.5px),
+    radial-gradient(circle at 78% 60%, rgba(107, 142, 35, 0.1) 2px, transparent 2.5px),
+    radial-gradient(circle at 45% 85%, rgba(139, 111, 71, 0.08) 2px, transparent 2.5px),
+    radial-gradient(circle at 90% 15%, rgba(107, 142, 35, 0.08) 2px, transparent 2.5px);
+  background-size: 140px 140px;
+  min-height: 100vh;
+  padding: 24px;
+}
+
 .page {
   max-width: 640px;
-  margin: var(--spacing-p-l) auto;
+  margin: 0 auto;
+}
+
+.page h1 {
+  transform: rotate(-1deg);
+}
+
+.directions {
+  border: 2px dashed var(--border-info-primary);
+  border-radius: 10px;
 }
 
 .ingredients {
@@ -17,6 +38,14 @@
   max-width: 160px;
 }
 
+/* Sticker tilt: ingredients sit askew, alternating ±1.5°, until picked. */
+.ingredients > li:nth-child(odd) .ingredient {
+  transform: rotate(-1.5deg);
+}
+.ingredients > li:nth-child(even) .ingredient {
+  transform: rotate(1.5deg);
+}
+
 .ingredient {
   display: flex;
   flex-direction: column;
@@ -29,18 +58,25 @@
   color: var(--text-neutral-primary);
   text-align: center;
   cursor: pointer;
-  background: var(--background-neutral-primary);
+  background: var(--background-neutral-secondary);
   border: 2px solid var(--border-neutral-primary);
   border-radius: var(--shape-md);
+  box-shadow: 3px 3px 0 rgba(92, 61, 46, 0.18);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
+/* Picking a card straightens it — a second, non-colour selection cue. */
 .ingredient[aria-pressed='true'] {
   background: var(--background-brand-purple-extra-light);
   border-color: var(--border-selected-primary);
+  transform: rotate(0deg) scale(1.03);
 }
 
+/* Subtle highlight for the ingredients that fed the currently active rule. */
 .ingredient[data-contributing='true'] {
-  box-shadow: 0 0 0 3px var(--border-success-primary);
+  border-color: #8b5e3c;
+  box-shadow: 3px 3px 0 rgba(139, 94, 60, 0.35);
 }
 
 .ingredient:focus-visible {
@@ -48,9 +84,24 @@
   outline-offset: 2px;
 }
 
+/* The medallion — a third, redundant selection channel and the app's most
+   recognisable object: brown until picked, then olive. */
 .ingredient .emoji {
-  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 26px;
   line-height: 1;
+  background: #8b5e3c;
+  border: 2px solid #5c3d2e;
+}
+
+.ingredient[aria-pressed='true'] .emoji {
+  background: #6b8e23;
+  border-color: #4b6017;
 }
 
 .ingredient .name {
@@ -59,9 +110,18 @@
 
 .ingredient .hint {
   font-size: var(--font-size-body-xs);
-  color: var(--text-neutral-secondary);
+  font-style: italic;
+  color: var(--text-neutral-tertiary);
 }
 
-.result {
-  background: var(--background-neutral-secondary);
+.ingredient[aria-pressed='true'] .hint {
+  font-weight: var(--font-weight-bold);
+  font-style: normal;
+  color: #4b6017;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ingredient {
+    transition: none;
+  }
 }

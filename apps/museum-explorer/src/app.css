@@ -1,13 +1,20 @@
-.hero,
-.page,
-.credit {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-p-l);
+/* Layer 3 — the signature visuals no DSCO/MUI prop can supply. */
+
+body {
+  background: #f7f5f2;
 }
 
-.hero {
-  padding-top: var(--spacing-p-l);
+h1,
+h2,
+h3 {
+  font-family: var(--font-family-heading);
+}
+
+.page,
+.credit {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-p-l);
 }
 
 .credit {
@@ -15,17 +22,102 @@
   color: var(--text-neutral-secondary);
 }
 
+/* ---------- Hero ---------- */
+
+.hero {
+  background: linear-gradient(135deg, #6a55e8 0%, #4c2889 55%, #241659 100%);
+  color: #ffffff;
+  text-align: center;
+  padding: 48px 24px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.1) 0, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.08) 0, transparent 40%);
+  pointer-events: none;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* DS Typography paints its own `color: var(--text-neutral-primary)` on the
+   element, so the hero's inherited white never reaches the heading — it
+   rendered dark ink on the purple band at 1.5:1. Element+class beats the DS's
+   single-class rule. */
+.hero h1,
+.hero p {
+  color: #ffffff;
+}
+
+.hero p {
+  margin: 6px 0 0;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
 .search {
   display: flex;
-  gap: var(--spacing-p-s);
+  justify-content: center;
   align-items: flex-end;
-  margin: var(--spacing-p-m) 0 var(--spacing-p-xs);
+  gap: 10px;
+  margin-top: 28px;
+  flex-wrap: wrap;
 }
+
+/* The DS's own field label is visible by default; recolour it for the
+   gradient rather than hiding it, since a visible label beats the
+   original's placeholder-reliant sr-only one. */
+.hero .search-field > span:first-child {
+  color: #ffffff;
+}
+
+.search input[name='search'] {
+  width: min(420px, 80vw);
+  padding: 13px 18px;
+  border-radius: 999px;
+  border: none;
+  box-shadow: 0 1px 2px rgba(36, 22, 89, 0.08);
+}
+
+.search input[name='search']:focus-visible {
+  outline: 3px solid #ffd98e;
+  outline-offset: 2px;
+}
+
+/* Re-scopes the DS's "purple" button ramp to the museum's amber, without
+   touching the app-wide purple used by links and headings elsewhere. */
+button.search-button {
+  --background-brand-purple-primary: #b4541d; /* original #E8834B is 2.7:1 with white text */
+  --background-brand-purple-strong: #963f13; /* original hover #D9713A */
+  border-radius: 999px;
+  padding: 13px 26px;
+}
+
+/* ---------- Status ---------- */
 
 .search-status {
   min-height: 1.5rem;
   margin-bottom: var(--spacing-p-m);
+  text-align: center;
 }
+
+.search-status[data-error='true'] {
+  color: var(--text-error-primary);
+  font-weight: 600;
+}
+
+/* ---------- Gallery grid ---------- */
 
 .grid {
   display: grid;
@@ -35,6 +127,25 @@
 
 .card-title {
   font-weight: var(--font-weight-semi-bold);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-artist {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-artist::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e8834b;
+  flex-shrink: 0;
 }
 
 .empty {
@@ -61,11 +172,32 @@
   object-fit: contain;
 }
 
+.detail-image {
+  background: #ece9fb;
+  border-radius: 18px;
+}
+
+.date-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  margin: 8px 0 20px;
+  border-radius: 999px;
+  border: 1px solid var(--borders-neutral-primary);
+  color: var(--text-neutral-secondary);
+  font-size: 13px;
+  font-family: monospace;
+}
+
 .info-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-p-m);
   margin: var(--spacing-p-m) 0;
+}
+
+.info-cards h3 {
+  border-bottom: 2px solid #ece9fb;
+  padding-bottom: 8px;
 }
 
 .field {
@@ -80,6 +212,23 @@
 .field-value.missing {
   color: var(--text-neutral-secondary);
   font-style: italic;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .detail {
+    animation: detailFadeIn 0.3s ease;
+  }
+}
+
+@keyframes detailFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 760px) {

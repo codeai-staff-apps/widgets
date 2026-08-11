@@ -13,26 +13,26 @@ import {CodeBlock, visuallyHidden} from './shared';
 
 import './arrayItems.css';
 
-function ArrayPanel({card, run}: {card: ArrayCard; run: boolean}) {
+function ArrayPanel({card, run, listId}: {card: ArrayCard; run: boolean; listId: string}) {
   const titleId = useId();
   return (
-    <Card variant="outlined" sx={{flex: '1 1 240px'}}>
+    <Card variant="outlined" sx={{flex: '1 1 240px', borderColor: '#E4E2F8', borderRadius: '10px'}}>
       <CardContent component={Stack} gap={1}>
         <Tags tagsList={[{label: card.badge}]} size="s" />
         <Typography semanticTag="h3" visualAppearance="heading-xs" id={titleId} noMargin>
           {card.title}
         </Typography>
         {run ? (
-          <ul className="arrayItems" aria-labelledby={titleId}>
+          <ul className="arrayItems" id={listId} aria-labelledby={titleId}>
             {card.items.map((item, i) => (
               <li key={i} className={`item ${item.state}`}>
-                {item.text}
+                "{item.text}"
                 {item.state === 'removed' && <span style={visuallyHidden}> (removed)</span>}
               </li>
             ))}
           </ul>
         ) : (
-          <Typography semanticTag="p" visualAppearance="body-three" noMargin>
+          <Typography semanticTag="p" visualAppearance="body-three" id={listId} noMargin>
             <em style={{color: 'var(--text-neutral-secondary)'}}>{emptyMessage}</em>
           </Typography>
         )}
@@ -51,6 +51,11 @@ export default function MethodExample({
   onRun: () => void;
 }) {
   const headingId = useId();
+  const firstCardId = useId();
+  const secondCardId = useId();
+  const verdictId = useId();
+  const cardIds = [firstCardId, secondCardId];
+
   return (
     <section aria-labelledby={headingId}>
       <Typography semanticTag="h2" visualAppearance="heading-md" id={headingId}>
@@ -59,20 +64,32 @@ export default function MethodExample({
       <Stack gap={2}>
         <CodeBlock summary={example.codeSummary}>{highlight(example.code)}</CodeBlock>
         <div>
-          <Button text="Run this code" onClick={onRun} />
+          <Button
+            text="Run this code"
+            iconLeft={{iconName: 'play'}}
+            onClick={onRun}
+            aria-controls={`${firstCardId} ${secondCardId} ${verdictId}`}
+          />
         </div>
         <Stack direction="row" gap={2} flexWrap="wrap">
-          {example.cards.map(card => (
-            <ArrayPanel key={card.badge + card.title} card={card} run={run} />
+          {example.cards.map((card, i) => (
+            <ArrayPanel key={card.badge + card.title} card={card} run={run} listId={cardIds[i]} />
           ))}
         </Stack>
         {run && (
           <Alert
-            type={example.verdict.mutates ? 'warning' : 'success'}
+            id={verdictId}
+            type={example.verdict.mutates ? 'warning' : 'primary'}
+            icon={example.verdict.mutates ? undefined : {iconName: 'check-circle'}}
             // Not a live region: the run is already announced once, in full,
             // through useAnnounce(). Two channels would describe one click twice.
             role="note"
-            text={`${example.verdict.badge}: ${example.verdict.text}`}
+            text={
+              <>
+                <Tags tagsList={[{label: example.verdict.badge}]} size="s" />{' '}
+                {example.verdict.text}
+              </>
+            }
           />
         )}
       </Stack>

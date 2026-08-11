@@ -5,6 +5,7 @@
 
 .mockup-frame {
   overflow-x: auto;
+  min-height: 220px;
   background: #ffffff;
   border: 1px solid var(--border-neutral-primary);
   border-radius: var(--shape-md);
@@ -39,6 +40,7 @@
 .mock-2000s {
   font-family: 'Comic Sans MS', cursive, sans-serif;
   font-size: 13px;
+  background: #f5f0e0;
 }
 
 .mock-2000s .banner {
@@ -56,17 +58,19 @@
   font-weight: bold;
   color: #cc0000;
   background: #ffff66;
-  border: 2px outset #cccccc;
+  border: 2px solid #cc0000;
 }
 
 .mock-2000s .box.green {
   color: #006600;
   background: #ccffcc;
+  border-color: #009900;
 }
 
 .mock-2000s .box.blue {
   color: #002080;
   background: #cce0ff;
+  border-color: #0033cc;
 }
 
 .mock-2000s .content {
@@ -78,7 +82,7 @@
   flex: 0 0 140px;
   padding: 6px;
   background: #ffe0b0;
-  border: 1px solid #cc9955;
+  border: 1px dashed #cc7a00;
 }
 
 .mock-2000s .main {
@@ -88,6 +92,10 @@
 }
 
 /* --- Late 2000s to 2010s: a button every few inches, plus an ad. --- */
+.mock-2010s {
+  background: #fafafa;
+}
+
 .mock-2010s .cta-row {
   display: flex;
   flex-wrap: wrap;
@@ -104,19 +112,19 @@
 }
 
 .mock-2010s .c1 {
-  background: #2f7d32;
+  background: #3b7dd8;
 }
 
 .mock-2010s .c2 {
-  background: #1565c0;
+  background: #e07b39;
 }
 
 .mock-2010s .c3 {
-  background: #b8391a;
+  background: #4fae4f;
 }
 
 .mock-2010s .c4 {
-  background: #5b3b8c;
+  background: #9b59b6;
 }
 
 .mock-2010s .row {
@@ -134,8 +142,9 @@
   flex: 0 0 150px;
   padding: 8px;
   font-size: 12px;
-  background: #fff6d6;
-  border: 1px dashed #c9a227;
+  color: #555555;
+  background: #eaeaea;
+  border: 1px solid #cccccc;
 }
 
 /* --- Modern: nav / hero / cards / footer, each doing one job. --- */
@@ -149,18 +158,20 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  color: #ffffff;
-  background: #0b0f2b;
+  background: #ffffff;
+  border-bottom: 1px solid #e4e2f8;
 }
 
 .mock-modern .logo {
   font-family: var(--font-family-heading, sans-serif);
   font-weight: 700;
+  color: #1f1976;
 }
 
 .mock-modern .links {
   display: flex;
   gap: 16px;
+  color: #4c42cf;
 }
 
 .mock-modern .hero {

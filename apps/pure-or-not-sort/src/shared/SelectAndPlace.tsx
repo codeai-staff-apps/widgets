@@ -153,6 +153,9 @@ export function useSelectAndPlace({items, containers, bankId}: SelectAndPlaceOpt
   // Pointer drag: an enhancement over clicking, sharing the same place() call.
   const drag = useRef<{itemId: string; x: number; y: number; moved: boolean} | null>(null);
   const dragEnded = useRef(false);
+  // Target under the pointer during an active drag, for drop-zone hover feedback.
+  const hoverRef = useRef<string | null>(null);
+  const [hoveredTargetId, setHoveredTargetId] = useState<string | null>(null);
 
   const onPointerDown = (itemId: string) => (e: PointerEvent<HTMLElement>) => {
     drag.current = {itemId, x: e.clientX, y: e.clientY, moved: false};
@@ -163,10 +166,22 @@ export function useSelectAndPlace({items, containers, bankId}: SelectAndPlaceOpt
         d.moved = true;
         select(d.itemId);
       }
+      if (d?.moved) {
+        const over = document
+          .elementFromPoint(move_.clientX, move_.clientY)
+          ?.closest<HTMLElement>('[data-sap-target]');
+        const id = over?.dataset.sapTarget ?? null;
+        if (id !== hoverRef.current) {
+          hoverRef.current = id;
+          setHoveredTargetId(id);
+        }
+      }
     };
     const onUp = (up: globalThis.PointerEvent) => {
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
+      hoverRef.current = null;
+      setHoveredTargetId(null);
       const d = drag.current;
       drag.current = null;
       if (!d?.moved) {
@@ -240,6 +255,8 @@ export function useSelectAndPlace({items, containers, bankId}: SelectAndPlaceOpt
 
   return {
     selectedId,
+    /** Target container id under the pointer during an active drag, or null. */
+    hoveredTargetId,
     /** Item ids in a container, in order. */
     itemsIn: (containerId: string) => contents[containerId] ?? [],
     containerOf,

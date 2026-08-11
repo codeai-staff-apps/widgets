@@ -150,8 +150,12 @@ export function PromptChoice({
       </div>
       {option && (
         <>
-          <Dialogue speaker={CHROME.teacherName}>{option.teacherBranch}</Dialogue>
-          <Dialogue speaker={CHROME.studentName}>{option.studentBranch}</Dialogue>
+          <Dialogue speaker={CHROME.teacherName} variant="teacher">
+            {option.teacherBranch}
+          </Dialogue>
+          <Dialogue speaker={CHROME.studentName} variant="student">
+            {option.studentBranch}
+          </Dialogue>
         </>
       )}
     </>

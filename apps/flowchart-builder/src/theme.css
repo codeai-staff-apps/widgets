@@ -1,0 +1,93 @@
+/* Layer 1 — re-token the design system for the periwinkle worksheet identity.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order.
+   flowchart.css already reads most of these tokens, so re-pointing them
+   re-themes the board without touching the component CSS. */
+:root[data-brand] {
+  /* surfaces — the periwinkle worksheet */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #f0f4ff;
+  --background-neutral-tertiary: #e0e7ff;
+  --background-neutral-white-fixed: #ffffff;
+  --background-neutral-black-fixed: #1e1b4b;
+  --background-neutral-primary-inverse: #1e1b4b;
+
+  /* text — #6b7280 is 4.4:1 on #f0f4ff and #a5b4fc is 2.0:1; darkened for AA */
+  --text-neutral-primary: #1e1b4b;
+  --text-neutral-secondary: #545a72;
+  --text-neutral-tertiary: #6a6f84;
+  --text-neutral-placeholder: #65699c;
+  --text-neutral-white-fixed: #ffffff;
+  --text-neutral-inverse: #e0e7ff;
+
+  /* borders */
+  --border-neutral-primary: #c9d4f0;
+  --border-neutral-secondary: #c9d4f0;
+  --borders-neutral-primary: #c9d4f0;
+  --borders-neutral-light: #e0e7ff;
+  --borders-neutral-strong: #94a3b8;
+
+  /* periwinkle brand — nodes, zone borders, chips, Check button */
+  --background-brand-primary: #6c63ff;
+  --background-brand-strong: #4f46e5;
+  --background-brand-mid: #a5b4fc;
+  --background-brand-light: #e0e7ff;
+  --border-brand-primary: #6c63ff;
+  --border-brand-strong: #4f46e5;
+  --text-brand-primary: #4a41c9; /* #6c63ff is 4.3:1 on white — use the
+                                     literal #6c63ff only for the 900-weight
+                                     title and node labels (large text) */
+  --text-brand-secondary: #5b52e8;
+
+  --background-brand-purple-primary: #6c63ff;
+  --background-brand-purple-strong: #4f46e5;
+  --background-brand-purple-hover: #5b52e8;
+  --background-brand-purple-light: #ede9fe;
+  --background-brand-purple-extra-light: #e0e7ff;
+  --borders-brand-purple-primary: #6c63ff;
+  --borders-brand-purple-strong: #4f46e5;
+  --borders-brand-purple-light: #a5b4fc;
+  --text-brand-purple-primary: #4a41c9;
+  --text-brand-purple-secondary: #5b52e8;
+
+  /* selection + focus */
+  --background-selected-primary: #6c63ff;
+  --background-selected-strong: #4f46e5;
+  --border-selected-primary: #6c63ff;
+  --text-selected-primary: #ffffff;
+  --border-focused-primary: #4f46e5;
+
+  /* semantics — success fill/correct zone vs. the (lighter) Yes-branch tint */
+  --background-success-primary: #22c55e;
+  --background-success-light: #dcfce7;
+  --background-success-extra-light: #f0fdf4;
+  --border-success-primary: #16a34a;
+  --borders-success-primary: #16a34a;
+  --text-success-primary: #166534;
+
+  /* No branch / Keep Trying share one warm tint in the original */
+  --background-warning-primary: #fbbf24;
+  --background-warning-light: #fef9c3;
+  --background-warning-extra-light: #fff7ed;
+  --border-warning-primary: #f97316;
+  --borders-warning-primary: #f97316;
+  --text-warning-primary: #9a3412;
+
+  /* wrong zone */
+  --background-error-light: #fee2e2;
+  --background-error-extra-light: #fee2e2;
+  --border-error-primary: #ff6b6b;
+  --borders-error-primary: #ff6b6b;
+  --text-error-primary: #b42318;
+
+  /* info — the instruction bar */
+  --background-info-extra-light: #e0e7ff;
+  --border-info-primary: #6c63ff;
+  --borders-info-primary: #6c63ff;
+  --text-info-primary: #1e1b4b;
+}
+
+body {
+  background: var(--background-neutral-secondary);
+  min-height: 100vh;
+}

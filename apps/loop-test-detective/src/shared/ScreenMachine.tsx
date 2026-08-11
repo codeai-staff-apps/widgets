@@ -91,6 +91,14 @@ export interface ScreenProps {
   /** Pick the level that fits the page's outline; the first screen is usually the `h1`. */
   headingTag?: Extract<SemanticTag, 'h1' | 'h2' | 'h3'>;
   headingAppearance?: VisualAppearance;
+  /** Rendered before the heading, inside `panelClassName`'s wrapper (e.g. an eyebrow label). */
+  eyebrow?: ReactNode;
+  /** Rendered after the heading, inside the same wrapper (e.g. a sub line). */
+  afterHeading?: ReactNode;
+  /** Trailing content in the panel, alongside the eyebrow/heading/afterHeading column (e.g. a photo). */
+  panelEnd?: ReactNode;
+  /** Class for the decorative panel that groups eyebrow+heading+afterHeading+panelEnd. */
+  panelClassName?: string;
   children: ReactNode;
 }
 
@@ -101,6 +109,10 @@ export function Screen({
   heading,
   headingTag = 'h2',
   headingAppearance,
+  eyebrow,
+  afterHeading,
+  panelEnd,
+  panelClassName,
   children,
 }: ScreenProps) {
   const active = machine.is(id);
@@ -120,15 +132,33 @@ export function Screen({
     return null;
   }
 
+  const headingEl = (
+    <Typography
+      semanticTag={headingTag}
+      visualAppearance={headingAppearance ?? DEFAULT_APPEARANCE[headingTag]}
+      id={headingId}
+    >
+      {heading}
+    </Typography>
+  );
+
   return (
     <section aria-labelledby={headingId}>
-      <Typography
-        semanticTag={headingTag}
-        visualAppearance={headingAppearance ?? DEFAULT_APPEARANCE[headingTag]}
-        id={headingId}
-      >
-        {heading}
-      </Typography>
+      {panelClassName ? (
+        <div className={panelClassName}>
+          <div className="panelText">
+            {eyebrow}
+            {headingEl}
+            {afterHeading}
+          </div>
+          {panelEnd}
+        </div>
+      ) : (
+        <>
+          {headingEl}
+          {afterHeading}
+        </>
+      )}
       {children}
     </section>
   );

@@ -26,7 +26,10 @@ export default function CodeBlock({
       variant="outlined"
       component="pre"
       // tabIndex: a horizontally scrollable region must be keyboard-reachable.
+      // role/aria-label: a keyboard-reachable region needs an accessible name.
       tabIndex={0}
+      role={summary ? 'group' : undefined}
+      aria-label={summary}
       sx={{
         m: 0,
         p: 2,
