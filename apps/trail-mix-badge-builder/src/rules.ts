@@ -13,8 +13,12 @@ export const INGREDIENTS: readonly Ingredient[] = [
   {id: 'pretzels', name: 'Pretzels', emoji: '🥨'},
 ];
 
+/** Which rule fired — drives the badge pill's colour (see BADGE_STYLES in App.tsx). */
+export type BadgeVariant = 'empty' | 'protein' | 'sweet' | 'balanced' | 'mixed';
+
 export interface Verdict {
   badge: string;
+  variant: BadgeVariant;
   /** Ids the winning rule fired on, highlighted in the ingredient list. */
   contributing: readonly string[];
 }
@@ -28,21 +32,25 @@ export function awardBadge(selected: ReadonlySet<string>): Verdict {
   const inMix = INGREDIENTS.filter(i => selected.has(i.id)).map(i => i.id);
 
   if (inMix.length === 0) {
-    return {badge: '🎒 Empty Bag', contributing: []};
+    return {badge: '🎒 Empty Bag', variant: 'empty', contributing: []};
   }
   const hasProtein = has('almonds') || has('seeds');
   const hasSweet = has('chocolate') || has('cranberries');
   if (hasProtein && hasSweet && has('pretzels')) {
-    return {badge: '⚖️ Balanced Mix', contributing: inMix};
+    return {badge: '⚖️ Balanced Mix', variant: 'balanced', contributing: inMix};
   }
   if (has('almonds') && has('seeds')) {
-    return {badge: '💪 Protein Powerhouse', contributing: ['almonds', 'seeds']};
+    return {
+      badge: '💪 Protein Powerhouse',
+      variant: 'protein',
+      contributing: ['almonds', 'seeds'],
+    };
   }
   // The !almonds guard keeps "protein contaminated" sweet combos out of Sweet Tooth.
   if (has('chocolate') && has('cranberries') && !has('almonds')) {
-    return {badge: '🍭 Sweet Tooth', contributing: ['chocolate', 'cranberries']};
+    return {badge: '🍭 Sweet Tooth', variant: 'sweet', contributing: ['chocolate', 'cranberries']};
   }
-  return {badge: '🎒 Custom Mix', contributing: []};
+  return {badge: '🎒 Custom Mix', variant: 'mixed', contributing: []};
 }
 
 /** "⚖️ Balanced Mix" → "Balanced Mix badge active." */
