@@ -34,13 +34,27 @@ scripts/            gen-manifest.mjs — builds the gallery manifest from
 ## Rules
 
 - **Anti-bespoke, Occam's razor.** Build the SIMPLEST thing that provides
-  equivalent functionality. Fidelity target is the original's *pedagogy and
-  interactions*, never its ornamentation: if a stock DS/MUI component does the
-  job with default styling, use it as-is — drop the original's custom
-  gradients, novelty fonts, decorative chrome. Custom CSS exists only where
-  the learning interaction itself demands it (e.g. a card must visibly flip).
-  No speculative props, config, or abstraction; no state beyond what the
-  interaction needs. If your implementation feels clever, simplify it.
+  equivalent functionality. No speculative props, config, or abstraction; no
+  state beyond what the interaction needs. If your implementation feels clever,
+  simplify it.
+- **Keep the original's identity.** An app's theme is part of what it teaches:
+  the Mars dashboard has to look like Mars. Reproduce the original's palette,
+  depth, and signature motifs — but by *re-tokening the design system*, not by
+  hand-rolling components. Three layers, in order:
+  1. **`src/theme.css`** — redefine DS tokens to the app's palette. The DS is
+     token-driven, so this re-themes every DS component for free. The selector
+     MUST be `:root[data-brand]`: the document is `<html data-brand="codeai-next">`
+     and a plain `:root` block ties on specificity and loses on source order.
+  2. **MUI `ThemeProvider`** — tokens do not reach MUI. Set `palette.mode`,
+     `primary.main`, and `background.paper` so MUI parts (`LinearProgress`,
+     `Paper`, `Chip`) match. Style with `sx`, not a new stylesheet.
+  3. **App CSS** — last resort, only for a signature visual no component
+     provides (a gradient-clipped title, a card that must visibly flip). Use
+     `var(--token)`, never raw hex, wherever a token exists.
+  What you still drop: the original's novelty fonts (CSP blocks Google Fonts —
+  map display/body onto `var(--font-family-heading)`/`var(--font-family-main)`)
+  and any ornament that costs accessibility. Identity is carried by colour,
+  depth, and layout, not by the typeface.
 - **Component hierarchy: component-library first, MUI second, custom last.**
   Import DS components by subpath: `@code-dot-org/component-library/button`.
   Use MUI (`@mui/material` v7) only where no DS component exists. Hand-rolled
@@ -56,9 +70,11 @@ scripts/            gen-manifest.mjs — builds the gallery manifest from
   HTML5 drag alone); a heading structure starting at one `<h1>`; `lang` on
   `<html>`; visible `:focus-visible` styles; `prefers-reduced-motion`
   respected; never expose an activity's answer through an accessible name.
-- **Faithful rebuild**: same educational content and interaction flow as the
-  original (its spec transcribes the content); design-system look; a11y
-  fixed. Do not redesign the pedagogy.
+- **Faithful rebuild**: same educational content, same interaction flow, and
+  the same visual identity as the original (its spec transcribes all three);
+  built out of design-system components; a11y fixed. Do not redesign the
+  pedagogy, and do not flatten the theme into stock components on white —
+  a rebuild nobody recognises is not a rebuild.
 - **Stay in your app.** Never edit sibling apps, `packages/runtime`,
   `template/`, `gallery/`, or workflows.
 - Each app keeps its own `package-lock.json` committed.
