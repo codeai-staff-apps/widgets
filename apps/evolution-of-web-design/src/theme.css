@@ -1,0 +1,28 @@
+/* Layer 1 — re-token the design system for this app's chrome.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order.
+
+   The codeai-next light brand already resolves to this app's chrome palette
+   (#4c42cf / #1f1976 / #e4e2f8 / #aca8ea) and its feedback blue (#d5efff), so
+   nothing is redefined for those. The era mockups are CONTENT and are
+   deliberately styled with literal period colours in src/mockups.css —
+   nothing below reaches them. */
+:root[data-brand] {
+  /* Feedback-box icon ink. Matches the original's #06338D exactly. */
+  --text-info-primary: #06338d;
+  --text-info-primary-fixed: #06338d;
+
+  /* Answer states — the chosen option turns green if it was the primary fit,
+     amber otherwise (src/app.css re-scopes these onto the chosen option). */
+  --background-success-light: #ccf1d0;
+  --background-success-mid: #7cdb87;
+  --border-success-primary: #7cdb87;
+  --text-success-primary: #003f25;
+  --text-success-primary-fixed: #003f25;
+
+  --background-warning-light: #ffe3ce;
+  --background-warning-mid: #ffa868;
+  --border-warning-primary: #ffa868;
+  --text-warning-primary: #510000;
+  --text-warning-primary-fixed: #510000;
+}

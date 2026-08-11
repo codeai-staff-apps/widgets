@@ -6,6 +6,36 @@
   padding: var(--spacing-p-l);
 }
 
+.page h1 {
+  color: var(--brand-purple-95);
+  font-family: var(--font-family-heading);
+}
+
+.dots {
+  display: flex;
+  gap: var(--spacing-p-xs);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--background-brand-light);
+}
+
+.dot.done {
+  background: var(--brand-purple-20);
+}
+
+.dot.active {
+  background: var(--background-brand-primary);
+}
+
+.era-label {
+  color: var(--text-brand-purple-primary-fixed);
+  font-family: var(--font-family-heading);
+}
+
 .options {
   display: grid;
   gap: var(--spacing-p-xs);
@@ -18,6 +48,34 @@
 .options legend {
   padding: 0 var(--spacing-p-xs);
   font-weight: var(--font-weight-semi-bold);
+  color: var(--brand-purple-95);
+  font-family: var(--font-family-heading);
+}
+
+/* Every option reads as a bordered choice card, matching the original; only
+   the chosen one's fill changes. */
+.options .option {
+  padding: var(--spacing-p-xs) var(--spacing-p-s);
+  border: 1.5px solid var(--background-brand-light);
+  border-radius: var(--shape-md);
+}
+
+/* Layer 1b: re-scope the DS's text/accent tokens for the chosen option only,
+   so its label ink and radio accent follow the fill below. */
+.options .option.chosen.primary-fit {
+  --text-neutral-primary: var(--text-success-primary);
+  --background-brand-teal-primary: var(--border-success-primary);
+  --borders-brand-teal-primary: var(--border-success-primary);
+  background: var(--background-success-light);
+  border-color: var(--border-success-primary);
+}
+
+.options .option.chosen:not(.primary-fit) {
+  --text-neutral-primary: var(--text-warning-primary);
+  --background-brand-teal-primary: var(--border-warning-primary);
+  --borders-brand-teal-primary: var(--border-warning-primary);
+  background: var(--background-warning-light);
+  border-color: var(--border-warning-primary);
 }
 
 .nav-row {
