@@ -5,12 +5,18 @@ export interface Card {
   delay: number;
 }
 
+/** One run of syntax-highlighted code. Plain segments carry no `cls`. */
+export interface CodeSegment {
+  text: string;
+  cls?: 'c-fn' | 'c-str' | 'c-kw' | 'c-num' | 'c-obj' | 'c-cmt';
+}
+
 export interface Challenge {
   id: string;
   eyebrow: string;
   heading: string;
   desc: string;
-  codeSnippet: string;
+  codeSegments: CodeSegment[];
   cards: Card[];
   correctOrder: string[];
   /** Fixed scramble: every student starts from the same board, every time. */
@@ -29,14 +35,35 @@ export const CHALLENGES: Challenge[] = [
     id: 'sync',
     eyebrow: 'Blocking code',
     heading: 'The Synchronous Kitchen',
-    desc: 'This code runs top to bottom with no delays. Put the tickets into the order you predict, then run the routine to check.',
-    codeSnippet: `runBtn.addEventListener('click', () => {
-    addLog("Chef grabs the order ticket.");
-    addLog("Heating up the pan...");
-    addLog("Cracking and whisking the eggs.");
-    addLog("Pouring mixture into pan and cooking.");
-    addLog("Sliding omelette onto plate. Order served!");
-});`,
+    desc: 'This code runs top to bottom with no delays. Drag the tickets into the order you predict, then run the routine to check.',
+    codeSegments: [
+      {text: 'runBtn', cls: 'c-obj'},
+      {text: '.'},
+      {text: 'addEventListener', cls: 'c-fn'},
+      {text: '('},
+      {text: "'click'", cls: 'c-str'},
+      {text: ', () => {\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Chef grabs the order ticket."', cls: 'c-str'},
+      {text: ');\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Heating up the pan..."', cls: 'c-str'},
+      {text: ');\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Cracking and whisking the eggs."', cls: 'c-str'},
+      {text: ');\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Pouring mixture into pan and cooking."', cls: 'c-str'},
+      {text: ');\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Sliding omelette onto plate. Order served!"', cls: 'c-str'},
+      {text: ');\n});'},
+    ],
     cards: [
       {id: 's1', text: 'Chef grabs the order ticket.', delay: 0},
       {id: 's2', text: 'Heating up the pan...', delay: 0},
@@ -56,24 +83,47 @@ export const CHALLENGES: Challenge[] = [
     id: 'async',
     eyebrow: 'Non-blocking code',
     heading: 'The Asynchronous Kitchen',
-    desc: 'This code uses setTimeout, so some tasks wait before finishing. Put the tickets into the order you predict they will finish in, then run the routine and watch the timers race.',
-    codeSnippet: `runBtn.addEventListener('click', () => {
-    addLog("Order started...");
-
-    setTimeout(() => {
-        addLog("Coffee is brewed!");
-    }, 5000);
-
-    setTimeout(() => {
-        addLog("Eggs are fried!");
-    }, 3000);
-
-    setTimeout(() => {
-        addLog("Toast popped!");
-    }, 2000);
-
-    addLog("Pouring OJ and placing ticket on counter.");
-});`,
+    desc: 'This code uses setTimeout, so some tasks wait before finishing. Drag the tickets into the order you predict they will finish in, then run the routine and watch the timers race.',
+    codeSegments: [
+      {text: 'runBtn', cls: 'c-obj'},
+      {text: '.'},
+      {text: 'addEventListener', cls: 'c-fn'},
+      {text: '('},
+      {text: "'click'", cls: 'c-str'},
+      {text: ', () => {\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Order started..."', cls: 'c-str'},
+      {text: ');\n\n    '},
+      {text: 'setTimeout', cls: 'c-fn'},
+      {text: '(() => {\n        '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Coffee is brewed!"', cls: 'c-str'},
+      {text: ');\n    }, '},
+      {text: '5000', cls: 'c-num'},
+      {text: ');\n\n    '},
+      {text: 'setTimeout', cls: 'c-fn'},
+      {text: '(() => {\n        '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Eggs are fried!"', cls: 'c-str'},
+      {text: ');\n    }, '},
+      {text: '3000', cls: 'c-num'},
+      {text: ');\n\n    '},
+      {text: 'setTimeout', cls: 'c-fn'},
+      {text: '(() => {\n        '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Toast popped!"', cls: 'c-str'},
+      {text: ');\n    }, '},
+      {text: '2000', cls: 'c-num'},
+      {text: ');\n\n    '},
+      {text: 'addLog', cls: 'c-fn'},
+      {text: '('},
+      {text: '"Pouring OJ and placing ticket on counter."', cls: 'c-str'},
+      {text: ');\n});'},
+    ],
     cards: [
       {id: 'a1', text: 'Order started...', delay: 0},
       {id: 'a2', text: 'Pouring OJ and placing ticket on counter.', delay: 0},

@@ -4,7 +4,8 @@ import Button from '@code-dot-org/component-library/button';
 import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
 import LinearProgress from '@mui/material/LinearProgress';
-import {useEffect, useRef, useState, type KeyboardEvent} from 'react';
+import Paper from '@mui/material/Paper';
+import {Fragment, useEffect, useRef, useState, type KeyboardEvent} from 'react';
 
 import {runSchedule, timerLabel, timerRows, type Challenge} from './data';
 import {useAnnounce, useSelectAndPlace} from './shared';
@@ -53,6 +54,27 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
     }
     event.preventDefault();
     move(cardId, event.key === 'ArrowUp' ? -1 : 1);
+  };
+
+  // Pointer/keyboard drag, layered on the up/down buttons and Alt+arrow path
+  // above via the same board. Locking during and after a run disables both
+  // the pick-up handle and the insertion-slot drop targets.
+  const pickUp = (cardId: string) => {
+    const props = board.getItemProps(cardId);
+    if (!locked) {
+      return props;
+    }
+    const {onPointerDown, onClick, ...rest} = props;
+    return rest;
+  };
+
+  const dropSlot = (index: number) => {
+    const props = board.getTargetProps(challenge.id, {index});
+    if (!locked) {
+      return props;
+    }
+    const {onClick, ...rest} = props;
+    return rest;
   };
 
   const run = () => {
@@ -115,7 +137,18 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
   const score = marks ? Object.values(marks).filter(Boolean).length : 0;
 
   return (
-    <section className="challenge" aria-labelledby={`${challenge.id}Heading`}>
+    <Paper
+      component="section"
+      elevation={0}
+      aria-labelledby={`${challenge.id}Heading`}
+      sx={{
+        bgcolor: '#fff',
+        borderRadius: '16px',
+        p: {xs: 3, sm: '28px'},
+        mb: '32px',
+        boxShadow: '0 2px 10px rgba(31,25,118,0.08)',
+      }}
+    >
       <Tags tagsList={[{label: challenge.eyebrow}]} />
       <Typography
         semanticTag="h2"
@@ -136,7 +169,17 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
             label: 'Show the code',
             content: (
               <pre className="code">
-                <code>{challenge.codeSnippet}</code>
+                <code>
+                  {challenge.codeSegments.map((segment, index) =>
+                    segment.cls ? (
+                      <span key={index} className={segment.cls}>
+                        {segment.text}
+                      </span>
+                    ) : (
+                      segment.text
+                    ),
+                  )}
+                </code>
               </pre>
             ),
           },
@@ -146,54 +189,70 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
       <div className="columns">
         <div>
           <Typography semanticTag="p" visualAppearance="overline-three" noMargin>
-            Your predicted order
+            Drag into your predicted order
           </Typography>
           <Typography semanticTag="p" visualAppearance="body-three">
             Use each ticket's up and down buttons, or focus a ticket and press Alt+↑ / Alt+↓.
           </Typography>
-          <ol className="deck">
+          <ol className={board.selectedId ? 'deck deck--armed' : 'deck'}>
+            <li className="slotRow">
+              <button {...dropSlot(0)} disabled={locked} className="slot" />
+            </li>
             {order.map((id, index) => (
-              <li
-                key={id}
-                className={[
-                  'card',
-                  marks && (marks[id] ? 'card--right' : 'card--wrong'),
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                tabIndex={0}
-                aria-label={`Position ${index + 1} of ${order.length}: ${cardById[id].text}`}
-                aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
-                onKeyDown={event => onCardKeyDown(event, id)}
-              >
-                <span className="cardText">{cardById[id].text}</span>
-                {marks && (
-                  <span className="mark">
-                    <span aria-hidden="true">{marks[id] ? '✓' : '✗'} </span>
-                    {marks[id] ? 'Correct' : 'Not quite'}
-                  </span>
-                )}
-                <Button
-                  isIconOnly
-                  icon={{iconName: 'arrow-up', iconStyle: 'solid'}}
-                  type="secondary"
-                  color="black"
-                  size="l"
-                  disabled={locked}
-                  ariaLabel={`Move ${cardById[id].text} up`}
-                  onClick={() => move(id, -1)}
-                />
-                <Button
-                  isIconOnly
-                  icon={{iconName: 'arrow-down', iconStyle: 'solid'}}
-                  type="secondary"
-                  color="black"
-                  size="l"
-                  disabled={locked}
-                  ariaLabel={`Move ${cardById[id].text} down`}
-                  onClick={() => move(id, 1)}
-                />
-              </li>
+              <Fragment key={id}>
+                <li
+                  className={[
+                    'card',
+                    marks && (marks[id] ? 'card--right' : 'card--wrong'),
+                    board.selectedId === id && 'card--picked',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  tabIndex={0}
+                  aria-label={`Position ${index + 1} of ${order.length}: ${cardById[id].text}`}
+                  aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
+                  onKeyDown={event => onCardKeyDown(event, id)}
+                >
+                  <button
+                    {...pickUp(id)}
+                    disabled={locked}
+                    className="handle"
+                    aria-label={`Pick up ${cardById[id].text}`}
+                  >
+                    <span aria-hidden="true">::</span>
+                  </button>
+                  <span className="cardText">{cardById[id].text}</span>
+                  {marks && (
+                    <span className="mark">
+                      <span aria-hidden="true">{marks[id] ? '✓' : '✗'} </span>
+                      {marks[id] ? 'Correct' : 'Not quite'}
+                    </span>
+                  )}
+                  <Button
+                    isIconOnly
+                    icon={{iconName: 'arrow-up', iconStyle: 'solid'}}
+                    type="secondary"
+                    color="black"
+                    size="l"
+                    disabled={locked}
+                    ariaLabel={`Move ${cardById[id].text} up`}
+                    onClick={() => move(id, -1)}
+                  />
+                  <Button
+                    isIconOnly
+                    icon={{iconName: 'arrow-down', iconStyle: 'solid'}}
+                    type="secondary"
+                    color="black"
+                    size="l"
+                    disabled={locked}
+                    ariaLabel={`Move ${cardById[id].text} down`}
+                    onClick={() => move(id, 1)}
+                  />
+                </li>
+                <li className="slotRow">
+                  <button {...dropSlot(index + 1)} disabled={locked} className="slot" />
+                </li>
+              </Fragment>
             ))}
           </ol>
         </div>
@@ -222,7 +281,11 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
                 variant="determinate"
                 value={progress[card.id] ?? 0}
                 sx={{
+                  height: 8,
+                  borderRadius: 999,
+                  bgcolor: '#e4e2f8',
                   '& .MuiLinearProgress-bar': {
+                    bgcolor: '#d9772e',
                     transition: animated
                       ? `transform ${card.delay * challenge.timeScale}ms linear`
                       : 'none',
@@ -235,7 +298,7 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
       </div>
 
       <div className="actions">
-        <Button text="Run routine" color="purple" disabled={locked} onClick={run} />
+        <Button text="Run Routine" color="purple" disabled={locked} onClick={run} />
         <Button text="Reset" type="secondary" color="black" onClick={reset} />
       </div>
 
@@ -248,6 +311,6 @@ export default function ChallengePanel({challenge}: ChallengeProps) {
           text={`${score} of ${challenge.cards.length} in the right spot. ${challenge.resultExplanation}`}
         />
       )}
-    </section>
+    </Paper>
   );
 }

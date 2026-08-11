@@ -1,0 +1,54 @@
+/* Layer 1 — re-token the design system for the lavender/indigo worksheet.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order. */
+:root[data-brand] {
+  /* surfaces: white panels sit on a lavender page (page painted in layer 3) */
+  --background-neutral-primary: #ffffff;
+  --background-neutral-secondary: #e4e2f8; /* ticket surface, timer track, secondary hover */
+  --background-neutral-tertiary: #f3f2fc;
+  --background-neutral-black-fixed: #000000;
+
+  /* text */
+  --text-neutral-primary: #1f1976;
+  --text-neutral-secondary: #6b6b76;
+  --text-neutral-tertiary: #6b6b76;
+  --text-neutral-white-fixed: #ffffff;
+
+  /* borders */
+  --borders-neutral-primary: #d8d5f5;
+  --borders-neutral-light: #d8d5f5;
+  --border-neutral-primary: #d8d5f5;
+
+  /* accent: code.org purple */
+  --background-brand-teal-primary: #4c42cf;
+  --background-brand-teal-strong: #1f1976;
+  --background-brand-teal-extra-light: #e4e2f8;
+  --borders-brand-teal-primary: #4c42cf;
+  --borders-brand-teal-strong: #1f1976;
+  --background-brand-purple-primary: #4c42cf;
+  --background-brand-purple-strong: #1f1976;
+  --background-brand-purple-extra-light: #e4e2f8;
+  --borders-brand-purple-primary: #4c42cf;
+  --borders-brand-purple-strong: #1f1976;
+  --text-brand-purple-primary: #4c42cf;
+  --text-brand-teal-primary-fixed: #6bd0ff; /* the terminal's cyan prompt */
+
+  --background-selected-primary: #4c42cf;
+  --background-selected-strong: #1f1976;
+  --border-selected-primary: #4c42cf;
+  --text-selected-primary: #ffffff;
+  --background-neutral-disabled: #b9b5e8;
+
+  /* grading semantics: the original's teal = correct, orange = not quite */
+  --background-success-extra-light: #d5efff;
+  --borders-success-primary: #0e8fa6;
+  --text-success-primary: #0a6b7c;
+  --background-warning-extra-light: #ffe3ce;
+  --borders-warning-primary: #d9772e;
+  --text-warning-primary: #8a4713;
+
+  /* result banner */
+  --background-info-primary: #6a62d9;
+  --background-info-extra-light: #edecfa;
+  --borders-info-primary: #6a62d9;
+}
