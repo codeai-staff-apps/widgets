@@ -6,6 +6,70 @@
   padding: var(--spacing-p-l);
 }
 
+/* Layer 1b — re-scope tokens locally rather than overriding DS internals.
+   `.worksheet-heading` restores the original's Space Grotesk display face;
+   `.heading-ink` restores its #1F1976 heading colour. They are separate
+   because the detail title (`.worksheet-heading` only) sits inside an
+   Alert already re-inked by `.detail-alert` / `.completion-alert` below,
+   and must not fight that colour. */
+.worksheet-heading {
+  font-family: var(--font-family-heading);
+}
+
+.heading-ink {
+  --text-neutral-primary: #1f1976;
+}
+
+.detail-alert {
+  --text-neutral-primary: #06338d;
+}
+
+.completion-alert {
+  --text-neutral-primary: #1f1976;
+}
+
+.detail-placeholder {
+  --text-neutral-primary: var(--text-neutral-secondary);
+}
+
+/* --- progress chips --------------------------------------------------
+   DS Tags has no selected/unselected state, so the explored/unexplored
+   flip is the one place a bespoke rule earns its keep. */
+.progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.progress-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4c42cf;
+  background-color: #f7f7fb;
+  border: 1.5px solid #e4e2f8;
+  border-radius: 20px;
+}
+
+.progress-chip.explored {
+  color: #003f25;
+  background-color: #ccf1d0;
+  border-color: #7cdb87;
+}
+
+.progress-chip .check {
+  display: none;
+  font-weight: 700;
+}
+
+.progress-chip.explored .check {
+  display: inline;
+}
+
 /* --- the sample site ------------------------------------------------ */
 
 .site-frame {
@@ -45,8 +109,8 @@
 
 .hotspot-tag {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  left: 6px;
   z-index: 1;
   padding: 2px 8px;
   font-size: var(--font-size-body-xs);
@@ -82,6 +146,7 @@
 .site-nav .links {
   display: flex;
   gap: 18px;
+  color: #c9ceff;
   font-size: var(--font-size-body-sm);
 }
 
@@ -131,7 +196,7 @@
   color: var(--text-neutral-primary);
   text-align: center;
   background: #ffffff;
-  border: 1px solid #e0e0e8;
+  border: 1px solid #e4e2f8;
   border-radius: var(--shape-sm);
 }
 
@@ -141,11 +206,14 @@
 }
 
 .planet-name {
+  font-family: var(--font-family-heading);
   font-weight: var(--font-weight-bold);
+  color: #1f1976;
 }
 
 .planet-text {
   font-size: var(--font-size-body-xs);
+  color: var(--text-neutral-secondary);
 }
 
 .site-footer {
@@ -156,13 +224,14 @@
   justify-content: space-between;
   padding: 18px 20px;
   font-size: var(--font-size-body-sm);
-  color: #ffffff;
+  color: #c9ceff;
   background: #1f1976;
 }
 
 .site-footer .links {
   display: flex;
   gap: 16px;
+  color: #ffffff;
 }
 
 @media (max-width: 480px) {
