@@ -1,0 +1,44 @@
+/* Layer 3 — the signature "dossier" motifs no token or MUI prop can supply. */
+
+body {
+  background: #f5f5f7;
+}
+
+/* Typography has no colour prop; the hero Paper backgrounds are dark. */
+.hero h1,
+.summaryHero h1 {
+  color: #ffffff;
+}
+
+.hero::before,
+.hero::after,
+.summaryHero::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::before {
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.hero::after {
+  bottom: -30px;
+  left: 15%;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.summaryHero::before {
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.05);
+}

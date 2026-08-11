@@ -1,6 +1,7 @@
 import Alert from '@code-dot-org/component-library/alert';
 import DsButton from '@code-dot-org/component-library/button';
 import Typography from '@code-dot-org/component-library/typography';
+import Avatar from '@mui/material/Avatar';
 // MUI Button only for the choice list: see the comment on those buttons below.
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -9,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import {useEffect, useRef, useState} from 'react';
 
 import {rich} from './markup';
+import PromptBox from './PromptBox';
 import {
   choices,
   choicesScreen,
@@ -29,6 +31,14 @@ const ALERT_TYPE: Record<OutcomeType, 'success' | 'warning' | 'danger'> = {
   ok: 'warning',
   miss: 'danger',
 };
+
+/** The letter disc's fill, recoloured by how the response actually went. */
+const LETTER_COLORS: Record<OutcomeType, {bgcolor: string; color: string}> = {
+  best: {bgcolor: '#34BD43', color: '#ffffff'},
+  ok: {bgcolor: '#FFA868', color: '#510000'},
+  miss: {bgcolor: '#FFA868', color: '#510000'},
+};
+const LETTER_DEFAULT = {bgcolor: '#E4E2F8', color: '#1F1976'};
 
 export default function ChoicesScreen({onNext}: {onNext: () => void}) {
   const announce = useAnnounce();
@@ -61,44 +71,50 @@ export default function ChoicesScreen({onNext}: {onNext: () => void}) {
 
   return (
     <Stack gap={2}>
-      <Card variant="outlined">
-        <CardContent>
-          <Typography semanticTag="p" visualAppearance="overline-three" noMargin>
-            {choicesScreen.repeatedPromptLabel}
-          </Typography>
-          <blockquote style={{margin: 0}}>
-            <Typography semanticTag="p" visualAppearance="body-two" noMargin>
-              {student.quote}
-            </Typography>
-          </blockquote>
-        </CardContent>
-      </Card>
+      <PromptBox label={choicesScreen.repeatedPromptLabel} text={student.quote} quote />
 
-      {choices.map(choice => {
-        const isPicked = picked?.key === choice.key;
-        return (
-          // Stays MUI: the design system's Button takes a `text` string, so it
-          // cannot host the letter/prose row, and it has no full-width or
-          // text-align API for a block-shaped answer option.
-          <Button
-            key={choice.key}
-            fullWidth
-            // aria-disabled rather than disabled: a locked-out choice must stay
-            // readable and reachable, and keep the colour that reports how it went.
-            aria-disabled={picked !== null}
-            // Filled marks the choice you made; how well it went is carried by
-            // the feedback alert, the one place the theme colours severity.
-            variant={isPicked ? 'contained' : 'outlined'}
-            onClick={() => picked === null && pick(choice)}
-            sx={{justifyContent: 'flex-start', textAlign: 'left', textTransform: 'none'}}
-          >
-            <Stack direction="row" gap={1.5} alignItems="flex-start">
-              <strong>{choice.letter}</strong>
-              <span>{choice.text}</span>
-            </Stack>
-          </Button>
-        );
-      })}
+      <div role="group" aria-label="Response options">
+        <Stack gap={1.25}>
+          {choices.map(choice => {
+            const isPicked = picked?.key === choice.key;
+            const letterColors = isPicked ? LETTER_COLORS[choice.outcome.type] : LETTER_DEFAULT;
+            return (
+              // Stays MUI: the design system's Button takes a `text` string, so it
+              // cannot host the letter/prose row, and it has no full-width or
+              // text-align API for a block-shaped answer option.
+              <Button
+                key={choice.key}
+                fullWidth
+                // aria-disabled rather than disabled: a locked-out choice must stay
+                // readable and reachable, and keep the colour that reports how it went.
+                aria-disabled={picked !== null}
+                // Filled marks the choice you made; how well it went is carried by
+                // the feedback alert, the one place the theme colours severity.
+                variant={isPicked ? 'contained' : 'outlined'}
+                onClick={() => picked === null && pick(choice)}
+                sx={{justifyContent: 'flex-start', textAlign: 'left', textTransform: 'none'}}
+              >
+                <Stack direction="row" gap={1.5} alignItems="flex-start">
+                  <Avatar
+                    aria-hidden="true"
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      fontSize: '0.72rem',
+                      fontFamily: 'var(--font-family-heading)',
+                      fontWeight: 700,
+                      ...letterColors,
+                    }}
+                  >
+                    {choice.letter}
+                  </Avatar>
+                  <span>{choice.text}</span>
+                </Stack>
+              </Button>
+            );
+          })}
+        </Stack>
+      </div>
 
       {picked && (
         <Alert
@@ -106,6 +122,9 @@ export default function ChoicesScreen({onNext}: {onNext: () => void}) {
           showIcon={false}
           text={
             <>
+              <span aria-hidden="true" style={{fontSize: '1.1rem', marginRight: '6px'}}>
+                {picked.outcome.icon}
+              </span>
               <strong>{picked.outcome.label}. </strong>
               {rich(picked.outcome.body)}
             </>
