@@ -1,0 +1,33 @@
+/* Layer 1 — re-token the design system for this app's palette.
+   Must use :root[data-brand] (specificity 0,2,0): a plain :root{} ties with
+   the DS's [data-brand=codeai-next] block and loses on source order.
+
+   The codeai-next light brand already resolves to this app's purple family
+   (#4c42cf / #1f1976 / #e4e2f8 / #aca8ea) and its info blue (#d5efff) — see
+   arrayItems.css, which is already fully token-driven. The deltas below are
+   the two sentiment ramps, and two of them are live WCAG failures in that
+   file today, not just fidelity misses:
+     - .changed/.removed pills painted #f5c000 text on #fff5da ≈ 1.6:1.
+     - .new pills painted #258830 text on #d8ffdc ≈ 4.15:1 (below AA at
+       0.85rem body text). */
+:root[data-brand] {
+  /* "changed" / "removed" pills, and the side-effect verdict. */
+  --background-warning-light: #ffe3ce;
+  --background-warning-mid: #ffa868;
+  --border-warning-primary: #ffa868;
+  --border-warning-light: #ffa868;
+  --text-warning-primary: #510000; /* was #f5c000 on #fff5da ≈ 1.6:1 */
+  --text-warning-primary-fixed: #510000;
+
+  /* "new" pills — the brand-new array returned by a pure method. */
+  --background-success-light: #ccf1d0;
+  --background-success-mid: #7cdb87;
+  --border-success-primary: #7cdb87;
+  --border-success-light: #7cdb87;
+  --text-success-primary: #003f25; /* was #258830 on #d8ffdc ≈ 4.15:1 */
+  --text-success-primary-fixed: #003f25;
+
+  /* Directions banner ink. Lifts ≈4.1:1 -> ≈9.4:1. */
+  --text-info-primary: #06338d;
+  --text-info-primary-fixed: #06338d;
+}

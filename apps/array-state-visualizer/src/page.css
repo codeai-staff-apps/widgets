@@ -1,0 +1,36 @@
+/* Layer 3 — the one signature motif no DSCO or MUI component can supply:
+ * the dark-indigo terminal-style code block. This is the app's entire visual
+ * identity, so it earns its bespoke CSS. Scoped to `.page pre` rather than
+ * editing `src/shared/CodeBlock.tsx`, which is a template file shared across
+ * apps — only the colours here are app-specific, not the component.
+ *
+ * Specificity note: each selector below is a class + a type (0,1,1), which
+ * beats the single-class rules MUI's `sx` and `Paper` variant emit (0,1,0),
+ * so these win regardless of import order — no `!important` needed.
+ */
+.page pre {
+  background: #1f1976;
+  color: #e4e2f8;
+  border-color: #1f1976;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.page pre mark {
+  background: #4c42cf;
+  color: #ffffff;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-weight: 700;
+}
+
+.page pre .comment {
+  color: #aca8ea;
+  font-style: italic;
+}
+
+.page h2 {
+  color: #1f1976;
+  font-family: var(--font-family-heading);
+}

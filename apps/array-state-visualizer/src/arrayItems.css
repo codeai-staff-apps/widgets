@@ -19,6 +19,33 @@
   border-radius: 999px;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.85rem;
+  /* Staggered build-up, like the original's per-item setTimeout. Safe under
+     reduced motion: runtime.css's global guard clamps animation-duration. */
+  animation: itemIn 0.25s ease both;
+}
+
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.arrayItems .item:nth-child(2) {
+  animation-delay: 60ms;
+}
+.arrayItems .item:nth-child(3) {
+  animation-delay: 120ms;
+}
+.arrayItems .item:nth-child(4) {
+  animation-delay: 180ms;
+}
+.arrayItems .item:nth-child(5) {
+  animation-delay: 240ms;
 }
 
 .plain {
