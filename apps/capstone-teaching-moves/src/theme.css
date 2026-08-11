@@ -1,0 +1,27 @@
+/* Layer 1 — re-token the design system for this app's amber/green
+   answer-state ramps. Must use :root[data-brand] (specificity 0,2,0): a
+   plain :root{} ties with the DS's [data-brand=codeai-next] block and loses
+   on source order.
+
+   The codeai-next light brand already resolves to this app's purple family
+   (--background-brand-primary: #4c42cf, --background-brand-light: #e4e2f8,
+   --brand-purple-95: #1f1976) — nothing to restate there. The only deltas
+   are the two answer-state ramps: the DS mint and DS yellow are not this
+   app's green and amber. */
+:root[data-brand] {
+  /* Correct move — .correct-selected and the reveal Alert. */
+  --background-success-light: #ccf1d0;
+  --background-success-mid: #5cb86b;
+  --border-success-primary: #5cb86b;
+  --border-success-light: #5cb86b;
+  --text-success-primary: #1f7028; /* AA on #ccf1d0 */
+  --text-success-primary-fixed: #003f25;
+
+  /* "Not quite." — .wrong-selected and .feedback-box. */
+  --background-warning-light: #ffe3ce;
+  --background-warning-mid: #e8965c;
+  --border-warning-primary: #e8965c;
+  --border-warning-light: #e8965c;
+  --text-warning-primary: #510000;
+  --text-warning-primary-fixed: #510000;
+}

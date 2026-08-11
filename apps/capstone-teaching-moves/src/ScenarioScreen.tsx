@@ -5,8 +5,9 @@ import Tags from '@code-dot-org/component-library/tags';
 import Typography from '@code-dot-org/component-library/typography';
 // MUI Button only for the choice list: see the comment on those buttons below.
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import {useState} from 'react';
+import {useId, useState} from 'react';
 
 import {labels, scenarios, type Choice, type Scenario} from './scenarios';
 
@@ -47,6 +48,7 @@ export default function ScenarioScreen({
   const [choices] = useState(() => shuffle(scenario.choices));
   const [wrongPicks, setWrongPicks] = useState<string[]>([]);
   const [solved, setSolved] = useState(false);
+  const promptId = useId();
 
   const lastWrong = wrongPicks[wrongPicks.length - 1];
   const feedback = choices.find(choice => choice.text === lastWrong)?.feedback;
@@ -63,6 +65,20 @@ export default function ScenarioScreen({
 
   const isLocked = (choice: Choice) => solved || wrongPicks.includes(choice.text);
 
+  // Amber for a ruled-out wrong pick, green for the found move; once solved,
+  // every unchosen option dims to mark the round as over.
+  const choiceSx = (choice: Choice) => ({
+    justifyContent: 'flex-start',
+    textAlign: 'left',
+    textTransform: 'none',
+    ...(solved && choice.correct
+      ? {bgcolor: '#ccf1d0', borderColor: '#5cb86b', color: '#211c3d'}
+      : wrongPicks.includes(choice.text)
+        ? {bgcolor: '#ffe3ce', borderColor: '#e8965c', color: '#211c3d'}
+        : {}),
+    ...(solved && !choice.correct ? {opacity: 0.45} : {}),
+  });
+
   return (
     <Stack gap={2}>
       <Tags tagsList={[{label: scenario.tag}]} />
@@ -73,32 +89,48 @@ export default function ScenarioScreen({
         <ProgressDots index={index} />
       </Stack>
 
-      <Image className="photo" src={scenario.beforeImage} altText="" loading="eager" />
+      <Image
+        className="photo"
+        src={scenario.beforeImage}
+        altText={scenario.beforeAlt}
+        loading="eager"
+      />
 
       <Typography semanticTag="p" visualAppearance="body-two" noMargin>
         {scenario.text}
       </Typography>
 
+      <Typography
+        semanticTag="p"
+        visualAppearance="body-two"
+        noMargin
+        id={promptId}
+        style={{fontFamily: 'var(--font-family-heading)', fontWeight: 600, color: '#211c3d'}}
+      >
+        {labels.prompt}
+      </Typography>
+
       {/* Stays MUI: the design system's Button has no full-width or text-align
           API, so a block-shaped answer option would need override CSS reaching
           into the component's internals. */}
-      {choices.map(choice => (
-        <Button
-          key={choice.text}
-          fullWidth
-          // aria-disabled, not disabled: a locked choice stays readable and
-          // reachable instead of dropping to MUI's low-contrast grey.
-          aria-disabled={isLocked(choice)}
-          // Wrong picks stay marked so the learner can see what they ruled
-          // out; the feedback alert only ever shows the most recent one.
-          variant={solved && choice.correct ? 'contained' : 'outlined'}
-          color={wrongPicks.includes(choice.text) ? 'error' : 'primary'}
-          onClick={() => !isLocked(choice) && pick(choice)}
-          sx={{justifyContent: 'flex-start', textAlign: 'left', textTransform: 'none'}}
-        >
-          {choice.text}
-        </Button>
-      ))}
+      <Stack gap={1} role="group" aria-labelledby={promptId}>
+        {choices.map(choice => (
+          <Button
+            key={choice.text}
+            fullWidth
+            variant="outlined"
+            // aria-disabled, not disabled: a locked choice stays readable and
+            // reachable instead of dropping to MUI's low-contrast grey.
+            aria-disabled={isLocked(choice)}
+            // Wrong picks stay marked so the learner can see what they ruled
+            // out; the feedback alert only ever shows the most recent one.
+            onClick={() => !isLocked(choice) && pick(choice)}
+            sx={choiceSx(choice)}
+          >
+            {choice.text}
+          </Button>
+        ))}
+      </Stack>
 
       {!solved && feedback && (
         <Alert
@@ -116,6 +148,15 @@ export default function ScenarioScreen({
 
       {solved && (
         <>
+          <Divider sx={{borderStyle: 'dashed', borderColor: '#E4E2F8', mt: '10px'}} />
+          <Typography
+            semanticTag="p"
+            visualAppearance="overline-three"
+            noMargin
+            style={{color: '#3a9e4d', fontFamily: 'var(--font-family-heading)'}}
+          >
+            {labels.afterLabel}
+          </Typography>
           <Alert
             type="success"
             showIcon={false}
@@ -125,7 +166,12 @@ export default function ScenarioScreen({
               </>
             }
           />
-          <Image className="photo" src={scenario.afterImage} altText="" loading="eager" />
+          <Image
+            className="photo"
+            src={scenario.afterImage}
+            altText={scenario.afterAlt}
+            loading="eager"
+          />
           <div>
             <DsButton text={labels.nextButtonLabel} onClick={onNext} />
           </div>

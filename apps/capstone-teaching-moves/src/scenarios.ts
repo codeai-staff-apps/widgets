@@ -25,9 +25,11 @@ export interface Scenario {
   tag: string;
   title: string;
   beforeImage: string;
+  beforeAlt: string;
   text: string;
   choices: Choice[];
   afterImage: string;
+  afterAlt: string;
   quote: string;
   explain: string;
 }
@@ -47,6 +49,7 @@ export const scenarios: Scenario[] = [
     tag: 'Scenario 1 · Group Roles',
     title: '“Bossy” Leaders',
     beforeImage: s1Before,
+    beforeAlt: 'One student directing teammates who wait to be told what to do next.',
     text: 'You notice one student taking over as Project Leader—assigning tasks, correcting others, and making decisions without team input. Other students are disengaging or just waiting to be told what to do.',
     choices: [
       {
@@ -67,6 +70,7 @@ export const scenarios: Scenario[] = [
       },
     ],
     afterImage: s1After,
+    afterAlt: 'The same team gathered around a Kanban board, deciding tasks together.',
     quote: '“What does our Kanban board say we should work on next?”',
     explain:
       'This shifts leadership from authority to facilitation and keeps decisions grounded in shared planning tools — not personalities.',
@@ -76,6 +80,7 @@ export const scenarios: Scenario[] = [
     tag: 'Scenario 2 · Planning vs. Building',
     title: 'Rush to Code',
     beforeImage: s2Before,
+    beforeAlt: 'Students building app screens without agreeing on how the app should work.',
     text: 'On Day 2, teams jump straight into building—designing screens, picking colors, or starting code—without clearly explaining how their app is supposed to work. When you ask questions, their ideas are vague or inconsistent.',
     choices: [
       {
@@ -96,6 +101,7 @@ export const scenarios: Scenario[] = [
       },
     ],
     afterImage: s2After,
+    afterAlt: 'The same students mapping out a user interaction together before building.',
     quote: '“Walk me through one user interaction — what does the user do, and what happens next?”',
     explain:
       "If they can't explain it clearly, they're not ready to build. This reinforces that planning and system thinking come before coding — not after.",
@@ -105,6 +111,7 @@ export const scenarios: Scenario[] = [
     tag: 'Scenario 3 · Scope',
     title: 'Feature Creep',
     beforeImage: s3Before,
+    beforeAlt: 'A team excitedly sketching extra features while their core app sits unfinished.',
     text: 'Teams keep adding new ideas—extra screens, features, or “cool” elements—but their core app is incomplete or buggy. They\'re excited, but their project is becoming scattered and unfinished.',
     choices: [
       {
@@ -125,6 +132,7 @@ export const scenarios: Scenario[] = [
       },
     ],
     afterImage: s3After,
+    afterAlt: 'The same team reviewing their core features together, focused and organized.',
     quote: '“What problem does this feature solve? What testing or feedback led you to add it?”',
     explain:
       'A simpler, well-explained app is stronger than a complex, unfinished one. This helps students prioritize intentional design over quantity.',
@@ -134,6 +142,7 @@ export const scenarios: Scenario[] = [
     tag: 'Scenario 4 · Expectations',
     title: 'Sharing Stress',
     beforeImage: s4Before,
+    beforeAlt: 'Students looking anxious and unsure about how their project will be shared.',
     text: "Students don't know how their projects will be shared, so some overbuild while others under-prepare. At the end, expectations feel unclear or mismatched.",
     choices: [
       {
@@ -153,6 +162,7 @@ export const scenarios: Scenario[] = [
       },
     ],
     afterImage: s4After,
+    afterAlt: 'The same students presenting confidently, with clear expectations for their audience.',
     quote:
       'Level 1: in-class gallery walk. Level 2: school/community showcase. Level 3: public/online sharing.',
     explain:
@@ -179,6 +189,8 @@ export const wrapUp = {
 };
 
 export const labels = {
+  prompt: "What's your teacher move?",
+  afterLabel: '✓ Teacher move',
   nextButtonLabel: 'Next scenario →',
   wrongPrefix: 'Not quite. ',
   progress: (index: number) => `Scenario ${index + 1} of ${scenarios.length}`,

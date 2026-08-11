@@ -1,3 +1,20 @@
+/* Layer 3 — the lavender field the whole app floats on. */
+body {
+  background: #e4e2f8;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 12px;
+}
+
+/* Typography has no colour prop, so the heading's indigo comes from here. */
+.page h1 {
+  color: #1f1976;
+  font-family: var(--font-family-heading);
+}
+
 /*
  * The photographs are mood illustration, so they are cropped to a band rather
  * than allowed to set the card's height — v2's `object-fit` rule, kept.
@@ -9,14 +26,17 @@
   object-position: center 30%;
 }
 
-/* Step meter. Decorative: the "Scenario N of 4" label carries the real count. */
+/* Step meter, full width: spans the card so it reads as a bar, not dots.
+   Decorative: the "Scenario N of 4" label carries the real count. */
 .progressDots {
   display: flex;
   gap: 6px;
+  flex: 1;
 }
 
 .dot {
-  width: 28px;
+  flex: 1;
+  width: auto;
   height: 6px;
   border-radius: 999px;
   background: var(--background-brand-purple-extra-light);
@@ -27,5 +47,6 @@
 }
 
 .dot.active {
-  background: var(--background-brand-purple-light);
+  background: var(--background-brand-primary);
+  opacity: 0.55;
 }
