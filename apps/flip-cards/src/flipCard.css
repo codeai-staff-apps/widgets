@@ -10,6 +10,9 @@
 
 .flipCard {
   width: 320px;
+  /* The original is 220px, sized for its two short definitions. Kept taller
+     here as a deliberate accommodation for the longer added decks (e.g.
+     error-handling, live-vs-local). */
   height: 240px;
   perspective: 1000px;
   cursor: pointer;
@@ -21,7 +24,7 @@
 }
 
 .flipCard:focus-visible .flipInner {
-  outline: 3px solid var(--border-primary-focus, var(--background-brand-purple-primary));
+  outline: 3px solid var(--border-focused-primary);
   outline-offset: 4px;
   border-radius: var(--border-radius-l, 16px);
 }
@@ -75,14 +78,16 @@
   text-align: center;
   font-size: 12px;
   font-weight: 500;
-  color: rgb(255 255 255 / 65%);
+  /* 75%, not the original's 65% — 65% is ~4.3:1 on the darker gradient stop,
+     just under AA for 12px text; 75% clears it with negligible visual change. */
+  color: rgb(255 255 255 / 75%);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .flipBack {
   background: var(--background-neutral-primary, #fff);
-  border: 2px solid var(--background-brand-purple-primary);
+  border: 2px solid var(--borders-brand-purple-primary);
   color: var(--text-neutral-primary);
   transform: rotateY(180deg);
 }
@@ -90,10 +95,14 @@
 .flipBack .backLabel {
   font-size: 12px;
   font-weight: 600;
-  color: var(--background-brand-purple-primary);
+  color: var(--borders-brand-purple-primary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 10px;
+}
+
+.flipBack strong {
+  color: var(--text-brand-purple-primary);
 }
 
 .flipBack .bullets {

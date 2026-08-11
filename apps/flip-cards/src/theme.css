@@ -1,0 +1,23 @@
+/* Layer 1 — re-token the DSCO purple ramp for the original's indigo-violet
+   identity. flipCard.css already reads these tokens, so re-pointing them
+   restores the original gradient, frame and emphasis colour with only a
+   couple of small edits in flipCard.css itself (see comments there).
+
+   Must use :root[data-brand] (specificity 0,2,0): the DS defines its own
+   tokens under [data-brand='codeai-next'] at equal specificity, so this
+   file must be imported after the runtime stylesheet for the tie to
+   resolve in our favour by source order. See THEMING.md. */
+:root[data-brand] {
+  /* the two 145deg gradient stops, verbatim from the original */
+  --background-brand-purple-primary: #554CB3;
+  --background-brand-purple-strong: #423B8C;
+  /* the lighter frame/label violet, verbatim */
+  --borders-brand-purple-primary: #6A62D9;
+  /* the original's tinted <strong> emphasis inside definitions, verbatim */
+  --text-brand-purple-primary: #4A4399;
+  /* focus ring colour matches the frame violet */
+  --border-focused-primary: #6A62D9;
+  /* back-face body text, verbatim (the DS default here is near-black, not
+     this violet-black) */
+  --text-neutral-primary: #2A2640;
+}
