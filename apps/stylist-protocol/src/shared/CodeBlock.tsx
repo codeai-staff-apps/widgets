@@ -13,14 +13,21 @@ import {visuallyHidden} from './visuallyHidden';
  * `aria-label`: that deletes the code from the accessibility tree and hands a
  * screen-reader user a paraphrase of the very thing the exercise is about.
  * `summary` adds a one-line description *before* the code, never instead of it.
+ *
+ * `surface` picks which of the app's two dark code panels this is — the
+ * editor or the console — rather than forking the component per colour.
  */
 export default function CodeBlock({
   children,
   summary,
+  surface = 'editor',
 }: {
   children: ReactNode;
   summary?: string;
+  surface?: 'editor' | 'console';
 }) {
+  const isConsole = surface === 'console';
+
   return (
     <Paper
       variant="outlined"
@@ -32,7 +39,9 @@ export default function CodeBlock({
         p: 2,
         overflowX: 'auto',
         fontFamily: 'ui-monospace, SFMono-Regular, Consolas, monospace',
-        color: 'var(--text-neutral-primary)',
+        bgcolor: isConsole ? '#11111b' : '#1e1e2e',
+        borderColor: '#2d2d42',
+        color: isConsole ? '#a6e3a1' : 'var(--text-neutral-primary)',
       }}
     >
       {summary && <span style={visuallyHidden}>{summary}</span>}

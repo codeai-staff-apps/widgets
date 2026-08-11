@@ -47,62 +47,75 @@ export default function StepScreen({
     <Screen
       machine={machine}
       id={id}
-      heading={`${step.icon} ${step.title}`}
+      heading={
+        <>
+          <span aria-hidden="true">{step.icon} </span>
+          {step.title}
+        </>
+      }
       headingTag="h1"
       headingAppearance="heading-md"
     >
-      <Typography semanticTag="p" visualAppearance="body-two" id={instructionId}>
-        {step.instruction}
-      </Typography>
-
-      <Dialogue speaker={CHROME.teacherName}>{step.teacherLine}</Dialogue>
-      <Dialogue speaker={CHROME.studentName}>{step.studentLine}</Dialogue>
-
-      {interaction.type === 'concept' && (
-        <Concept interaction={interaction} answered={answered} onAnswer={onAnswer} />
-      )}
-      {interaction.type === 'clickline' && (
-        <Typography semanticTag="p" visualAppearance="body-two">
-          {interaction.hint}
+      <div className="stepCard">
+        <Typography semanticTag="p" visualAppearance="body-two" id={instructionId}>
+          {step.instruction}
         </Typography>
-      )}
-      {interaction.type === 'sequence' && (
-        <Sequence interaction={interaction} answered={answered} onAnswer={onAnswer} />
-      )}
-      {interaction.type === 'promptchoice' && (
-        <PromptChoice
-          interaction={interaction}
-          answered={answered}
-          onAnswer={onAnswer}
-          instructionId={instructionId}
-        />
-      )}
-      {interaction.type === 'testconfirm' && (
-        <>
-          <PhoneFeed withNewPost={phoneHasNewPost} />
-          <TestConfirm interaction={interaction} answered={answered} onAnswer={onAnswer} />
-        </>
-      )}
 
-      {answered && (
-        <>
-          <Alert
-            type={result ? 'success' : 'danger'}
-            size="s"
-            text={result ? step.passResult : step.failResult}
+        <Dialogue speaker={CHROME.teacherName} variant="teacher">
+          {step.teacherLine}
+        </Dialogue>
+        <Dialogue speaker={CHROME.studentName} variant="student">
+          {step.studentLine}
+        </Dialogue>
+
+        {interaction.type === 'concept' && (
+          <Concept interaction={interaction} answered={answered} onAnswer={onAnswer} />
+        )}
+        {interaction.type === 'clickline' && (
+          <Typography semanticTag="p" visualAppearance="body-two">
+            {interaction.hint}
+          </Typography>
+        )}
+        {interaction.type === 'sequence' && (
+          <Sequence interaction={interaction} answered={answered} onAnswer={onAnswer} />
+        )}
+        {interaction.type === 'promptchoice' && (
+          <PromptChoice
+            interaction={interaction}
+            answered={answered}
+            onAnswer={onAnswer}
+            instructionId={instructionId}
           />
-          <Dialogue speaker={CHROME.studentName}>{step.studentReaction}</Dialogue>
-          <div>
-            <Button
-              ref={nextRef}
-              type="primary"
-              color="purple"
-              text={isLast ? CHROME.btnFinish : CHROME.btnNext}
-              onClick={onNext}
+        )}
+        {interaction.type === 'testconfirm' && (
+          <>
+            <PhoneFeed withNewPost={phoneHasNewPost} />
+            <TestConfirm interaction={interaction} answered={answered} onAnswer={onAnswer} />
+          </>
+        )}
+
+        {answered && (
+          <>
+            <Alert
+              type={result ? 'success' : 'danger'}
+              size="s"
+              text={result ? step.passResult : step.failResult}
             />
-          </div>
-        </>
-      )}
+            <Dialogue speaker={CHROME.studentName} variant="student">
+              {step.studentReaction}
+            </Dialogue>
+            <div>
+              <Button
+                ref={nextRef}
+                type="primary"
+                color="purple"
+                text={isLast ? CHROME.btnFinish : CHROME.btnNext}
+                onClick={onNext}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </Screen>
   );
 }

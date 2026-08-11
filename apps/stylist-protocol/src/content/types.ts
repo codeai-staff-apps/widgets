@@ -3,12 +3,16 @@
  * union below is what the step card switches on.
  */
 
+/** One run of syntax-highlighted code text. Plain segments carry no `tok`. */
+export interface CodeSegment {
+  text: string;
+  tok?: 'kw' | 'fn' | 'str' | 'num' | 'cm' | 'op' | 'todo';
+}
+
 export interface CodeLine {
   /** Present only on lines a step highlights, clicks, or rewrites. */
   id?: string;
-  text: string;
-  /** The `// HELPER FUNCTIONS` comment — the line step 2 is looking for. */
-  isTodo?: boolean;
+  segments: CodeSegment[];
   /** Omitted for lines that are always on screen. */
   visibility?: 'beforeReveal' | 'afterReveal';
 }
@@ -79,6 +83,8 @@ export interface Post {
   title: string;
   content: string;
   imageFile: string;
+  /** Stands in for the post's photo — the swatch behind the filename. */
+  swatchColor: string;
 }
 
 export interface Summary {
@@ -86,19 +92,29 @@ export interface Summary {
   sub: string;
   teacherLine: string;
   steps: {icon: string; name: string; note: string}[];
+  /** The bolded lead-in of `takeaway`, e.g. "Key takeaway for your classroom:" */
+  takeawayLead: string;
   takeaway: string;
   btnRestart: string;
+}
+
+/** A run of text with the data-value spans the original called out in amber. */
+export interface TextSegment {
+  text: string;
+  emphasis?: boolean;
 }
 
 export interface Chrome {
   documentTitle: string;
   unitTag: string;
   introTitle: string;
+  /** The accent-coloured second half of the intro heading. */
+  introTitleAccent: string;
   introSub: string;
   notifIcon: string;
   notifTitle: string;
-  notifDetails: string;
-  notifItems: string;
+  notifDetails: TextSegment[];
+  notifItems: TextSegment[];
   studentName: string;
   teacherName: string;
   introTeacherLine: string;
@@ -110,6 +126,9 @@ export interface Chrome {
   consoleInitial: string;
   /** Contains `{n}`, the 1-based step number. */
   progressOf: string;
+  dotDoneLabel: string;
+  dotActiveLabel: string;
+  dotPendingLabel: string;
   btnNext: string;
   btnFinish: string;
   phoneTitle: string;

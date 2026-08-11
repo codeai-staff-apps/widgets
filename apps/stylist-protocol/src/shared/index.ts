@@ -7,4 +7,5 @@ export {default as CodeBlock} from './CodeBlock';
 export {LiveAnnouncerProvider, useAnnounce} from './LiveAnnouncer';
 export {Screen, useScreenMachine} from './ScreenMachine';
 export type {ScreenMachine, ScreenMachineOptions, ScreenProps} from './ScreenMachine';
+export {splitLeadingGlyph} from './splitLeadingGlyph';
 export {visuallyHidden} from './visuallyHidden';
