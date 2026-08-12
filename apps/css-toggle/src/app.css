@@ -1,0 +1,30 @@
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--spacing-p-m) var(--spacing-p-xs) var(--spacing-p-xl);
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-p-xxs);
+  margin: var(--spacing-p-s) 0 var(--spacing-p-xs);
+}
+
+.observations {
+  margin-top: var(--spacing-p-xxs);
+  color: var(--text-neutral-secondary);
+}
+
+.observations ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.observations li {
+  margin-bottom: 4px;
+}
+
+.discussionRow {
+  margin-top: var(--spacing-p-s);
+}
