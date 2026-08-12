@@ -1,0 +1,56 @@
+.page {
+  display: grid;
+  gap: var(--spacing-p-m);
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--spacing-p-l);
+}
+
+.stage {
+  display: grid;
+  gap: var(--spacing-p-s);
+  justify-items: start;
+}
+
+.frame {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+}
+
+.annotations,
+.discuss {
+  display: grid;
+  gap: var(--spacing-p-s);
+  padding: var(--spacing-p-m);
+  border: 1px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+}
+
+.ann-list {
+  display: grid;
+  gap: var(--spacing-p-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ann-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--spacing-p-xs);
+}
+
+.ann-key {
+  flex-shrink: 0;
+  min-width: 84px;
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.discuss ol {
+  display: grid;
+  gap: var(--spacing-p-xs);
+  margin: 0;
+  padding-left: 1.2em;
+}

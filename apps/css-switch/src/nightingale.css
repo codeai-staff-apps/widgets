@@ -1,0 +1,149 @@
+/*
+ * The Nightingale Cinema mock site's own CSS — deliberately NOT
+ * design-system styled. This file *is* "the stylesheet" the checkbox in
+ * App.tsx turns on and off: every rule below except the `:not(.styled)`
+ * block is scoped under `.demo.styled`, so unchecking it removes every one
+ * of those rules and the mock falls back to plain element defaults.
+ *
+ * The `:not(.styled)` block exists only to counter runtime.css, which sets
+ * every app's <body> to the platform's brand sans-serif — without it, "no
+ * CSS" would still secretly be wearing the platform's font. This recreates
+ * what an unstyled page actually looks like: a serif face, black on white.
+ */
+
+.demo:not(.styled) {
+  color: #000000;
+  background: #ffffff;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.demo.styled {
+  color: #f4efe4;
+  background: #12162a;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.demo.styled .demo-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(244, 239, 228, 0.18);
+}
+
+.demo.styled .demo-word {
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: #cf9f3f;
+}
+
+.demo.styled .demo-links {
+  display: flex;
+  gap: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.demo.styled .demo-hero {
+  padding: 40px 24px;
+  text-align: center;
+  background: radial-gradient(circle at 50% 0%, rgba(207, 159, 63, 0.18), transparent 60%);
+  border-bottom: 1px dashed rgba(244, 239, 228, 0.18);
+}
+
+.demo.styled .demo-kicker {
+  margin: 0 0 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #cf9f3f;
+}
+
+.demo.styled .demo-heading {
+  margin: 0 0 8px;
+  font-size: 2.1rem;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.demo.styled .demo-feature {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+  color: #cf9f3f;
+}
+
+.demo.styled .demo-feature span {
+  font-size: 0.95rem;
+  font-style: normal;
+  color: #f4efe4;
+  opacity: 0.7;
+}
+
+.demo.styled .demo-copy {
+  max-width: 40ch;
+  margin: 0 auto 20px;
+  opacity: 0.85;
+}
+
+.demo.styled .demo-cta {
+  display: inline-block;
+  padding: 10px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #12162a;
+  background: #cf9f3f;
+  border-radius: 2px;
+}
+
+.demo.styled .demo-lineup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  padding: 32px 24px;
+}
+
+.demo.styled .demo-card {
+  text-align: center;
+}
+
+.demo.styled .demo-card img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.demo.styled .demo-card-title {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.demo.styled .demo-card-time {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: #cf9f3f;
+}
+
+.demo.styled .demo-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.demo.styled .demo-footer p {
+  margin: 0;
+}
