@@ -65,7 +65,13 @@ export default function App() {
         />
 
         <div>
-          <Button type="primary" buttonTagTypeAttribute="submit" text="Submit feedback" disabled={!rating} />
+          <Button
+            type="primary"
+            buttonTagTypeAttribute="submit"
+            text="Submit feedback"
+            disabled={!rating}
+            onClick={() => {}}
+          />
         </div>
       </form>
     </main>
