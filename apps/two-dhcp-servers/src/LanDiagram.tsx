@@ -14,13 +14,16 @@ export type LinkState = 'idle' | 'split' | 'connected';
 export interface CardAction {
   label: string;
   ariaLabel: string;
+  /** Pulse to invite the click. Set false once the click has happened so the
+   * button stays mounted (keeping keyboard focus) but stops drawing attention. */
+  flash: boolean;
   onClick: () => void;
 }
 
-/** A card button that pulses to invite the one click the current step expects. */
-function FlashingButton({action}: {action: CardAction}) {
+/** A card button that pulses while the current step is waiting on its click. */
+function CardButton({action}: {action: CardAction}) {
   return (
-    <span className="cardBtnWrap cardBtnWrap--flash">
+    <span className={`cardBtnWrap ${action.flash ? 'cardBtnWrap--flash' : ''}`}>
       <Button size="s" text={action.label} ariaLabel={action.ariaLabel} onClick={action.onClick} />
     </span>
   );
@@ -57,7 +60,7 @@ function RouterCard({
           <dd>{dhcpOn ? router.poolLabel : 'access-point mode — hands out no addresses'}</dd>
         </div>
       </dl>
-      {action && <FlashingButton action={action} />}
+      {action && <CardButton action={action} />}
     </div>
   );
 }
@@ -89,7 +92,7 @@ function DeviceCard({
       ) : (
         <span className="chip chip--empty">waiting for an address…</span>
       )}
-      {action && <FlashingButton action={action} />}
+      {action && <CardButton action={action} />}
     </div>
   );
 }

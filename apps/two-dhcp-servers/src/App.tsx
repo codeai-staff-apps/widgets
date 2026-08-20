@@ -58,59 +58,66 @@ export default function App() {
           : 'split'
         : 'idle';
 
-  // Card buttons exist only for the click the current step expects, so the
-  // learner can never act out of turn: an action is supplied to a card only
-  // while that step is live and its effect hasn't happened yet.
+  // A card gets a button only during the step that expects its click, so the
+  // learner can never act out of turn. The button stays mounted for the whole
+  // step (it merely stops flashing once used) so keyboard focus is never
+  // dropped, and every handler is a no-op if its effect already happened.
   const deviceActions: Partial<Record<'laptop' | 'phone', CardAction>> = {};
   let routerBAction: CardAction | undefined;
 
-  if (machine.is('connect-laptop') && !leases.laptop) {
+  if (machine.is('connect-laptop')) {
     deviceActions.laptop = {
       label: 'Send DHCPDISCOVER',
       ariaLabel: "Send the laptop's DHCPDISCOVER",
+      flash: !leases.laptop,
       onClick: () => {
+        if (leases.laptop) return;
         setLeases(prev => ({...prev, laptop: SCRIPT.laptopFromA}));
         announce('Router A answered first. The laptop leased 192.168.1.100.');
       },
     };
   }
-  if (machine.is('connect-phone') && !leases.phone) {
+  if (machine.is('connect-phone')) {
     deviceActions.phone = {
       label: 'Send DHCPDISCOVER',
       ariaLabel: "Send the phone's DHCPDISCOVER",
+      flash: !leases.phone,
       onClick: () => {
+        if (leases.phone) return;
         setLeases(prev => ({...prev, phone: SCRIPT.phoneFromB}));
         announce('Router B answered first. The phone leased 192.168.0.100, a different subnet.');
       },
     };
   }
   if (machine.is('resolved')) {
-    if (!leases.laptop) {
-      deviceActions.laptop = {
-        label: 'Send DHCPDISCOVER',
-        ariaLabel: 'Reconnect the laptop by sending its DHCPDISCOVER',
-        onClick: () => {
-          setLeases(prev => ({...prev, laptop: SCRIPT.laptopFromAAgain}));
-          announce('The laptop leased 192.168.1.100 from Router A.');
-        },
-      };
-    }
-    if (!leases.phone) {
-      deviceActions.phone = {
-        label: 'Send DHCPDISCOVER',
-        ariaLabel: 'Reconnect the phone by sending its DHCPDISCOVER',
-        onClick: () => {
-          setLeases(prev => ({...prev, phone: SCRIPT.phoneFromA}));
-          announce('The phone leased 192.168.1.101 from Router A.');
-        },
-      };
-    }
+    deviceActions.laptop = {
+      label: 'Send DHCPDISCOVER',
+      ariaLabel: 'Reconnect the laptop by sending its DHCPDISCOVER',
+      flash: !leases.laptop,
+      onClick: () => {
+        if (leases.laptop) return;
+        setLeases(prev => ({...prev, laptop: SCRIPT.laptopFromAAgain}));
+        announce('The laptop leased 192.168.1.100 from Router A.');
+      },
+    };
+    deviceActions.phone = {
+      label: 'Send DHCPDISCOVER',
+      ariaLabel: 'Reconnect the phone by sending its DHCPDISCOVER',
+      flash: !leases.phone,
+      onClick: () => {
+        if (leases.phone) return;
+        setLeases(prev => ({...prev, phone: SCRIPT.phoneFromA}));
+        announce('The phone leased 192.168.1.101 from Router A.');
+      },
+    };
   }
-  if (machine.is('fix') && routerBDhcpOn) {
+  if (machine.is('fix')) {
     routerBAction = {
       label: 'Turn off DHCP',
       ariaLabel: "Turn off Router B's DHCP",
+      flash: routerBDhcpOn,
       onClick: () => {
+        if (!routerBDhcpOn) return;
         setRouterBDhcpOn(false);
         setLeases({});
         announce('Router B DHCP is off. The devices released their leases — reconnect them next.');
@@ -155,7 +162,7 @@ export default function App() {
         </Body>
       </Screen>
 
-      <Screen machine={machine} id="connect-laptop" heading={TITLES['connect-laptop']}>
+      <Screen machine={machine} id="connect-laptop" headingTag="h1" heading={TITLES['connect-laptop']}>
         <Body>
           When a device joins, it broadcasts a <strong>DHCPDISCOVER</strong> to the whole LAN — "who
           can give me an address?" Every DHCP server hears it, and whichever replies first wins. It's
@@ -169,7 +176,7 @@ export default function App() {
         )}
       </Screen>
 
-      <Screen machine={machine} id="connect-phone" heading={TITLES['connect-phone']}>
+      <Screen machine={machine} id="connect-phone" headingTag="h1" heading={TITLES['connect-phone']}>
         <Body>
           The phone broadcasts its own DISCOVER. Nothing guarantees the same server answers — this
           time <strong>Router B</strong> replies first. Press the phone's flashing{' '}
@@ -183,7 +190,7 @@ export default function App() {
         )}
       </Screen>
 
-      <Screen machine={machine} id="split" heading={TITLES.split}>
+      <Screen machine={machine} id="split" headingTag="h1" heading={TITLES.split}>
         <Body>
           The laptop is on <strong>192.168.1.0/24</strong> and the phone is on{' '}
           <strong>192.168.0.0/24</strong>. To reach each other, each device asks: is the destination
@@ -193,7 +200,7 @@ export default function App() {
         </Body>
       </Screen>
 
-      <Screen machine={machine} id="fix" heading={TITLES.fix}>
+      <Screen machine={machine} id="fix" headingTag="h1" heading={TITLES.fix}>
         <Body>
           A single network should have exactly <strong>one</strong> DHCP server. The extra router can
           stay for its Wi‑Fi and ports, but its DHCP must be turned off — usually called{' '}
@@ -208,7 +215,7 @@ export default function App() {
         )}
       </Screen>
 
-      <Screen machine={machine} id="resolved" heading={TITLES.resolved}>
+      <Screen machine={machine} id="resolved" headingTag="h1" heading={TITLES.resolved}>
         <Body>
           With only Router A answering, both devices get addresses from the same pool on the same
           subnet — so they can finally talk. Press each device's flashing{' '}
@@ -216,7 +223,7 @@ export default function App() {
         </Body>
       </Screen>
 
-      <Screen machine={machine} id="gotcha" heading={TITLES.gotcha}>
+      <Screen machine={machine} id="gotcha" headingTag="h1" heading={TITLES.gotcha}>
         <Body>
           The laptop now has <strong>192.168.1.100</strong> from Router A. You open a browser and try
           to load Router B's admin page at <strong>192.168.0.1</strong> to check its settings — but
@@ -247,7 +254,7 @@ export default function App() {
         )}
       </Screen>
 
-      <Screen machine={machine} id="summary" heading={TITLES.summary}>
+      <Screen machine={machine} id="summary" headingTag="h1" heading={TITLES.summary}>
         <ul style={{margin: 0, paddingLeft: '1.25rem', display: 'grid', gap: '0.5rem'}}>
           <li>
             <Typography semanticTag="span" visualAppearance="body-two" noMargin>
