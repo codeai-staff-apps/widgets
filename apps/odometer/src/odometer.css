@@ -1,0 +1,169 @@
+.odoPage {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.odoControls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.odoButtonRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.odoSpeedRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.odoSpeedRow > span {
+  font-family: var(--font-family-main);
+  font-size: 0.85rem;
+  color: var(--text-neutral-secondary);
+}
+
+.odoRows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.odoRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  /* dnd-kit's own settle animation (see OdometerRow) — off by default so a
+     row that isn't involved in a drag never transitions; --dnd-transition is
+     set inline only while a drag is affecting this row's position. */
+  transition: var(--dnd-transition, none);
+}
+
+.odoRow[data-dragging] {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .odoRow {
+    transition: none !important;
+  }
+}
+
+/* The reorder handle: a real button so it's tabbable and has an accessible
+   name; drag is pointer events (touch-friendly), Up/Down arrow keys are the
+   keyboard equivalent — see useRowOrder. */
+.odoDragHandle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-secondary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.odoRow[data-dragging] .odoDragHandle {
+  cursor: grabbing;
+}
+
+.odoDragHandle:focus-visible {
+  outline: 3px solid var(--border-focused-primary);
+  outline-offset: 2px;
+}
+
+.odoRowLabel {
+  width: 130px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.odoWheelGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* The wheel strip is this widget's one signature visual, so it earns bespoke
+   CSS (per AGENTS.md) — but every color still comes from a design token. */
+.odoWheel {
+  display: flex;
+  gap: 1px;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm);
+  overflow: hidden;
+}
+
+.odoCell {
+  position: relative;
+  width: 26px;
+  height: 40px;
+  overflow: hidden;
+  /* Falls back to the neutral inverse token if a row ever omits --odo-wheel-color. */
+  background: var(--odo-wheel-color, var(--background-neutral-primary-inverse));
+}
+
+.odoCellTrack {
+  display: flex;
+  flex-direction: column;
+  /* Two stacked digits make this track twice the cell's height, so moving up
+     by half the track's own height (-50%) moves by exactly one digit. */
+  transform: translateY(calc(var(--frac, 0) * -50%));
+}
+
+.odoDigit {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 1.375rem;
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-neutral-primary-inverse);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .odoCellTrack {
+    --frac: 0 !important;
+  }
+}
+
+.odoOverflowBadge {
+  /* text-error-primary on background-error-light is only 3.51:1, below the
+     4.5:1 WCAG AA floor for this text's size — text-error-secondary is a
+     darker step of the same token family and clears 5.45:1. */
+  color: var(--text-error-secondary);
+  background: var(--background-error-light);
+  border: 1px solid var(--border-error-primary);
+  border-radius: var(--shape-sm);
+  padding: 2px 10px;
+  font-family: var(--font-family-main);
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-semi-bold);
+  white-space: nowrap;
+}
+
+.odoValueControls,
+.odoCustomBase {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.odoHelp {
+  color: var(--text-neutral-secondary);
+}
