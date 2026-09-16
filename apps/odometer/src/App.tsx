@@ -131,6 +131,9 @@ export default function App() {
         </div>
       </div>
 
+      <Typography semanticTag="p" visualAppearance="body-three" className="odoHelp">
+        {copy.reorderHelp}
+      </Typography>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

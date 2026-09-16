@@ -31,6 +31,7 @@ export const copy = {
     `Reorder ${label} row, position ${position} of ${total}.`,
   reorderAnnounce: (label: string, position: number, total: number) =>
     `${label} moved to position ${position} of ${total}.`,
+  reorderHelp: 'Drag a row, or focus its handle and press Space then the arrow keys, to reorder.',
   controls: {
     start: 'Start',
     pause: 'Pause',
