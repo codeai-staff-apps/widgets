@@ -1,0 +1,6 @@
+{
+  "id": "odometer",
+  "name": "Odometer",
+  "description": "One shared number, shown rolling by in binary, octal, decimal, hex, and a custom base — watch digits carry differently per base.",
+  "originalUrl": "https://github.com/code-dot-org/code-dot-org/tree/staging/dashboard/public/odometer"
+}
