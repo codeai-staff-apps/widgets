@@ -111,7 +111,7 @@ export default function App() {
           />
         </div>
         <div className="odoSpeedRow">
-          <span aria-hidden="true">{copy.controls.speedSlow}</span>
+          <span id="odo-speed-slow">{copy.controls.speedSlow}</span>
           <Slider
             name="odo-speed"
             label={copy.controls.speedLabel}
@@ -121,9 +121,13 @@ export default function App() {
             maxValue={SPEED_MAX}
             step={SPEED_STEP}
             value={speed}
+            // The raw min/max already give a screen reader a numeric range;
+            // this ties in what the two ends of that range *mean* (SPEED_MIN
+            // reads far less like "slow" than "0.005" does on its own).
+            aria-describedby="odo-speed-slow odo-speed-fast"
             onChange={e => setSpeed(Number(e.target.value))}
           />
-          <span aria-hidden="true">{copy.controls.speedFast}</span>
+          <span id="odo-speed-fast">{copy.controls.speedFast}</span>
         </div>
       </div>
 
@@ -161,6 +165,14 @@ export default function App() {
           value={wholePart(value)}
           step={1}
           min={VALUE_MIN}
+          // Genuinely unbounded (that's the point of this field vs. the
+          // slider's 1023 ceiling) — but a native number input with no `max`
+          // reports an accessible valuemax equal to its current value, which
+          // falsely tells a screen reader the field is capped there. A very
+          // large `max` fixes that without limiting what can actually be
+          // typed (an over-max value is still accepted; nothing here reads
+          // native validity).
+          max={Number.MAX_SAFE_INTEGER}
           onChange={e => {
             const next = parseFloat(e.target.value);
             if (!Number.isNaN(next)) {
@@ -189,6 +201,10 @@ export default function App() {
           value={customBase}
           min={CUSTOM_BASE_MIN}
           max={CUSTOM_BASE_MAX}
+          // Ties in the valid-range explanation below: without this, a screen
+          // reader user who tabs straight to the field (rather than reading
+          // the page linearly) never hears it.
+          aria-describedby="odo-custom-base-help"
           onChange={e => {
             const next = parseInt(e.target.value, 10);
             if (Number.isFinite(next) && next >= CUSTOM_BASE_MIN && next <= CUSTOM_BASE_MAX) {
@@ -196,7 +212,12 @@ export default function App() {
             }
           }}
         />
-        <Typography semanticTag="p" visualAppearance="body-three" className="odoHelp">
+        <Typography
+          semanticTag="p"
+          visualAppearance="body-three"
+          className="odoHelp"
+          id="odo-custom-base-help"
+        >
           {copy.controls.customBaseHelp}
         </Typography>
       </div>

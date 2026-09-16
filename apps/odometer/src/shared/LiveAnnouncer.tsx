@@ -24,6 +24,15 @@ import {visuallyHidden} from './visuallyHidden';
 
 /** Delay between clearing and setting the region, so repeats of the same string are re-read. */
 const CLEAR_THEN_SET_MS = 60;
+/**
+ * Minimum time a message stays up before the next queued one can replace it —
+ * long enough for a screen reader to get through a short sentence. Without a
+ * queue, two `announce()` calls close together (e.g. Reset firing its own
+ * message the same tick a row's overflow clears) raced: the second's
+ * clear-then-set silently cancelled the first's pending set, and only the
+ * last call was ever heard.
+ */
+const MIN_DISPLAY_MS = 1200;
 
 const AnnounceContext = createContext<((message: string) => void) | null>(null);
 
@@ -31,13 +40,34 @@ const AnnounceContext = createContext<((message: string) => void) | null>(null);
 export function LiveAnnouncerProvider({children}: {children: ReactNode}) {
   const outer = useContext(AnnounceContext);
   const [message, setMessage] = useState('');
+  const queue = useRef<string[]>([]);
+  const playing = useRef(false);
   const timer = useRef<number>();
 
-  const announce = useCallback((next: string) => {
+  const playNext = useCallback(() => {
+    const next = queue.current.shift();
+    if (next === undefined) {
+      playing.current = false;
+      return;
+    }
+    playing.current = true;
     window.clearTimeout(timer.current);
     setMessage('');
-    timer.current = window.setTimeout(() => setMessage(next), CLEAR_THEN_SET_MS);
+    timer.current = window.setTimeout(() => {
+      setMessage(next);
+      timer.current = window.setTimeout(playNext, MIN_DISPLAY_MS);
+    }, CLEAR_THEN_SET_MS);
   }, []);
+
+  const announce = useCallback(
+    (next: string) => {
+      queue.current.push(next);
+      if (!playing.current) {
+        playNext();
+      }
+    },
+    [playNext],
+  );
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 

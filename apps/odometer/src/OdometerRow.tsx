@@ -1,4 +1,3 @@
-import FontAwesomeV6Icon from '@code-dot-org/component-library/fontAwesomeV6Icon';
 import Typography from '@code-dot-org/component-library/typography';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
@@ -9,6 +8,26 @@ import DigitCell from './DigitCell';
 import {readOdometer} from './odometerMath';
 import OverflowBadge from './OverflowBadge';
 import type {RowId} from './useRowOrder';
+
+/**
+ * A plain inline SVG, not `FontAwesomeV6Icon`: that component's stylesheet
+ * `@import`s FontAwesome Pro from an external host, which this repo's CSP
+ * blocks and AGENTS.md forbids outright ("no external requests of any
+ * kind") — under that CSP the icon silently never renders, leaving a blank
+ * button. This has no such dependency and paints identically everywhere.
+ */
+function GripIcon() {
+  return (
+    <svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true" focusable="false">
+      <circle cx="2" cy="2" r="1.5" />
+      <circle cx="8" cy="2" r="1.5" />
+      <circle cx="2" cy="8" r="1.5" />
+      <circle cx="8" cy="8" r="1.5" />
+      <circle cx="2" cy="14" r="1.5" />
+      <circle cx="8" cy="14" r="1.5" />
+    </svg>
+  );
+}
 
 export default function OdometerRow({
   id,
@@ -59,7 +78,17 @@ export default function OdometerRow({
       ref={setNodeRef}
       className="odoRow"
       data-dragging={isDragging || undefined}
-      style={{transform: CSS.Transform.toString(transform), transition}}
+      style={
+        {
+          transform: CSS.Transform.toString(transform),
+          // A custom property, not the `transition` value directly: odometer.css
+          // zeroes this out under prefers-reduced-motion, the same way it
+          // already does for the digit-roll's --frac. dnd-kit's own settle
+          // animation (sibling rows sliding into their new slots) would
+          // otherwise ignore that preference entirely.
+          '--dnd-transition': transition,
+        } as CSSProperties
+      }
     >
       <button
         ref={setActivatorNodeRef}
@@ -69,7 +98,7 @@ export default function OdometerRow({
         {...attributes}
         {...listeners}
       >
-        <FontAwesomeV6Icon iconName="grip-vertical" iconStyle="solid" />
+        <GripIcon />
       </button>
       <Typography
         semanticTag="span"
