@@ -53,3 +53,8 @@ export function fractionalPart(value: number): number {
   const v = Math.max(0, value);
   return v - Math.floor(v);
 }
+
+/** The whole part of a non-negative value — what the odometers actually display, floor matching `fractionalPart`. */
+export function wholePart(value: number): number {
+  return Math.floor(Math.max(0, value));
+}

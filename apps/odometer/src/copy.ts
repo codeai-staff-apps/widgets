@@ -24,6 +24,10 @@ export const copy = {
   overflowAnnounce: (label: string) => `${label} is overflowing.`,
   overflowClearAnnounce: (label: string) => `${label} is back in range.`,
   resetAnnounce: 'Value reset to 0.',
+  reorderHandleLabel: (label: string, position: number, total: number) =>
+    `Reorder ${label} row, position ${position} of ${total}. Drag, or press arrow up or down, to move it.`,
+  reorderAnnounce: (label: string, position: number, total: number) =>
+    `${label} moved to position ${position} of ${total}.`,
   controls: {
     start: 'Start',
     pause: 'Pause',
@@ -33,7 +37,6 @@ export const copy = {
     speedFast: 'Fast',
     valueLabel: 'Value',
     valueSliderLabel: 'Value (slider)',
-    valueSliderHelp: 'The slider tops out at 1023 — type a bigger number below to keep going.',
     customBaseLabel: 'Custom base',
     customBaseHelp: 'Any base from 2 to 36. Bases above 10 use letters A-Z for the extra digits.',
   },

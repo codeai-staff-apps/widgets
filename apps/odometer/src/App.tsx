@@ -5,7 +5,7 @@ import Typography from '@code-dot-org/component-library/typography';
 import {useCallback, useState} from 'react';
 
 import {copy} from './copy';
-import {fractionalPart} from './odometerMath';
+import {fractionalPart, wholePart} from './odometerMath';
 import OdometerRow from './OdometerRow';
 import './odometer.css';
 import {useAnnounce} from './shared';
@@ -18,23 +18,35 @@ import {
   VALUE_SLIDER_MAX,
   VALUE_SLIDER_STEP,
 } from './useOdometerPlayback';
+import {useRowOrder, type RowId} from './useRowOrder';
 
 const CUSTOM_BASE_MIN = 2;
 const CUSTOM_BASE_MAX = 36;
 const DEFAULT_CUSTOM_BASE = 20;
 
-/** Decimal places kept when echoing the shared value into the number field — auto-play accumulates float noise past this. */
-const VALUE_DISPLAY_PRECISION = 3;
-
-function round(n: number, precision: number): number {
-  const factor = 10 ** precision;
-  return Math.round(n * factor) / factor;
-}
+/**
+ * Each row's wheel background, so students can tell the five bases apart at a
+ * glance in a classroom setting. Colors are app-local (no DS categorical/data-vis
+ * token set exists): dark enough for AA contrast under the white digits, and
+ * chosen to stay distinguishable from each other under protanopia, deuteranopia
+ * and tritanopia (varied in lightness and saturation, not just hue — "custom"
+ * is plain gray — and none are a red/green pair).
+ */
+const ROW_COLORS: Record<RowId, string> = {
+  binary: '#0b3d68',
+  octal: '#7a4512',
+  decimal: '#0f5c6b',
+  hexadecimal: '#6a2159',
+  custom: '#5c5c5c',
+};
 
 export default function App() {
   const {value, setValue, playing, start, pause, reset, speed, setSpeed} = useOdometerPlayback();
   const [customBase, setCustomBase] = useState(DEFAULT_CUSTOM_BASE);
   const announce = useAnnounce();
+  const {order, draggingId, onHandlePointerDown, onHandleKeyDown} = useRowOrder(
+    id => copy.rowLabels[id],
+  );
 
   const handleOverflowChange = useCallback(
     (label: string, overflowing: boolean) => {
@@ -49,13 +61,14 @@ export default function App() {
   };
 
   const frac = fractionalPart(value);
-  const rows = [
-    {label: copy.rowLabels.binary, radix: 2},
-    {label: copy.rowLabels.octal, radix: 8},
-    {label: copy.rowLabels.decimal, radix: 10},
-    {label: copy.rowLabels.hexadecimal, radix: 16},
-    {label: copy.rowLabels.custom, radix: customBase},
-  ];
+  const radixOf: Record<RowId, number> = {
+    binary: 2,
+    octal: 8,
+    decimal: 10,
+    hexadecimal: 16,
+    custom: customBase,
+  };
+  const rows = order.map(id => ({id, label: copy.rowLabels[id], radix: radixOf[id]}));
 
   return (
     <main className="odoPage">
@@ -101,14 +114,20 @@ export default function App() {
       </div>
 
       <div className="odoRows">
-        {rows.map(row => (
+        {rows.map((row, i) => (
           <OdometerRow
-            key={row.label}
+            key={row.id}
             label={row.label}
             radix={row.radix}
+            color={ROW_COLORS[row.id]}
             value={value}
             frac={frac}
             onOverflowChange={handleOverflowChange}
+            position={i + 1}
+            total={rows.length}
+            dragging={draggingId === row.id}
+            onHandlePointerDown={onHandlePointerDown(row.id)}
+            onHandleKeyDown={onHandleKeyDown(row.id)}
           />
         ))}
       </div>
@@ -118,8 +137,8 @@ export default function App() {
           name="odo-value"
           inputType="number"
           label={copy.controls.valueLabel}
-          value={round(value, VALUE_DISPLAY_PRECISION)}
-          step={VALUE_SLIDER_STEP}
+          value={wholePart(value)}
+          step={1}
           min={VALUE_MIN}
           onChange={e => {
             const next = parseFloat(e.target.value);
@@ -131,6 +150,7 @@ export default function App() {
         <Slider
           name="odo-value-slider"
           label={copy.controls.valueSliderLabel}
+          color="brand"
           hideValue
           minValue={VALUE_MIN}
           maxValue={VALUE_SLIDER_MAX}
@@ -138,9 +158,6 @@ export default function App() {
           value={Math.min(value, VALUE_SLIDER_MAX)}
           onChange={e => setValue(Number(e.target.value))}
         />
-        <Typography semanticTag="p" visualAppearance="body-three" className="odoHelp">
-          {copy.controls.valueSliderHelp}
-        </Typography>
       </div>
 
       <div className="odoCustomBase">

@@ -45,6 +45,37 @@
   flex-wrap: wrap;
 }
 
+.odoRow[data-dragging] {
+  opacity: 0.6;
+}
+
+/* The reorder handle: a real button so it's tabbable and has an accessible
+   name; drag is pointer events (touch-friendly), Up/Down arrow keys are the
+   keyboard equivalent — see useRowOrder. */
+.odoDragHandle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-secondary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.odoRow[data-dragging] .odoDragHandle {
+  cursor: grabbing;
+}
+
+.odoDragHandle:focus-visible {
+  outline: 3px solid var(--border-focused-primary);
+  outline-offset: 2px;
+}
+
 .odoRowLabel {
   width: 130px;
   flex-shrink: 0;
@@ -72,7 +103,8 @@
   width: 26px;
   height: 40px;
   overflow: hidden;
-  background: var(--background-neutral-primary-inverse);
+  /* Falls back to the neutral inverse token if a row ever omits --odo-wheel-color. */
+  background: var(--odo-wheel-color, var(--background-neutral-primary-inverse));
 }
 
 .odoCellTrack {
