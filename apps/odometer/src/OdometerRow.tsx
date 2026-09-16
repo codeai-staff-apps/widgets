@@ -1,13 +1,17 @@
 import FontAwesomeV6Icon from '@code-dot-org/component-library/fontAwesomeV6Icon';
 import Typography from '@code-dot-org/component-library/typography';
-import {useEffect, useRef, type CSSProperties, type KeyboardEvent, type PointerEvent} from 'react';
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
+import {useEffect, useRef, type CSSProperties} from 'react';
 
 import {copy} from './copy';
 import DigitCell from './DigitCell';
 import {readOdometer} from './odometerMath';
 import OverflowBadge from './OverflowBadge';
+import type {RowId} from './useRowOrder';
 
 export default function OdometerRow({
+  id,
   label,
   radix,
   color,
@@ -16,10 +20,8 @@ export default function OdometerRow({
   onOverflowChange,
   position,
   total,
-  dragging,
-  onHandlePointerDown,
-  onHandleKeyDown,
 }: {
+  id: RowId;
   label: string;
   radix: number;
   /** This row's wheel background — a design token or app-local CSS custom property. */
@@ -31,10 +33,13 @@ export default function OdometerRow({
   /** This row's place in the current order, 1-based, for the drag handle's accessible name. */
   position: number;
   total: number;
-  dragging: boolean;
-  onHandlePointerDown: (e: PointerEvent<HTMLButtonElement>) => void;
-  onHandleKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => void;
 }) {
+  // dnd-kit owns the drag/keyboard reordering interaction: `attributes` +
+  // `listeners` make the handle a sortable activator (pointer and keyboard),
+  // `setNodeRef`/`transform`/`transition` position this row while dragging.
+  const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging} =
+    useSortable({id});
+
   // Not memoized: `value` changes on every playback tick anyway, so the
   // memo would never hit and this stays cheap without it.
   const reading = readOdometer(value, radix);
@@ -50,13 +55,19 @@ export default function OdometerRow({
   const groupLabel = `${label}: ${reading.displayText}${reading.overflow ? copy.overflowAriaSuffix : ''}`;
 
   return (
-    <div className="odoRow" data-dragging={dragging || undefined}>
+    <div
+      ref={setNodeRef}
+      className="odoRow"
+      data-dragging={isDragging || undefined}
+      style={{transform: CSS.Transform.toString(transform), transition}}
+    >
       <button
+        ref={setActivatorNodeRef}
         type="button"
         className="odoDragHandle"
         aria-label={copy.reorderHandleLabel(label, position, total)}
-        onPointerDown={onHandlePointerDown}
-        onKeyDown={onHandleKeyDown}
+        {...attributes}
+        {...listeners}
       >
         <FontAwesomeV6Icon iconName="grip-vertical" iconStyle="solid" />
       </button>

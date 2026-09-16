@@ -2,6 +2,8 @@ import Button from '@code-dot-org/component-library/button';
 import Slider from '@code-dot-org/component-library/slider';
 import TextField from '@code-dot-org/component-library/textField';
 import Typography from '@code-dot-org/component-library/typography';
+import {closestCenter, DndContext, type Announcements} from '@dnd-kit/core';
+import {SortableContext, verticalListSortingStrategy} from '@dnd-kit/sortable';
 import {useCallback, useState} from 'react';
 
 import {copy} from './copy';
@@ -40,13 +42,24 @@ const ROW_COLORS: Record<RowId, string> = {
   custom: '#5c5c5c',
 };
 
+/**
+ * Silences dnd-kit's own built-in drag announcements: `useRowOrder` already
+ * announces reorders through this app's one shared live region (matching how
+ * overflow/reset are announced), so dnd-kit's default phrasing would just be
+ * a second, differently-worded announcement for the same event.
+ */
+const SILENT_DRAG_ANNOUNCEMENTS: Announcements = {
+  onDragStart: () => '',
+  onDragOver: () => '',
+  onDragEnd: () => '',
+  onDragCancel: () => '',
+};
+
 export default function App() {
   const {value, setValue, playing, start, pause, reset, speed, setSpeed} = useOdometerPlayback();
   const [customBase, setCustomBase] = useState(DEFAULT_CUSTOM_BASE);
   const announce = useAnnounce();
-  const {order, draggingId, onHandlePointerDown, onHandleKeyDown} = useRowOrder(
-    id => copy.rowLabels[id],
-  );
+  const {order, sensors, onDragEnd} = useRowOrder(id => copy.rowLabels[id]);
 
   const handleOverflowChange = useCallback(
     (label: string, overflowing: boolean) => {
@@ -102,6 +115,7 @@ export default function App() {
           <Slider
             name="odo-speed"
             label={copy.controls.speedLabel}
+            color="brand"
             hideValue
             minValue={SPEED_MIN}
             maxValue={SPEED_MAX}
@@ -113,24 +127,31 @@ export default function App() {
         </div>
       </div>
 
-      <div className="odoRows">
-        {rows.map((row, i) => (
-          <OdometerRow
-            key={row.id}
-            label={row.label}
-            radix={row.radix}
-            color={ROW_COLORS[row.id]}
-            value={value}
-            frac={frac}
-            onOverflowChange={handleOverflowChange}
-            position={i + 1}
-            total={rows.length}
-            dragging={draggingId === row.id}
-            onHandlePointerDown={onHandlePointerDown(row.id)}
-            onHandleKeyDown={onHandleKeyDown(row.id)}
-          />
-        ))}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+        accessibility={{announcements: SILENT_DRAG_ANNOUNCEMENTS}}
+      >
+        <SortableContext items={order} strategy={verticalListSortingStrategy}>
+          <div className="odoRows">
+            {rows.map((row, i) => (
+              <OdometerRow
+                key={row.id}
+                id={row.id}
+                label={row.label}
+                radix={row.radix}
+                color={ROW_COLORS[row.id]}
+                value={value}
+                frac={frac}
+                onOverflowChange={handleOverflowChange}
+                position={i + 1}
+                total={rows.length}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       <div className="odoValueControls">
         <TextField

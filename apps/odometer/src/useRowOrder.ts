@@ -1,4 +1,6 @@
-import {useRef, useState, type KeyboardEvent, type PointerEvent} from 'react';
+import {KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent} from '@dnd-kit/core';
+import {arrayMove, sortableKeyboardCoordinates} from '@dnd-kit/sortable';
+import {useState} from 'react';
 
 import {copy} from './copy';
 import {useAnnounce} from './shared';
@@ -8,109 +10,54 @@ export type RowId = 'binary' | 'octal' | 'decimal' | 'hexadecimal' | 'custom';
 const DEFAULT_ORDER: RowId[] = ['binary', 'octal', 'decimal', 'hexadecimal', 'custom'];
 
 /**
- * Moves `id` to index `to` within `ids`, clamping `to` to a valid index.
- * Returns a new array; `ids` is never mutated. Pure so drag/keyboard math is
- * unit-testable without a DOM.
+ * Where `activeId` lands if dropped on `overId`, and what 1-based position to
+ * announce it at — or `null` if dropped back where it started (no reorder, no
+ * announcement). This is the one bit of reorder math dnd-kit doesn't already
+ * give us (it hands back `active`/`over`, not "did anything change"), so it's
+ * kept as a small pure, unit-tested wrapper around dnd-kit's own `arrayMove`
+ * rather than a hand-rolled splice.
  */
-export function reorderIds<T>(ids: readonly T[], id: T, to: number): T[] {
-  const clamped = Math.max(0, Math.min(to, ids.length - 1));
-  const next = ids.filter(x => x !== id);
-  next.splice(clamped, 0, id);
-  return next;
+export function computeReorder(
+  order: readonly RowId[],
+  activeId: RowId,
+  overId: RowId,
+): {order: RowId[]; position: number} | null {
+  if (activeId === overId) {
+    return null;
+  }
+  const from = order.indexOf(activeId);
+  const to = order.indexOf(overId);
+  const next = arrayMove(order as RowId[], from, to);
+  return {order: next, position: next.indexOf(activeId) + 1};
 }
 
 /**
- * Which slot a pointer at `y` should drop into, given each row's current
- * vertical midpoint (top + height / 2) in on-screen order: the first row
- * whose midpoint is below `y`, or the last row if `y` is below all of them.
- * Reading straight from the rows' real, current bounding boxes on every move
- * (rather than a cumulative "moved half a row" threshold) means a drag never
- * overshoots the row the cursor is actually over.
- */
-export function dropIndexForY(y: number, rowMidpoints: readonly number[]): number {
-  // <=, not <: a pointer sitting exactly on a row's own midpoint (the common
-  // case right after a mouse-up snaps it there, or a synthetic/test move)
-  // must land on that row, not roll over to the next one.
-  const index = rowMidpoints.findIndex(mid => y <= mid);
-  return index === -1 ? rowMidpoints.length - 1 : index;
-}
-
-/**
- * Row display order, plus drag-to-reorder and its keyboard equivalent — the
- * original widget's rows were draggable but had no keyboard path.
- *
- * Dragging uses pointer events (not HTML5 drag-and-drop, which never fires
- * from a touch tap) on each row's handle: every move, it re-measures the
- * rows' bounding boxes and drops the dragged row into whichever slot the
- * cursor is over (see `dropIndexForY`). The same handle takes Up/Down arrow
- * keys. A ref shadows the order state so both paths always read the latest
- * order, even mid-drag before React re-renders.
+ * Row display order, plus drag-to-reorder via dnd-kit — the original
+ * widget's rows were draggable (jQuery-UI) but had no keyboard path.
+ * `@dnd-kit/core`'s pointer sensor covers touch as well as mouse, and its
+ * keyboard sensor (`sortableKeyboardCoordinates`, from `@dnd-kit/sortable`)
+ * is the keyboard equivalent: focus a row's handle, Space to lift, Up/Down
+ * to move, Space to drop, Escape to cancel.
  */
 export function useRowOrder(labelOf: (id: RowId) => string) {
   const announce = useAnnounce();
   const [order, setOrder] = useState<RowId[]>(DEFAULT_ORDER);
-  const orderRef = useRef(order);
-  orderRef.current = order;
-  const [draggingId, setDraggingId] = useState<RowId | null>(null);
-  const dragId = useRef<RowId | null>(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {coordinateGetter: sortableKeyboardCoordinates}),
+  );
 
-  const reorder = (id: RowId, to: number) => {
-    const ids = orderRef.current;
-    const from = ids.indexOf(id);
-    const next = reorderIds(ids, id, to);
-    const landedAt = next.indexOf(id);
-    if (landedAt === from) {
+  const onDragEnd = ({active, over}: DragEndEvent) => {
+    if (!over) {
       return;
     }
-    orderRef.current = next;
-    setOrder(next);
-    announce(copy.reorderAnnounce(labelOf(id), landedAt + 1, next.length));
-  };
-
-  const moveRow = (id: RowId, delta: number) => {
-    const from = orderRef.current.indexOf(id);
-    reorder(id, from + delta);
-  };
-
-  const onHandlePointerDown = (id: RowId) => (e: PointerEvent<HTMLButtonElement>) => {
-    const rowsEl = e.currentTarget.closest('.odoRows');
-    if (!(rowsEl instanceof HTMLElement)) {
+    const result = computeReorder(order, active.id as RowId, over.id as RowId);
+    if (!result) {
       return;
     }
-    dragId.current = id;
-    setDraggingId(id);
-
-    const onMove = (move: globalThis.PointerEvent) => {
-      if (!dragId.current) {
-        return;
-      }
-      const midpoints = Array.from(rowsEl.children).map(row => {
-        const rect = row.getBoundingClientRect();
-        return rect.top + rect.height / 2;
-      });
-      reorder(dragId.current, dropIndexForY(move.clientY, midpoints));
-    };
-    const onUp = () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-      window.removeEventListener('pointercancel', onUp);
-      dragId.current = null;
-      setDraggingId(null);
-    };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-    window.addEventListener('pointercancel', onUp);
+    setOrder(result.order);
+    announce(copy.reorderAnnounce(labelOf(active.id as RowId), result.position, result.order.length));
   };
 
-  const onHandleKeyDown = (id: RowId) => (e: KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      moveRow(id, -1);
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      moveRow(id, 1);
-    }
-  };
-
-  return {order, draggingId, onHandlePointerDown, onHandleKeyDown};
+  return {order, sensors, onDragEnd};
 }

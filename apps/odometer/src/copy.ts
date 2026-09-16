@@ -24,8 +24,11 @@ export const copy = {
   overflowAnnounce: (label: string) => `${label} is overflowing.`,
   overflowClearAnnounce: (label: string) => `${label} is back in range.`,
   resetAnnounce: 'Value reset to 0.',
+  // dnd-kit supplies its own screen-reader instructions for how to operate
+  // the handle (its default `accessibility.screenReaderInstructions`), so
+  // this only needs to state which row and where it currently sits.
   reorderHandleLabel: (label: string, position: number, total: number) =>
-    `Reorder ${label} row, position ${position} of ${total}. Drag, or press arrow up or down, to move it.`,
+    `Reorder ${label} row, position ${position} of ${total}.`,
   reorderAnnounce: (label: string, position: number, total: number) =>
     `${label} moved to position ${position} of ${total}.`,
   controls: {
