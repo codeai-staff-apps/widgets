@@ -1,0 +1,104 @@
+/*
+ * The array visualization. State is carried by `data-state` on each cell so
+ * a step change is a prop update, not a re-render of markup — and every
+ * state pairs a token colour with a non-colour cue (the role caption, or a
+ * strikethrough for eliminated values), never colour alone.
+ */
+.arrayTrack-legend {
+  margin: 0 0 4px;
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-neutral-tertiary);
+}
+
+.arrayTrack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.arrayTrack-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 46px;
+}
+
+.arrayTrack-role {
+  height: 14px;
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-neutral-secondary);
+}
+
+.arrayTrack-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 4px 8px;
+  border: 2px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 1rem;
+  font-weight: var(--font-weight-semi-bold);
+  box-sizing: border-box;
+}
+
+.arrayTrack-index {
+  font-size: var(--font-size-body-xs);
+  color: var(--text-neutral-tertiary);
+}
+
+.arrayTrack-cell[data-state='eliminated'] .arrayTrack-value {
+  border-color: var(--border-neutral-secondary);
+  background: var(--background-neutral-secondary);
+  color: var(--text-neutral-tertiary);
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+
+.arrayTrack-cell[data-state='mid'] .arrayTrack-value {
+  border-color: var(--border-brand-primary);
+  background: var(--background-brand-light);
+  color: var(--text-brand-primary);
+  font-weight: var(--font-weight-black);
+}
+
+.arrayTrack-cell[data-state='mid'] .arrayTrack-role {
+  color: var(--text-brand-primary);
+}
+
+.arrayTrack-cell[data-state='found'] .arrayTrack-value {
+  border-color: var(--border-success-primary);
+  background: var(--background-success-light);
+  color: var(--text-success-primary);
+  font-weight: var(--font-weight-black);
+}
+
+.arrayTrack-cell[data-state='found'] .arrayTrack-role {
+  color: var(--text-success-primary);
+}
+
+/* The student's current prediction: a soft amber fill only — no border,
+   outline or size change, so the cell's box never moves — and never a
+   success/error colour, since it previews a choice, it doesn't judge one.
+   Stays through "Check answer" (the verdict is the Alert, not this), and
+   only changes when the prediction itself changes. `prefers-reduced-motion`
+   is handled globally (see runtime.css), so no separate query is needed here. */
+.arrayTrack-cell[data-preview='true'] .arrayTrack-value {
+  background: var(--background-warning-light);
+  transition: background-color 150ms ease;
+}
+

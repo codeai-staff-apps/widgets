@@ -1,0 +1,40 @@
+/* Standalone/preview builds render without the org app shell's chrome, so the
+   page needs its own background — the design tokens are token-driven but
+   nothing else paints `body` here. */
+body {
+  background: var(--background-neutral-primary);
+}
+
+.targetValue {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 2px solid var(--border-brand-primary);
+  border-radius: var(--shape-round, 999px);
+  background: var(--background-brand-light);
+  color: var(--text-brand-primary);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-weight: var(--font-weight-black);
+}
+
+/* The prediction prompt is the primary student task, so it gets the
+   strongest visual treatment on the page: a filled, thick-bordered panel
+   with a large legend — clearly a step above the plain-text target line and
+   the info alert above it. */
+.predictFieldset {
+  margin: 0;
+  padding: var(--spacing-p-l, 20px);
+  border: 3px solid var(--border-brand-primary);
+  border-radius: var(--shape-lg, 12px);
+  background: var(--background-brand-light);
+}
+
+.predictFieldset legend {
+  padding: 0 8px;
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-black);
+  color: var(--text-brand-primary);
+}
+
+.checkAnswerRow {
+  margin-top: var(--spacing-p-m, 12px);
+}
