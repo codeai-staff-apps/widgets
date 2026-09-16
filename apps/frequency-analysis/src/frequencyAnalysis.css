@@ -1,0 +1,378 @@
+/*
+ * Every color here is a design token. The only non-token visuals are the
+ * bar-chart and tile-layer geometry (widths/heights/positions are data, not
+ * styling). Every state that reads as color (assigned/unassigned, series A/B)
+ * also carries a non-color cue: a caption, a numeric value, a dashed vs.
+ * solid border, or a stripe pattern — never color alone.
+ */
+
+body {
+  background: var(--background-neutral-primary);
+}
+
+.freq-page {
+  display: grid;
+  gap: var(--spacing-p-l, 20px);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-p-l, 20px);
+}
+
+.freq-layout {
+  display: grid;
+  gap: var(--spacing-p-l, 20px);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .freq-layout {
+    grid-template-columns: minmax(260px, 320px) 1fr;
+  }
+
+  .freq-message-pane {
+    position: sticky;
+    top: var(--spacing-p-l, 20px);
+  }
+}
+
+.freq-message-pane,
+.freq-board-pane {
+  display: grid;
+  gap: var(--spacing-p-l, 20px);
+  min-width: 0;
+}
+
+/* Message picker */
+
+.freq-message-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--spacing-p-m, 12px);
+}
+
+.freq-custom-message {
+  flex: 1 1 100%;
+  display: grid;
+  gap: var(--spacing-p-s, 8px);
+}
+
+.freq-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s, 8px);
+}
+
+/* Mode + controls */
+
+.freq-mode-row {
+  display: flex;
+}
+
+.freq-controls {
+  display: grid;
+  gap: var(--spacing-p-m, 12px);
+}
+
+.freq-fieldset {
+  display: grid;
+  gap: var(--spacing-p-s, 8px);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.freq-fieldset legend {
+  padding: 0;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-neutral-secondary);
+}
+
+.freq-shift-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s, 8px);
+}
+
+.freq-shift-field {
+  width: 6em;
+}
+
+/* Board */
+
+.freq-board-section {
+  display: grid;
+  gap: var(--spacing-p-s, 8px);
+  min-width: 0;
+}
+
+.freq-legend {
+  display: flex;
+  gap: var(--spacing-p-m, 12px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-body-xs);
+  color: var(--text-neutral-secondary);
+}
+
+.freq-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.freq-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.freq-legend-item[data-series='message'] .freq-swatch {
+  background: var(--background-accent-orange-primary);
+}
+
+.freq-legend-item[data-series='language'] .freq-swatch {
+  background: var(--background-brand-teal-primary);
+  /* Pattern, not just hue, distinguishes the two series for anyone who can't
+   * rely on color. */
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 2px,
+    rgb(255 255 255 / 0.6) 2px,
+    rgb(255 255 255 / 0.6) 3px
+  );
+}
+
+.freq-board-scroll {
+  overflow-x: auto;
+  position: relative;
+  border-radius: var(--shape-md, 8px);
+}
+
+.freq-board {
+  --freq-gutter: 96px;
+  --freq-col: 40px;
+  --freq-row-h: 44px;
+  --freq-bar-h: 96px;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--freq-gutter) repeat(26, var(--freq-col));
+  grid-template-rows:
+    var(--freq-bar-h) auto var(--freq-row-h) var(--freq-row-h) var(--freq-row-h) auto
+    var(--freq-bar-h);
+  min-width: calc(var(--freq-gutter) + 26 * var(--freq-col));
+}
+
+.freq-gutter-cell {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding-right: var(--spacing-p-s, 8px);
+  background: var(--background-neutral-primary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-neutral-secondary);
+}
+
+.freq-bar-cell {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  height: var(--freq-bar-h);
+}
+
+.freq-bar-cell-hanging {
+  align-items: flex-start;
+}
+
+.freq-bar {
+  width: 12px;
+  min-height: 1px;
+  border-radius: 2px 2px 0 0;
+  transition: height 200ms ease-out;
+}
+
+.freq-bar-hanging {
+  border-radius: 0 0 2px 2px;
+}
+
+.freq-bar[data-series='message'] {
+  background: var(--background-accent-orange-primary);
+}
+
+.freq-bar[data-series='language'] {
+  background: var(--background-brand-teal-primary);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 2px,
+    rgb(255 255 255 / 0.6) 2px,
+    rgb(255 255 255 / 0.6) 3px
+  );
+}
+
+.freq-bar[data-series='language'][data-empty] {
+  background: var(--background-neutral-secondary);
+  background-image: none;
+}
+
+.freq-value-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  font-size: 10px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.freq-value-cell [data-series='message'] {
+  color: var(--text-accent-orange-primary);
+}
+
+.freq-value-cell [data-series='language'] {
+  color: var(--text-brand-teal-primary);
+}
+
+.freq-original-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-accent-orange-primary);
+}
+
+/* Placeholders (Maps-to and Unassigned rows). The tile that occupies one, if
+ * any, is a separate element in `.freq-tile-layer`, painted on top. */
+.freq-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+  border: 2px dashed var(--border-neutral-secondary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-secondary);
+}
+
+.freq-placeholder[data-state='filled'] {
+  border-style: solid;
+  border-color: var(--border-brand-primary);
+  background: var(--background-brand-light);
+}
+
+.freq-placeholder[data-over] {
+  outline: 3px solid var(--border-focused-primary);
+  outline-offset: 2px;
+}
+
+/* The tile layer: an absolutely-positioned overlay spanning the Maps-to and
+ * Unassigned rows. All 26 tiles stay mounted here; state changes just move
+ * their transform, so sorts, shifts and drops all animate as a slide.
+ *
+ * `position: absolute` (not `relative`) is load-bearing: an absolutely
+ * positioned grid child is removed from grid-item generation entirely (CSS
+ * Grid ยง3), so it can use `grid-row`/`grid-column` to size its containing
+ * block to the Maps-to/Unassigned area without being auto-placement's 189
+ * plain cells try to skip around it -- which is what corrupted every row
+ * below it when this was `position: relative`. */
+.freq-tile-layer {
+  grid-row: 4 / span 2;
+  grid-column: 1 / -1;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.freq-tile-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--freq-col);
+  height: var(--freq-row-h);
+  pointer-events: auto;
+  transition: transform 400ms ease;
+}
+
+.freq-tile {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.freq-tile:focus-visible {
+  outline: 3px solid var(--border-focused-primary);
+  outline-offset: 2px;
+}
+
+.freq-tile[data-state='assigned'] {
+  border-color: var(--border-brand-primary);
+  background: var(--background-brand-light);
+  color: var(--text-brand-primary);
+  font-weight: var(--font-weight-black);
+}
+
+.freq-tile[data-state='dragging'] {
+  /* The `DragOverlay` (portaled to `document.body`) shows the letter while
+   * it's dragging; the source tile just disappears in place. */
+  opacity: 0;
+}
+
+/* Decoded message */
+
+.freq-output-wrapper {
+  display: grid;
+  gap: 4px;
+}
+
+.freq-output-hint {
+  color: var(--text-neutral-secondary);
+}
+
+.freq-output {
+  padding: var(--spacing-p-m, 12px);
+  border: 2px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md, 8px);
+  background: var(--background-neutral-primary);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 1rem;
+  line-height: 1.7;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.freq-output [data-state='unlocked'] {
+  background: var(--background-warning-light);
+}
+
+.freq-output [data-state='locked'] {
+  background: var(--background-success-light);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+/* Motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .freq-tile-wrapper,
+  .freq-bar {
+    transition: none;
+  }
+}
