@@ -8,14 +8,43 @@ export type RowId = 'binary' | 'octal' | 'decimal' | 'hexadecimal' | 'custom';
 const DEFAULT_ORDER: RowId[] = ['binary', 'octal', 'decimal', 'hexadecimal', 'custom'];
 
 /**
+ * Moves `id` to index `to` within `ids`, clamping `to` to a valid index.
+ * Returns a new array; `ids` is never mutated. Pure so drag/keyboard math is
+ * unit-testable without a DOM.
+ */
+export function reorderIds<T>(ids: readonly T[], id: T, to: number): T[] {
+  const clamped = Math.max(0, Math.min(to, ids.length - 1));
+  const next = ids.filter(x => x !== id);
+  next.splice(clamped, 0, id);
+  return next;
+}
+
+/**
+ * Which slot a pointer at `y` should drop into, given each row's current
+ * vertical midpoint (top + height / 2) in on-screen order: the first row
+ * whose midpoint is below `y`, or the last row if `y` is below all of them.
+ * Reading straight from the rows' real, current bounding boxes on every move
+ * (rather than a cumulative "moved half a row" threshold) means a drag never
+ * overshoots the row the cursor is actually over.
+ */
+export function dropIndexForY(y: number, rowMidpoints: readonly number[]): number {
+  // <=, not <: a pointer sitting exactly on a row's own midpoint (the common
+  // case right after a mouse-up snaps it there, or a synthetic/test move)
+  // must land on that row, not roll over to the next one.
+  const index = rowMidpoints.findIndex(mid => y <= mid);
+  return index === -1 ? rowMidpoints.length - 1 : index;
+}
+
+/**
  * Row display order, plus drag-to-reorder and its keyboard equivalent — the
  * original widget's rows were draggable but had no keyboard path.
  *
  * Dragging uses pointer events (not HTML5 drag-and-drop, which never fires
- * from a touch tap) on each row's handle: press and move past half a row's
- * height to swap. The same handle takes Up/Down arrow keys. A ref shadows
- * the order state so both paths always read the latest order, even mid-drag
- * before React re-renders.
+ * from a touch tap) on each row's handle: every move, it re-measures the
+ * rows' bounding boxes and drops the dragged row into whichever slot the
+ * cursor is over (see `dropIndexForY`). The same handle takes Up/Down arrow
+ * keys. A ref shadows the order state so both paths always read the latest
+ * order, even mid-drag before React re-renders.
  */
 export function useRowOrder(labelOf: (id: RowId) => string) {
   const announce = useAnnounce();
@@ -23,20 +52,24 @@ export function useRowOrder(labelOf: (id: RowId) => string) {
   const orderRef = useRef(order);
   orderRef.current = order;
   const [draggingId, setDraggingId] = useState<RowId | null>(null);
-  const drag = useRef<{id: RowId; y: number; rowHeight: number} | null>(null);
+  const dragId = useRef<RowId | null>(null);
 
-  const moveRow = (id: RowId, delta: number) => {
+  const reorder = (id: RowId, to: number) => {
     const ids = orderRef.current;
     const from = ids.indexOf(id);
-    const to = from + delta;
-    if (to < 0 || to >= ids.length) {
+    const next = reorderIds(ids, id, to);
+    const landedAt = next.indexOf(id);
+    if (landedAt === from) {
       return;
     }
-    const next = ids.filter(rowId => rowId !== id);
-    next.splice(to, 0, id);
     orderRef.current = next;
     setOrder(next);
-    announce(copy.reorderAnnounce(labelOf(id), to + 1, next.length));
+    announce(copy.reorderAnnounce(labelOf(id), landedAt + 1, next.length));
+  };
+
+  const moveRow = (id: RowId, delta: number) => {
+    const from = orderRef.current.indexOf(id);
+    reorder(id, from + delta);
   };
 
   const onHandlePointerDown = (id: RowId) => (e: PointerEvent<HTMLButtonElement>) => {
@@ -44,22 +77,24 @@ export function useRowOrder(labelOf: (id: RowId) => string) {
     if (!(rowsEl instanceof HTMLElement)) {
       return;
     }
-    drag.current = {id, y: e.clientY, rowHeight: rowsEl.scrollHeight / orderRef.current.length};
+    dragId.current = id;
     setDraggingId(id);
 
     const onMove = (move: globalThis.PointerEvent) => {
-      const d = drag.current;
-      if (!d || Math.abs(move.clientY - d.y) < d.rowHeight / 2) {
+      if (!dragId.current) {
         return;
       }
-      moveRow(d.id, move.clientY > d.y ? 1 : -1);
-      d.y = move.clientY;
+      const midpoints = Array.from(rowsEl.children).map(row => {
+        const rect = row.getBoundingClientRect();
+        return rect.top + rect.height / 2;
+      });
+      reorder(dragId.current, dropIndexForY(move.clientY, midpoints));
     };
     const onUp = () => {
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
-      drag.current = null;
+      dragId.current = null;
       setDraggingId(null);
     };
     window.addEventListener('pointermove', onMove);

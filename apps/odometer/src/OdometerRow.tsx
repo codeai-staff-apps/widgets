@@ -77,7 +77,12 @@ export default function OdometerRow({
           style={{'--odo-wheel-color': color} as CSSProperties}
         >
           {reading.digits.map((digit, i) => (
-            <DigitCell key={i} current={digit.current} next={digit.next} frac={frac} />
+            <DigitCell
+              key={i}
+              current={digit.current}
+              next={digit.next}
+              frac={digit.changing ? frac : 0}
+            />
           ))}
         </div>
         <OverflowBadge visible={reading.overflow} />

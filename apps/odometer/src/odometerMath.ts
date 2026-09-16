@@ -8,6 +8,13 @@ export interface OdometerDigit {
   current: string;
   /** Digit one tick later at this position — what rolls into view as the wheel turns. */
   next: string;
+  /**
+   * True only when `current !== next` — like a real odometer, a wheel that
+   * isn't about to carry stays put. Positions where the next tick doesn't
+   * change the digit (everything except the trailing digits that carry) must
+   * render statically, never scrolling.
+   */
+  changing: boolean;
 }
 
 export interface OdometerReading {
@@ -42,7 +49,9 @@ export function readOdometer(value: number, radix: number): OdometerReading {
 
   const digits: OdometerDigit[] = [];
   for (let i = 0; i < DIGIT_COUNT; i++) {
-    digits.push({current: displayText[i], next: nextDisplayText[i]});
+    const current = displayText[i];
+    const next = nextDisplayText[i];
+    digits.push({current, next, changing: current !== next});
   }
 
   return {digits, fullText, displayText, overflow: fullText.length > DIGIT_COUNT};
