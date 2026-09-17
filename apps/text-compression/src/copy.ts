@@ -56,7 +56,6 @@ export const copy = {
     percentSmaller: (percent: number) => `${percent}% smaller`,
     percentLarger: (percent: number) => `${Math.abs(percent)}% larger`,
     percentNoChange: 'No change',
-    announceError: 'Error in dictionary. Fix the highlighted pattern to see compression stats.',
     announceSmaller: (percent: number, total: number, original: number) =>
       `Compression: ${percent}% smaller, ${total} bytes instead of ${original}.`,
     announceLarger: (percent: number, total: number, original: number) =>

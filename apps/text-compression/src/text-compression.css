@@ -146,7 +146,13 @@ body {
   width: 40px;
   height: 40px;
   margin-top: 20px;
-  border: 1px solid var(--borders-neutral-primary);
+  /*
+   * borders-neutral-primary measures ~1.5:1 against this button's white
+   * background — under the 3:1 WCAG 1.4.11 floor for a control's boundary,
+   * and this border (plus the "x" glyph) is the only thing that marks the
+   * button's edges. borders-neutral-solid measures ~19:1.
+   */
+  border: 1px solid var(--borders-neutral-solid);
   border-radius: 8px;
   background: var(--background-neutral-primary);
   color: var(--text-neutral-primary);
@@ -159,8 +165,7 @@ body {
   background: var(--background-neutral-secondary, var(--background-neutral-primary));
 }
 
-.tcRemoveButton:focus-visible,
-.tcSymbolChip:focus-visible {
+.tcRemoveButton:focus-visible {
   outline: 2px solid var(--borders-neutral-solid, currentColor);
   outline-offset: 2px;
 }
