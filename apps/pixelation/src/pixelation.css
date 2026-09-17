@@ -1,0 +1,180 @@
+.pxPage {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: grid;
+  gap: 20px;
+}
+
+.pxIntro {
+  display: grid;
+  gap: 8px;
+}
+
+.pxSection {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm, 8px);
+  background: var(--background-neutral-primary);
+}
+
+.pxLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 800px) {
+  .pxLayout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    align-items: start;
+  }
+}
+
+.pxSliderRow {
+  display: grid;
+  grid-template-columns: minmax(0, 140px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 480px) {
+  .pxSliderRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pxSampleRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.pxCanvasColumn {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.pxCanvas {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm, 8px);
+  background: var(--background-neutral-secondary, var(--background-neutral-primary));
+}
+
+.pxCanvasControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pxEncodingHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pxTextareaWrap {
+  display: grid;
+  gap: 4px;
+}
+
+.pxTextarea {
+  width: 100%;
+  min-height: 220px;
+  box-sizing: border-box;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm, 4px);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  resize: vertical;
+}
+
+.pxTextarea:focus-visible {
+  outline: 2px solid var(--border-focused-primary, #1a73e8);
+  outline-offset: 1px;
+}
+
+.pxFormatRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.pxFormatButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pxFormat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.pxFormatSwatch {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--background-neutral-primary-inverse, #111);
+  color: var(--text-neutral-primary-inverse, #fff);
+  padding: 2px 8px;
+  border-radius: var(--shape-sm, 4px);
+  letter-spacing: 1px;
+}
+
+/* Red/green/blue channel indicators: these name the literal color channels
+ * being taught, which no design token represents, so they stay local (same
+ * reasoning as ROW_COLORS in the odometer app). Chosen light enough for AA
+ * contrast against the dark swatch background, and distinguishable from each
+ * other under protanopia/deuteranopia/tritanopia. */
+.pxFormatR {
+  color: #ff8a8a;
+}
+.pxFormatG {
+  color: #63e6be;
+}
+.pxFormatB {
+  color: #74c0fc;
+}
+.pxFormatUnknown {
+  color: var(--text-neutral-secondary, #999);
+}
+
+.pxLegend {
+  display: grid;
+  gap: 4px;
+}
+
+.pxLegendByte {
+  font-family: monospace;
+  padding: 4px 8px;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm, 4px);
+  background: var(--background-neutral-primary);
+  max-width: fit-content;
+}
+
+.pxActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
