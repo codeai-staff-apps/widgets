@@ -95,7 +95,7 @@
   min-height: 220px;
   box-sizing: border-box;
   font-family: monospace;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 10px;
   border: 1px solid var(--border-neutral-secondary);
   border-radius: var(--shape-sm, 4px);
@@ -132,7 +132,7 @@
 .pxFormatSwatch {
   font-family: monospace;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 0.875rem;
   background: var(--background-neutral-primary-inverse, #111);
   color: var(--text-neutral-primary-inverse, #fff);
   padding: 2px 8px;
@@ -155,7 +155,11 @@
   color: #74c0fc;
 }
 .pxFormatUnknown {
-  color: var(--text-neutral-secondary, #999);
+  /* text-neutral-secondary is a dark gray meant for a light background — on
+   * this swatch's dark/inverse background it renders at ~1.7:1 contrast,
+   * well under WCAG AA. Use the same inverse text token as the rest of the
+   * swatch instead. */
+  color: var(--text-neutral-primary-inverse, #fff);
 }
 
 .pxLegend {

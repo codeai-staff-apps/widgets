@@ -64,9 +64,14 @@ export const copy = {
     data: 'n bits of pixel data',
     dataFormula: 'n = width × height × bits per pixel',
   },
-  canvasLabel: (width: number, height: number, bitsPerPixel: number) =>
-    `Rendered image, ${width} by ${height} pixels, ${bitsPerPixel} bits per pixel.`,
-  missingDataLabel: 'shown in pink where the raw data runs out before the image does',
+  canvasLabel: (width: number, height: number, bitsPerPixel: number, missingPixels: number) => {
+    const base = `Rendered image, ${width} by ${height} pixels, ${bitsPerPixel} bits per pixel.`;
+    if (missingPixels <= 0) {
+      return base;
+    }
+    const pixelWord = missingPixels === 1 ? 'pixel is' : 'pixels are';
+    return `${base} ${missingPixels} ${pixelWord} missing color data and shown in pink, because the raw data runs out before the image does.`;
+  },
   announce: {
     dimensions: (width: number, height: number, bitsPerPixel: number) =>
       `Image resized to ${width} by ${height} pixels, ${bitsPerPixel} bits per pixel.`,

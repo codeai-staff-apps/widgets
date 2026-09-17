@@ -123,7 +123,12 @@ export default function PixelCanvas({
         height={CANVAS_SIZE}
         className="pxCanvas"
         role="img"
-        aria-label={copy.canvasLabel(width, height, bitsPerPixel)}
+        aria-label={copy.canvasLabel(
+          width,
+          height,
+          bitsPerPixel,
+          Math.max(0, width * height - colors.length),
+        )}
       />
       <div className="pxCanvasControls">
         <Checkbox
