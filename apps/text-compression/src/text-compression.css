@@ -1,0 +1,171 @@
+/*
+ * Explicit background on `body`, not just `.tcPage`: this standalone build
+ * has no org app shell to paint one (see sibling apps' theme.css files for
+ * the same pattern), so an artifact preview's own default ground would
+ * otherwise show past the sides of the centered column below.
+ */
+body {
+  background: var(--background-neutral-primary);
+}
+
+.tcPage {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  color: var(--text-neutral-primary);
+}
+
+.tcTextPicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.tcCustomEditor {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid var(--borders-neutral-primary);
+  border-radius: 8px;
+}
+
+.tcCustomEditorActions {
+  display: flex;
+  gap: 8px;
+}
+
+.tcColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .tcColumns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tcColumn {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.tcHelp {
+  color: var(--text-neutral-secondary, var(--text-neutral-primary));
+}
+
+.tcCompressedText {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--borders-neutral-primary);
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  min-height: 3.2em;
+}
+
+.tcCompressedText mark {
+  background: var(--background-warning-light);
+  color: var(--text-neutral-primary);
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.tcStats {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.tcStatRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--borders-neutral-light, var(--borders-neutral-primary));
+}
+
+.tcStatRow dt,
+.tcStatRow dd {
+  margin: 0;
+}
+
+.tcStatPositive {
+  color: var(--text-success-primary);
+  font-weight: 600;
+}
+
+.tcStatNegative {
+  color: var(--text-error-primary);
+  font-weight: 600;
+}
+
+.tcEntryList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.tcEntryRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tcSymbolChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin-top: 20px;
+  border: 1px solid var(--borders-neutral-primary);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  background: var(--background-neutral-secondary, var(--background-neutral-primary));
+}
+
+.tcPatternField {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tcRemoveButton {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin-top: 20px;
+  /*
+   * borders-neutral-primary measures ~1.5:1 against this button's white
+   * background — under the 3:1 WCAG 1.4.11 floor for a control's boundary,
+   * and this border (plus the "x" glyph) is the only thing that marks the
+   * button's edges. borders-neutral-solid measures ~19:1.
+   */
+  border: 1px solid var(--borders-neutral-solid);
+  border-radius: 8px;
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tcRemoveButton:hover {
+  background: var(--background-neutral-secondary, var(--background-neutral-primary));
+}
+
+.tcRemoveButton:focus-visible {
+  outline: 2px solid var(--borders-neutral-solid, currentColor);
+  outline-offset: 2px;
+}

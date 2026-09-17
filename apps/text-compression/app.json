@@ -1,0 +1,6 @@
+{
+  "id": "text-compression",
+  "name": "Text Compression",
+  "description": "Find repeated patterns in a text, replace each with a short symbol, and watch the byte count show whether it actually paid off.",
+  "originalUrl": "https://github.com/code-dot-org/code-dot-org/tree/staging/dashboard/public/text-compression"
+}
