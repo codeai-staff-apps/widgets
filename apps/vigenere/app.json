@@ -1,0 +1,6 @@
+{
+  "id": "vigenere",
+  "name": "Vigenère Cipher",
+  "description": "Encrypt and decrypt a message with a repeating keyword, one letter at a time, on a Vigenère square.",
+  "originalUrl": "https://github.com/code-dot-org/code-dot-org/tree/staging/dashboard/public/vigenere"
+}
