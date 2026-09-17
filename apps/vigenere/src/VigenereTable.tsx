@@ -1,3 +1,4 @@
+import Typography from '@code-dot-org/component-library/typography';
 import {useMemo} from 'react';
 
 import type {CipherMode, CipherStep} from './cipher';
@@ -31,7 +32,14 @@ export default function VigenereTable({mode, step}: {mode: CipherMode; step: Cip
   return (
     <figure className="vigTableFigure">
       <figcaption>
-        <p className="vigTableHeading">{copy.table.heading}</p>
+        <Typography
+          semanticTag="h2"
+          visualAppearance="heading-xs"
+          className="vigTableHeading"
+          noMargin
+        >
+          {copy.table.heading}
+        </Typography>
         <p className="vigTableDescription">{copy.table.description}</p>
       </figcaption>
       <table className="vigTable" aria-hidden="true">

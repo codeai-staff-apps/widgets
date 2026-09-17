@@ -1,4 +1,5 @@
 import Typography from '@code-dot-org/component-library/typography';
+import {useEffect, useRef} from 'react';
 
 import type {CipherMode, CipherStep} from './cipher';
 import {copy} from './copy';
@@ -20,6 +21,23 @@ export default function CharacterBreakdown({
 }) {
   const visible = steps.slice(0, revealed);
 
+  // The list scrolls internally (max-height), so the current (last) entry
+  // can end up below the fold — invisible to sighted users tracking
+  // playback — once a message runs longer than the visible list. Keep it in
+  // view on every step. `smooth` doubles as the one place this component
+  // animates, so it's gated on prefers-reduced-motion like any other motion.
+  const currentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!currentRef.current) {
+      return;
+    }
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    currentRef.current.scrollIntoView({
+      block: 'nearest',
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    });
+  }, [revealed]);
+
   return (
     <div className="vigBreakdown">
       <Typography semanticTag="h2" visualAppearance="heading-xs">
@@ -34,11 +52,13 @@ export default function CharacterBreakdown({
           {visible.map((step, i) => {
             const knownChar = mode === 'encrypt' ? step.plainChar : step.cipherChar;
             const resultChar = mode === 'encrypt' ? step.cipherChar : step.plainChar;
+            const isCurrent = i === visible.length - 1;
             return (
               <div
                 key={step.index}
+                ref={isCurrent ? currentRef : undefined}
                 className="vigBreakdownItem"
-                data-current={i === visible.length - 1 || undefined}
+                data-current={isCurrent || undefined}
               >
                 <dt>{copy.breakdown.term(step.index + 1, knownChar, step.keyChar)}</dt>
                 <dd>{copy.breakdown.definition(step.shift, resultChar)}</dd>

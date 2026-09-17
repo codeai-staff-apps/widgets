@@ -12,7 +12,7 @@ import CharacterBreakdown from './CharacterBreakdown';
 import {copy} from './copy';
 import LetterTrack from './LetterTrack';
 import {sampleTexts} from './sampleTexts';
-import {useAnnounce} from './shared';
+import {useAnnounce, visuallyHidden} from './shared';
 import {SPEED_MAX, SPEED_MIN, SPEED_STEP, useCipherPlayback} from './useCipherPlayback';
 import VigenereTable from './VigenereTable';
 import './vigenere.css';
@@ -91,7 +91,22 @@ export default function App() {
           errorMessage={keyword.length === 0 ? copy.form.keywordEmptyError : undefined}
           value={rawKeyword}
           onChange={e => setRawKeyword(e.target.value)}
+          // TextField renders its label and helper/error text as siblings inside
+          // one wrapping <label>, so without this the input's accessible name
+          // becomes "Keyword Repeats for as long as the message needs." (or the
+          // error text) instead of just "Keyword" — an aria-label matching the
+          // visible label restores the plain name. The error case still gets its
+          // helper text via TextField's own aria-describedby; the non-error case
+          // has no such wiring, so a visually-hidden duplicate of the helper text
+          // below, pointed at by aria-describedby, supplies it instead.
+          aria-label={copy.form.keywordLabel}
+          aria-describedby={keyword.length > 0 ? 'vig-keyword-help' : undefined}
         />
+        {keyword.length > 0 && (
+          <span id="vig-keyword-help" style={visuallyHidden}>
+            {copy.form.keywordHelp}
+          </span>
+        )}
 
         <fieldset className="vigModeFieldset">
           <legend className="vigModeLegend">{copy.form.modeLegend}</legend>
