@@ -44,9 +44,12 @@ export const strings = {
   chartMessageSeries: 'Original message',
   standardLanguage: (name: string) => `Standard ${name}`,
 
-  slotEmptyLabel: (letter: string) => `${letter}: no guess yet`,
-  slotFilledLabel: (letter: string, guess: string) => `Guess for ${letter}: currently ${guess}`,
-  tileLabel: (letter: string) => `Letter ${letter}, unassigned`,
+  slotEmptyLabel: (letter: string, messagePercent: string) =>
+    `${letter}: appears ${messagePercent} of the time in the message. No guess yet.`,
+  slotFilledLabel: (letter: string, guess: string, messagePercent: string, guessLanguagePercent: string) =>
+    `${letter}: appears ${messagePercent} of the time in the message. Currently guessed ${guess}, which appears ${guessLanguagePercent} of the time in standard English.`,
+  tileLabel: (letter: string, languagePercent: string) =>
+    `Letter ${letter}, appears ${languagePercent} of the time in standard English. Unassigned.`,
   unassignedEmptyLabel: (position: number) => `Unassigned position ${position}, empty`,
 
   dragInstructions:

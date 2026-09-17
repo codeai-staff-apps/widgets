@@ -138,13 +138,14 @@ body {
 .freq-legend-item[data-series='language'] .freq-swatch {
   background: var(--background-brand-teal-primary);
   /* Pattern, not just hue, distinguishes the two series for anyone who can't
-   * rely on color. */
+   * rely on color. Wider than a 2px-repeat/1px-stripe so it still registers
+   * at this swatch's 10px size. */
   background-image: repeating-linear-gradient(
     45deg,
     transparent 0,
-    transparent 2px,
-    rgb(255 255 255 / 0.6) 2px,
-    rgb(255 255 255 / 0.6) 3px
+    transparent 3px,
+    rgb(255 255 255 / 0.6) 3px,
+    rgb(255 255 255 / 0.6) 6px
   );
 }
 
@@ -214,9 +215,9 @@ body {
   background-image: repeating-linear-gradient(
     45deg,
     transparent 0,
-    transparent 2px,
-    rgb(255 255 255 / 0.6) 2px,
-    rgb(255 255 255 / 0.6) 3px
+    transparent 3px,
+    rgb(255 255 255 / 0.6) 3px,
+    rgb(255 255 255 / 0.6) 6px
   );
 }
 
@@ -231,13 +232,17 @@ body {
   align-items: center;
   justify-content: center;
   padding: 4px 0;
-  font-size: 10px;
+  font-size: var(--font-size-body-xs);
   line-height: 1.3;
   white-space: nowrap;
 }
 
+/* `-secondary` (not `-primary`) is the text-safe tier of the orange ramp:
+ * `-primary` is only guaranteed to clear the 3:1 non-text minimum (right for
+ * the bar/swatch fills above), not the 4.5:1 normal-text minimum these
+ * percentages and the bold ciphertext letters below need. */
 .freq-value-cell [data-series='message'] {
-  color: var(--text-accent-orange-primary);
+  color: var(--text-accent-orange-secondary);
 }
 
 .freq-value-cell [data-series='language'] {
@@ -249,7 +254,7 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: var(--font-weight-bold);
-  color: var(--text-accent-orange-primary);
+  color: var(--text-accent-orange-secondary);
 }
 
 /* Placeholders (Maps-to and Unassigned rows). The tile that occupies one, if
@@ -310,7 +315,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 2px solid var(--border-neutral-primary);
+  /* `--border-neutral-primary`/`-secondary` (1.46:1 / 2.49:1 on this page's white
+   * background) are both under the 3:1 minimum for a control's sole visible
+   * boundary; `--neutral-gray-60` (4.54:1) is the lightest primitive on the
+   * ramp that clears it. */
+  border: 2px solid var(--neutral-gray-60);
   border-radius: var(--shape-md, 8px);
   background: var(--background-neutral-primary);
   color: var(--text-neutral-primary);
@@ -319,6 +328,15 @@ body {
 }
 
 .freq-tile:focus-visible {
+  outline: 3px solid var(--border-focused-primary);
+  outline-offset: 2px;
+}
+
+/* The `DragOverlay` copy is never itself focused (it's `aria-hidden`, and the
+ * real, focused tile is hidden below via `opacity: 0` for the drag's
+ * duration) — so it carries the same ring unconditionally, keeping a visible
+ * focus affordance on screen for keyboard users while the drag is active. */
+.freq-tile[data-drag-overlay] {
   outline: 3px solid var(--border-focused-primary);
   outline-offset: 2px;
 }

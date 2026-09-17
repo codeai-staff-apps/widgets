@@ -37,9 +37,11 @@ export default function MessagePicker({
         type="secondary"
         onClick={() => setWritingOwn(prev => !prev)}
         ariaLabel={strings.writeYourOwn}
+        aria-expanded={writingOwn}
+        aria-controls="freq-custom-message"
       />
       {writingOwn && (
-        <div className="freq-custom-message">
+        <div className="freq-custom-message" id="freq-custom-message">
           <MuiTextField
             label={strings.customMessageLabel}
             placeholder={strings.customMessagePlaceholder}

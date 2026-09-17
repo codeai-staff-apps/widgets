@@ -226,6 +226,29 @@ export default function Board({analysis}: BoardProps) {
     ? Object.keys(assignments).find(c => assignments[c] === activeLetter)
     : undefined;
 
+  /*
+   * Tab order for the tile layer: fixed alphabetical order would decouple
+   * from the tiles' visual position once the board is rearranged (sort,
+   * shift, assign), dragging the horizontally-scrolling board back and
+   * forth on every Tab press. Ordering the DOM by current visual position
+   * instead — slot row left-to-right, then bank row left-to-right — keeps
+   * consecutive tab stops visually adjacent no matter how the board has
+   * been rearranged.
+   */
+  const tileOrder = useMemo(() => {
+    const positionOf = (letter: string) => {
+      const cipherLetter = Object.keys(assignments).find(c => assignments[c] === letter);
+      return cipherLetter
+        ? {row: 0, index: columns.indexOf(cipherLetter)}
+        : {row: 1, index: bankOrder.indexOf(letter)};
+    };
+    return [...LANGUAGE.letters].sort((a, b) => {
+      const posA = positionOf(a);
+      const posB = positionOf(b);
+      return posA.row !== posB.row ? posA.row - posB.row : posA.index - posB.index;
+    });
+  }, [assignments, columns, bankOrder]);
+
   return (
     <section className="freq-board-section" aria-label={strings.boardHeading}>
       <Typography semanticTag="h2" visualAppearance="heading-sm">
@@ -248,7 +271,10 @@ export default function Board({analysis}: BoardProps) {
         onDragStart={({active}) => setActiveId(String(active.id))}
         onDragEnd={handleDragEnd}
         onDragCancel={() => setActiveId(null)}
-        accessibility={{announcements: dndAnnouncements}}
+        accessibility={{
+          announcements: dndAnnouncements,
+          screenReaderInstructions: {draggable: strings.dragInstructions},
+        }}
       >
         <div className="freq-board-scroll">
           <div className="freq-board">
@@ -282,7 +308,7 @@ export default function Board({analysis}: BoardProps) {
               const messageFreq = frequencies[cipherLetter] ?? 0;
               const languageFreq = guess ? LANGUAGE.frequency[guess] ?? 0 : 0;
               return (
-                <div className="freq-value-cell" key={cipherLetter}>
+                <div className="freq-value-cell" key={cipherLetter} aria-hidden="true">
                   <span data-series="message">{pct(messageFreq)}</span>
                   <span data-series="language">{guess ? pct(languageFreq) : '–'}</span>
                 </div>
@@ -292,19 +318,22 @@ export default function Board({analysis}: BoardProps) {
             {/* Row 3: Original — the ciphertext letters, not interactive. */}
             <div className="freq-gutter-cell">{strings.captionOriginal}</div>
             {columns.map(cipherLetter => (
-              <div className="freq-original-cell" key={cipherLetter} data-notranslate>
+              <div className="freq-original-cell" key={cipherLetter} data-notranslate aria-hidden="true">
                 {cipherLetter}
               </div>
             ))}
 
-            {/* Row 4: Maps to — one placeholder per ciphertext column. */}
+            {/* Row 4: Maps to — one placeholder per ciphertext column. Its accessible
+             * name (when empty) is the sole place a screen-reader user encounters this
+             * column's letter and message-frequency together as one unit; when filled,
+             * the tile sitting on top of it carries that same combined information. */}
             <div className="freq-gutter-cell">{strings.captionMapsTo}</div>
             {columns.map(cipherLetter => (
               <Placeholder
                 key={cipherLetter}
                 id={`slot-${cipherLetter}`}
                 empty={!assignments[cipherLetter]}
-                emptyLabel={strings.slotEmptyLabel(cipherLetter)}
+                emptyLabel={strings.slotEmptyLabel(cipherLetter, pct(frequencies[cipherLetter] ?? 0))}
               />
             ))}
 
@@ -325,7 +354,7 @@ export default function Board({analysis}: BoardProps) {
               const isAssigned = assignedLetters.has(letter);
               const languageFreq = isAssigned ? 0 : LANGUAGE.frequency[letter] ?? 0;
               return (
-                <div className="freq-value-cell" key={letter}>
+                <div className="freq-value-cell" key={letter} aria-hidden="true">
                   <span data-series="language">{isAssigned ? '–' : pct(languageFreq)}</span>
                 </div>
               );
@@ -349,16 +378,22 @@ export default function Board({analysis}: BoardProps) {
             })}
 
             {/* The tile layer: all 26 letters, always mounted, positioned by transform.
-             * Painted last so tiles draw above the placeholders they sit on. */}
+             * Painted last so tiles draw above the placeholders they sit on. Rendered in
+             * `tileOrder` (current visual position), not alphabetically, so DOM/tab order
+             * tracks the board as it's rearranged. */}
             <div className="freq-tile-layer">
-              {LANGUAGE.letters.map(letter => {
+              {tileOrder.map(letter => {
                 const cipherLetter = Object.keys(assignments).find(c => assignments[c] === letter);
                 const columnIndex = cipherLetter ? columns.indexOf(cipherLetter) : bankOrder.indexOf(letter);
                 const x = GUTTER + columnIndex * COL + TILE_PAD;
                 const y = cipherLetter ? 0 : ROW_H;
                 return (
                   <div key={letter} className="freq-tile-wrapper" style={{transform: `translate(${x}px, ${y}px)`}}>
-                    <LetterTile letter={letter} cipherLetter={cipherLetter} />
+                    <LetterTile
+                      letter={letter}
+                      cipherLetter={cipherLetter}
+                      messageFrequency={cipherLetter ? frequencies[cipherLetter] : undefined}
+                    />
                   </div>
                 );
               })}
