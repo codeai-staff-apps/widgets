@@ -1,0 +1,251 @@
+/* Standalone/preview builds render without the org app shell's chrome, so
+   the page needs its own background — the design tokens are token-driven
+   but nothing else paints `body` here. */
+body {
+  background: var(--background-neutral-primary);
+}
+
+.vigPage {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  /* Standalone/preview builds render without the org app shell's chrome, so
+     the widget needs its own background — the design tokens are token-driven
+     but nothing else paints the page here. */
+  background: var(--background-neutral-primary);
+}
+
+.vigForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.vigModeFieldset,
+.vigControlsFieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vigModeLegend {
+  padding: 0;
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-neutral-primary);
+}
+
+.vigControls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vigButtonRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.vigSpeedRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.vigSpeedRow > span {
+  font-family: var(--font-family-main);
+  font-size: 0.85rem;
+  color: var(--text-neutral-secondary);
+}
+
+.vigHelp {
+  color: var(--text-neutral-secondary);
+}
+
+/* --- Result panel: three read-outs of the same pass — keyword, the typed
+   side, and the derived side — each with the letter the current step is on
+   marked. Colors are decorative reinforcement only: the text itself (and the
+   letter-by-letter list below) carries the same information either way. */
+.vigResult {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vigTrack {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vigTrackLabel {
+  width: 110px;
+  flex-shrink: 0;
+  color: var(--text-neutral-secondary);
+}
+
+.vigTrackText {
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  word-break: break-all;
+  padding: 6px 10px;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+}
+
+.vigTrackText mark {
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.vigTrack[data-role='key'] .vigTrackText mark {
+  background: var(--background-info-light);
+  box-shadow: inset 0 -2px 0 var(--borders-info-primary);
+}
+
+.vigTrack[data-role='source'] .vigTrackText mark {
+  background: var(--background-warning-light);
+  box-shadow: inset 0 -2px 0 var(--borders-warning-primary);
+}
+
+.vigTrack[data-role='result'] .vigTrackText mark {
+  background: var(--background-success-light);
+  box-shadow: inset 0 -2px 0 var(--borders-success-primary);
+}
+
+/* --- Letter-by-letter breakdown: the one place the keyword-letter/shift/
+   result relationship is stated as text, for anyone not reading it off the
+   table or the tracks above. */
+.vigBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vigBreakdownList {
+  margin: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-sm);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.85rem;
+  color: var(--text-neutral-primary);
+  background: var(--background-neutral-primary);
+}
+
+.vigBreakdownItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 6px;
+  border-radius: var(--shape-sm);
+}
+
+.vigBreakdownItem dt,
+.vigBreakdownItem dd {
+  margin: 0;
+}
+
+.vigBreakdownItem[data-current] {
+  background: var(--background-info-extra-light);
+}
+
+/* --- The Vigenère square: a supplementary visualization, aria-hidden (see
+   VigenereTable.tsx) — every color below is purely decorative. */
+.vigTableFigure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vigTableFigure figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vigTableHeading {
+  margin: 0;
+}
+
+.vigTableDescription {
+  margin: 0;
+  color: var(--text-neutral-secondary);
+  font-size: 0.85rem;
+  max-width: 560px;
+}
+
+.vigTable {
+  display: block;
+  overflow: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.vigTable th,
+.vigTable td {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.7rem;
+  padding: 0;
+  border: 1px solid var(--border-neutral-secondary);
+}
+
+.vigTable th {
+  background: var(--background-neutral-secondary);
+  color: var(--text-neutral-primary);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.vigTable td {
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-secondary);
+}
+
+.vigTable td[data-trail] {
+  background: var(--background-neutral-tertiary);
+}
+
+.vigTable th[data-role='key'],
+.vigTable td[data-role='key'] {
+  background: var(--background-info-light);
+  color: var(--text-info-secondary);
+}
+
+.vigTable th[data-role='source'],
+.vigTable td[data-role='source'] {
+  background: var(--background-warning-light);
+  color: var(--text-warning-secondary);
+}
+
+.vigTable th[data-role='result'],
+.vigTable td[data-role='result'] {
+  background: var(--background-success-light);
+  color: var(--text-success-secondary);
+}
