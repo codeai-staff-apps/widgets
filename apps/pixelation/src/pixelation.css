@@ -1,3 +1,13 @@
+/* Standalone/preview builds render without the org app shell's chrome, so the
+   page needs its own background — the design tokens are token-driven but
+   nothing else paints `body` here. Set on `body` (same pattern as
+   binary-search-visualizer/src/page.css) so the whole visible area is one
+   consistent neutral-primary fill, not just the narrower .pxPage column —
+   painting only .pxPage left a seam against the host's own background. */
+body {
+  background: var(--background-neutral-primary);
+}
+
 .pxPage {
   max-width: 960px;
   margin: 0 auto;
