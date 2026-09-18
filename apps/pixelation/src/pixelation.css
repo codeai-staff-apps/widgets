@@ -4,6 +4,7 @@
   padding: 24px 16px 48px;
   display: grid;
   gap: 20px;
+  background: var(--background-neutral-primary);
 }
 
 .pxIntro {
