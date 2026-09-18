@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  /* Standalone/preview builds render without the org app shell's chrome, so
+     the widget needs its own background — the design tokens are token-driven
+     but nothing else paints the page here. */
+  background: var(--background-neutral-primary);
 }
 
 .vigForm {
