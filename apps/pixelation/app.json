@@ -1,0 +1,6 @@
+{
+  "id": "pixelation",
+  "name": "Pixelation",
+  "description": "How images are encoded: color depth, resolution, and why a stream of pixel values is ambiguous without a width to go with it.",
+  "originalUrl": null
+}
