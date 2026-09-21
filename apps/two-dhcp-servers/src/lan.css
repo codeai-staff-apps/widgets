@@ -1,0 +1,277 @@
+/* The LAN diagram is the one bespoke visual this widget needs: two routers and
+ * two devices all wired to a single bus, so the learner can see they share one
+ * broadcast domain yet land on different subnets. Everything is token-driven;
+ * no hardcoded colors or fonts. */
+
+.lan {
+  display: grid;
+  gap: var(--spacing-p-s);
+  padding: var(--spacing-p-m);
+  border: 1px solid var(--border-neutral-secondary);
+  border-radius: var(--shape-lg);
+  background: var(--background-neutral-lab);
+}
+
+.lan__tier {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-s);
+}
+
+.lan__tier > * {
+  flex: 1 1 220px;
+}
+
+/* The shared bus line: a horizontal rule with a centered label so it reads as
+ * one physical wire everything hangs off. */
+.lan__bus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2px;
+  background: var(--border-neutral-solid);
+  margin: var(--spacing-p-xs) 0;
+}
+
+.lan__busLabel {
+  transform: translateY(-1px);
+  padding: 2px var(--spacing-p-s);
+  background: var(--background-neutral-lab);
+  color: var(--text-neutral-primary);
+  font-family: var(--font-family-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---- routers ---- */
+.router {
+  border: 1px solid var(--border-neutral-primary);
+  border-top: 4px solid var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+  background: var(--background-neutral-primary);
+  padding: var(--spacing-p-s);
+}
+
+.router--a {
+  border-top-color: var(--border-brand-primary);
+}
+
+.router--b {
+  border-top-color: var(--border-info-primary);
+}
+
+.router--off {
+  opacity: 0.6;
+}
+
+.router__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-p-xs);
+  margin-bottom: var(--spacing-p-xs);
+}
+
+.router__name {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  color: var(--text-neutral-primary);
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: var(--shape-round);
+}
+
+.badge--on {
+  background: var(--background-success-light);
+  color: var(--text-success-primary);
+  border: 1px solid var(--border-success-primary);
+}
+
+.badge--off {
+  background: var(--background-neutral-disabled);
+  color: var(--text-neutral-primary);
+  border: 1px solid var(--border-neutral-primary);
+}
+
+.router__facts {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.router__facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-p-s);
+  font-size: 0.85rem;
+}
+
+.router__facts dt {
+  color: var(--text-neutral-primary);
+  opacity: 0.7;
+}
+
+.router__facts dd {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  color: var(--text-neutral-primary);
+  text-align: right;
+}
+
+.router__facts .is-muted dd {
+  opacity: 0.65;
+  font-style: italic;
+}
+
+/* ---- devices ---- */
+.device {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--spacing-p-s);
+  border: 1px dashed var(--border-neutral-primary);
+  border-radius: var(--shape-md);
+  background: var(--background-neutral-primary);
+  text-align: center;
+}
+
+.device__icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.device__name {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  color: var(--text-neutral-primary);
+}
+
+.chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 10px;
+  border-radius: var(--shape-sm);
+  border: 1px solid var(--border-neutral-primary);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .chip--a,
+  .chip--b {
+    animation: chip-in 0.22s ease;
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.chip__ip {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.chip__meta {
+  font-size: 0.7rem;
+}
+
+/* The paler "extra-light" purple (vs the stock "-light") is where the DS purple
+ * ink already clears AA — 5.5:1 — so the laptop chip needs no ink override. */
+.chip--a {
+  background: var(--background-brand-purple-extra-light);
+  border-color: var(--border-brand-primary);
+  color: var(--text-brand-purple-primary);
+}
+
+.chip--b {
+  background: var(--background-info-light);
+  border-color: var(--border-info-primary);
+  color: var(--text-info-primary);
+}
+
+.chip--empty {
+  color: var(--text-neutral-primary);
+  opacity: 0.6;
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+/* ---- in-card action buttons ---- */
+/* The pulsing ring lives on a wrapper span, never on the DS button itself, so
+ * it can't collide with the button's own box-shadow or its focus-visible
+ * outline. Motion is opt-in; reduced-motion users get a steady ring instead. */
+.cardBtnWrap {
+  display: inline-flex;
+  margin-top: 4px;
+  border-radius: var(--shape-round);
+}
+
+.cardBtnWrap--flash {
+  border-radius: var(--shape-round);
+  box-shadow: 0 0 0 3px var(--cta-ring);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cardBtnWrap--flash {
+    box-shadow: 0 0 0 0 var(--cta-ring);
+    animation: cta-pulse 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes cta-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--cta-ring);
+  }
+  70% {
+    box-shadow: 0 0 0 9px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* ---- reachability verdict ---- */
+.reach {
+  margin: 0;
+  padding: var(--spacing-p-s) var(--spacing-p-m);
+  border-radius: var(--shape-md);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.reach--split {
+  background: var(--background-error-light);
+  color: var(--text-error-primary);
+  border: 1px solid var(--border-error-primary);
+}
+
+.reach--ok {
+  background: var(--background-success-light);
+  color: var(--text-success-primary);
+  border: 1px solid var(--border-success-primary);
+}
+
+/* Reveal-answer callout on the closing "gotcha" question. */
+.callout {
+  padding: var(--spacing-p-xs) var(--spacing-p-m);
+  border-radius: var(--shape-md);
+  border: 1px solid var(--border-info-primary);
+  border-left-width: 4px;
+  background: var(--background-info-light);
+}
+
+.callout p {
+  color: var(--text-info-primary);
+}

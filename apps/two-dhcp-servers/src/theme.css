@@ -1,0 +1,31 @@
+/* Layer 1 — correct design-system tokens that ship below WCAG AA for this
+ * app's usage, and define the one app-specific token the diagram needs.
+ *
+ * Must use :root[data-brand] (specificity 0,2,0) so these beat the DS's own
+ * [data-brand='codeai-next'] block (0,1,0) regardless of source order.
+ *
+ * The sentiment "primary" inks fail AA on their matching "-light" fills — the
+ * same defect array-state-visualizer documents. Measured against the stock
+ * backgrounds (success #d8ffdc, info #d5efff, error #ffdada), the defaults land
+ * at 4.15 / 4.13 / 3.51:1; the darker inks below clear 4.5:1 (6.12 / 5.44 /
+ * 5.59). The laptop chip is handled in lan.css instead, by switching to the
+ * paler brand-purple "extra-light" fill where the stock purple ink already
+ * passes — no brand-token override needed. */
+:root[data-brand] {
+  /* Split-network verdict + "no address" errors. Was #eb1414 (3.51:1). */
+  --text-error-primary: #b30000;
+  --text-error-primary-fixed: #b30000;
+
+  /* "DHCP ON" badge + the resolved verdict. Was #258830 (4.15:1). */
+  --text-success-primary: #136b1d;
+  --text-success-primary-fixed: #136b1d;
+
+  /* Phone (Router B) lease chip + the closing gotcha callout. Was #1570d1 (4.13:1). */
+  --text-info-primary: #0b5cb8;
+  --text-info-primary-fixed: #0b5cb8;
+
+  /* Attention ring on the one card button the current step expects. No DS
+   * token is both amber and >=3:1 on white (warning-strong is 2.79:1), so the
+   * cue gets its own token here. 4.24:1 on white. */
+  --cta-ring: #b26a00;
+}

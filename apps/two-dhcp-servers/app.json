@@ -1,0 +1,6 @@
+{
+  "id": "two-dhcp-servers",
+  "name": "Two DHCP Servers, One LAN",
+  "description": "Plug a second router into one network and watch devices split onto two subnets that can't reach each other — then turn off its DHCP to fix it.",
+  "originalUrl": null
+}
