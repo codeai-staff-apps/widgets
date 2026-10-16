@@ -8,12 +8,11 @@ import {useState} from 'react';
 import {
   DESTINATIONS,
   SLOTS,
-  SLOT_BLANK,
   SLOT_LABEL,
   SLOT_LAYER,
-  SLOT_LETTER,
   describePage,
   getDestination,
+  promptClauses,
   promptText,
   type Choice,
   type DestinationId,
@@ -32,15 +31,6 @@ const VERSIONS: readonly {name: string; selection: Selection}[] = [
   {name: 'Version C', selection: {audience: 0, feel: 1, parts: 0, content: 1}},
 ];
 
-/** The letter badge that ties a switch, its prompt line and its page layer together. */
-function Badge({slot}: {slot: Slot}) {
-  return (
-    <b className="badge" aria-hidden="true">
-      {SLOT_LETTER[slot]}
-    </b>
-  );
-}
-
 export default function App() {
   const [destinationId, setDestinationId] = useState<DestinationId>('wheel');
   // A switch being off is separate from which option it holds, so turning a
@@ -54,6 +44,9 @@ export default function App() {
 
   const destination = getDestination(destinationId);
   const selection = Object.fromEntries(SLOTS.map(slot => [slot, on[slot] ? choice[slot] : null])) as Selection;
+  const clauses = promptClauses(destination, selection);
+  const filled = SLOTS.filter(slot => on[slot]).map(slot => SLOT_LAYER[slot].toLowerCase());
+  const gray = SLOTS.filter(slot => !on[slot]).map(slot => SLOT_LAYER[slot].toLowerCase());
   const explored = tried.size === SLOTS.length;
   const picked = pickedVersion === null ? null : VERSIONS[pickedVersion];
 
@@ -73,8 +66,8 @@ export default function App() {
     sendSpark();
   };
 
-  const swapOption = (slot: Slot) => {
-    setChoice(current => ({...current, [slot]: current[slot] === 0 ? 1 : 0}));
+  const swapOption = (slot: Slot, value: string) => {
+    setChoice(current => ({...current, [slot]: Number(value) as Choice}));
     sendSpark();
   };
 
@@ -96,9 +89,6 @@ export default function App() {
             <li>Watch your prompt grow.</li>
             <li>See the page change.</li>
           </ol>
-          <Typography semanticTag="p" visualAppearance="body-one" noMargin>
-            Then tap the page you would want.
-          </Typography>
         </div>
         <Toggle
           name="sound"
@@ -119,61 +109,59 @@ export default function App() {
         />
       </div>
 
-      <section className="promptCard" aria-label="Switches and prompt">
-        <div role="group" aria-label="Switches" className="chipRow">
-          {SLOTS.map(slot => {
-            const other = destination[slot][on[slot] ? (choice[slot] === 0 ? 1 : 0) : 0];
-            return (
-              <div key={slot} role="group" aria-label={SLOT_LABEL[slot]} className="chipCell" data-slot={slot} data-on={on[slot]}>
-                <Badge slot={slot} />
-                <Button
-                  className="chip"
-                  size="l"
-                  type={on[slot] ? 'primary' : 'secondary'}
-                  color={on[slot] ? 'purple' : 'black'}
-                  text={SLOT_LABEL[slot]}
-                  iconLeft={{iconName: on[slot] ? 'check' : 'plus', iconStyle: 'solid'}}
-                  aria-pressed={on[slot]}
-                  onClick={() => toggleSlot(slot)}
-                />
-                <div className="swap">
-                  {on[slot] && (
-                    <Button
-                      type="tertiary"
-                      color="black"
-                      size="s"
-                      text={`Try: ${other.label}`}
-                      onClick={() => swapOption(slot)}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
+      <section className="promptCard" aria-labelledby="prompt-heading">
+        <Typography semanticTag="h2" visualAppearance="heading-xs" id="prompt-heading" noMargin>
+          Your prompt
+        </Typography>
+        <p className="promptText">
+          {destination.base}
+          {clauses.map(clause => (
+            // Re-keyed on the option so a newly added or swapped clause flashes.
+            <span key={`${clause.slot}-${clause.choice}`} className="clause" data-slot={clause.slot}>
+              {' '}
+              {clause.text}
+            </span>
+          ))}
+        </p>
+
+        <div role="group" aria-label="Details to add to the prompt" className="chipRow">
+          {SLOTS.map(slot => (
+            <div key={slot} className="chipCell" data-slot={slot} data-on={on[slot]}>
+              <Button
+                className="chip"
+                size="l"
+                type={on[slot] ? 'primary' : 'secondary'}
+                color={on[slot] ? 'purple' : 'black'}
+                text={SLOT_LABEL[slot]}
+                iconLeft={{iconName: on[slot] ? 'check' : 'plus', iconStyle: 'solid'}}
+                aria-pressed={on[slot]}
+                onClick={() => toggleSlot(slot)}
+              />
+            </div>
+          ))}
         </div>
 
-        <div className="promptBox">
-          <Typography semanticTag="h2" visualAppearance="heading-xs" noMargin>
-            Your prompt
-          </Typography>
-          <p className="promptBase">{destination.base}</p>
-          {SLOTS.map(slot => {
-            const value = selection[slot];
-            return value === null ? (
-              // Faded blank: this is where the switch's sentence will land.
-              <p key={`${slot}-blank`} className="slotLine slotBlank" data-slot={slot} aria-hidden="true">
-                <Badge slot={slot} />
-                {SLOT_BLANK[slot]}
-              </p>
-            ) : (
-              // Re-keyed on the option so a newly filled or swapped line flashes.
-              <p key={`${slot}-${value}`} className="slotLine slotFilled" data-slot={slot}>
-                <Badge slot={slot} />
-                {destination[slot][value].clause}
-              </p>
-            );
-          })}
-        </div>
+        {filled.length > 0 && (
+          <div className="swapGrid">
+            {SLOTS.filter(slot => on[slot]).map(slot => (
+              <div
+                key={slot}
+                role="group"
+                aria-label={`${SLOT_LABEL[slot]}: pick an option`}
+                className="swapRow"
+                data-slot={slot}
+              >
+                <span className="swapLabel">{SLOT_LABEL[slot]}</span>
+                <SegmentedButtons
+                  size="s"
+                  selectedButtonValue={String(choice[slot])}
+                  onChange={value => swapOption(slot, value)}
+                  buttons={destination[slot].map((option, index) => ({value: String(index), label: option.label}))}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <div className="spark">
@@ -187,14 +175,9 @@ export default function App() {
         <div role="img" aria-label={describePage(destination, selection)}>
           <SamplePage destinationId={destinationId} selection={selection} />
         </div>
-        <ul className="layers" role="status" aria-atomic="true">
-          {SLOTS.map(slot => (
-            <li key={slot} data-slot={slot} data-on={on[slot]}>
-              <Badge slot={slot} />
-              {SLOT_LAYER[slot]}: {on[slot] ? 'filled in' : 'still gray'}
-            </li>
-          ))}
-        </ul>
+        <p className="caption" role="status">
+          Filled in: {filled.join(', ') || 'nothing yet'}. Still gray: {gray.join(', ') || 'nothing'}.
+        </p>
       </section>
 
       <section className="finale" aria-labelledby="finale-heading">
