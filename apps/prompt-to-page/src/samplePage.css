@@ -1,0 +1,408 @@
+/*
+ * The sample page is illustrative content, not app chrome. It starts as a gray
+ * wireframe built from design-system neutral tokens; each "feel" swaps in one of
+ * the palettes below, which are also design-system tokens. All of the sample
+ * page's colors live in this file, as --sp-* variables.
+ */
+.sp {
+  --sp-bg: var(--background-neutral-secondary);
+  --sp-soft: var(--background-neutral-primary);
+  --sp-accent: var(--background-neutral-quaternary);
+  --sp-accent-2: var(--background-neutral-tertiary);
+  --sp-on-accent: var(--text-neutral-quaternary);
+  --sp-ink: var(--text-neutral-quaternary);
+  --sp-line: var(--border-neutral-primary);
+  --sp-radius: 6px;
+  --sp-scale: 1;
+
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+  padding-bottom: 1.25em;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--sp-bg);
+  color: var(--sp-ink);
+  border: 2px solid var(--sp-line);
+  border-radius: calc(var(--sp-radius) + 4px);
+  font-size: calc(14px * var(--sp-scale));
+  line-height: 1.3;
+}
+
+.sp,
+.sp * {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    border-radius 0.4s ease;
+}
+
+.sp[data-palette='playful'] {
+  --sp-bg: var(--brand-purple-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--brand-orange-40);
+  --sp-accent-2: var(--brand-pink-10);
+  --sp-on-accent: var(--neutral-base-black);
+  --sp-ink: var(--neutral-base-black);
+  --sp-line: var(--brand-purple-10);
+  --sp-radius: 22px;
+}
+.sp[data-palette='calm'] {
+  --sp-bg: var(--sentiment-information-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--sentiment-information-80);
+  --sp-accent-2: var(--sentiment-information-10);
+  --sp-on-accent: var(--neutral-base-white);
+  --sp-ink: var(--neutral-gray-95);
+  --sp-line: var(--sentiment-information-10);
+  --sp-radius: 8px;
+}
+.sp[data-palette='warm'] {
+  --sp-bg: var(--sentiment-warning-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--brand-orange-70);
+  --sp-accent-2: var(--brand-orange-10);
+  --sp-on-accent: var(--neutral-base-white);
+  --sp-ink: var(--brand-orange-95);
+  --sp-line: var(--brand-orange-10);
+  --sp-radius: 14px;
+}
+.sp[data-palette='bold'] {
+  --sp-bg: var(--brand-pink-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--brand-pink-70);
+  --sp-accent-2: var(--brand-purple-10);
+  --sp-on-accent: var(--neutral-base-white);
+  --sp-ink: var(--brand-purple-95);
+  --sp-line: var(--brand-pink-10);
+  --sp-radius: 3px;
+}
+.sp[data-palette='green'] {
+  --sp-bg: var(--sentiment-success-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--sentiment-success-70);
+  --sp-accent-2: var(--sentiment-success-10);
+  --sp-on-accent: var(--neutral-base-white);
+  --sp-ink: var(--sentiment-success-95);
+  --sp-line: var(--sentiment-success-10);
+  --sp-radius: 16px;
+}
+.sp[data-palette='serious'] {
+  --sp-bg: var(--neutral-gray-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--neutral-gray-90);
+  --sp-accent-2: var(--sentiment-information-10);
+  --sp-on-accent: var(--neutral-base-white);
+  --sp-ink: var(--neutral-base-black);
+  --sp-line: var(--neutral-gray-20);
+  --sp-radius: 3px;
+}
+.sp[data-palette='sunny'] {
+  --sp-bg: var(--sentiment-information-5);
+  --sp-soft: var(--neutral-base-white);
+  --sp-accent: var(--sentiment-warning-40);
+  --sp-accent-2: var(--sentiment-warning-10);
+  --sp-on-accent: var(--neutral-base-black);
+  --sp-ink: var(--neutral-base-black);
+  --sp-line: var(--sentiment-information-10);
+  --sp-radius: 18px;
+}
+.sp[data-palette='cool'] {
+  --sp-bg: var(--neutral-gray-95);
+  --sp-soft: var(--neutral-gray-90);
+  --sp-accent: var(--sentiment-information-40);
+  --sp-accent-2: var(--neutral-gray-70);
+  --sp-on-accent: var(--neutral-base-black);
+  --sp-ink: var(--neutral-base-white);
+  --sp-line: var(--neutral-gray-80);
+  --sp-radius: 10px;
+}
+
+/* Who it's for: friendly pages are roomy and large, quick pages are compact. */
+.sp[data-voice='friendly'] {
+  --sp-scale: 1.1;
+}
+.sp[data-voice='quick'] {
+  --sp-scale: 0.94;
+}
+
+/* Gray bars stand in for words that have not been written yet. */
+.sp-bar {
+  display: inline-block;
+  max-width: 100%;
+  height: 0.7em;
+  border-radius: 999px;
+  background: currentcolor;
+  opacity: 0.22;
+  vertical-align: middle;
+}
+
+/* Header */
+.sp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75em;
+  padding: 0.8em 1em;
+  background: var(--sp-accent);
+  color: var(--sp-on-accent);
+}
+.sp-brand {
+  font-weight: 800;
+  font-size: 1.05em;
+}
+.sp-badge {
+  padding: 0.25em 0.8em;
+  border-radius: 999px;
+  background: var(--sp-soft);
+  color: var(--sp-ink);
+  font-size: 0.85em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Hero */
+.sp-hero {
+  display: grid;
+  gap: 0.45em;
+  padding: 0 1em;
+}
+.sp-title {
+  font-size: 2em;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--sp-ink);
+}
+.sp-tagline {
+  font-size: 1.05em;
+}
+
+/* Stage and parts */
+.sp-stage {
+  margin: 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.sp-stage--wheel {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1em;
+  align-items: center;
+}
+.sp-stack {
+  display: grid;
+  gap: 0.75em;
+}
+.sp-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75em;
+}
+.sp-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+}
+.sp-strip .sp-tile {
+  flex-direction: row;
+  gap: 0.6em;
+  padding: 0.4em 0.9em;
+  border-radius: 999px;
+}
+
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: 0.9em 1em;
+  margin: 0;
+  background: var(--sp-soft);
+  color: var(--sp-ink);
+  border: 2px solid var(--sp-line);
+  border-radius: var(--sp-radius);
+  list-style: none;
+  box-sizing: border-box;
+}
+.sp-small {
+  font-size: 0.85em;
+  opacity: 0.85;
+}
+.sp-big {
+  font-size: 1.9em;
+  line-height: 1.1;
+}
+.sp-huge {
+  font-size: 2.6em;
+  line-height: 1;
+}
+.sp-price {
+  align-self: flex-start;
+  padding: 0.1em 0.6em;
+  border-radius: 999px;
+  background: var(--sp-accent);
+  color: var(--sp-on-accent);
+  font-weight: 800;
+}
+
+.sp-list li,
+.sp-facts li {
+  padding: 0.3em 0;
+}
+.sp-list li + li {
+  border-top: 2px dotted var(--sp-line);
+}
+.sp-menu li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+}
+.sp-facts {
+  display: grid;
+  gap: 0.2em;
+  margin: 0;
+  padding: 0.9em 1em;
+  list-style: none;
+}
+.sp-facts li {
+  padding-left: 0.8em;
+  border-left: 0.3em solid var(--sp-accent);
+}
+.sp-card.sp-facts {
+  display: grid;
+}
+.sp-treat .sp-photo {
+  aspect-ratio: 4 / 3;
+  border-radius: calc(var(--sp-radius) / 2);
+  background: var(--sp-accent-2);
+  position: relative;
+}
+.sp-treat .sp-photo::after {
+  content: '';
+  position: absolute;
+  inset: 22% 30%;
+  border-radius: 50%;
+  background: var(--sp-accent);
+}
+.sp-track {
+  height: 1.1em;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--sp-accent-2);
+}
+.sp-fill {
+  height: 100%;
+  background: var(--sp-accent);
+}
+.sp-search {
+  padding: 0.7em 1em;
+  font-weight: 700;
+}
+.sp-now {
+  align-items: flex-start;
+}
+.sp-tile {
+  align-items: center;
+  text-align: center;
+}
+
+/* Wheel */
+.sp-wheel {
+  width: 100%;
+  max-width: 15em;
+  justify-self: center;
+}
+.sp-wedge path {
+  stroke: var(--sp-bg);
+  stroke-width: 2;
+}
+.sp-wedge--a path {
+  fill: var(--sp-accent);
+}
+.sp-wedge--b path {
+  fill: var(--sp-accent-2);
+}
+.sp-wedge text {
+  font-size: 11px;
+  font-weight: 800;
+}
+.sp-wedge--a text {
+  fill: var(--sp-on-accent);
+}
+.sp-wedge--b text {
+  fill: var(--sp-ink);
+}
+.sp-pointer {
+  fill: var(--sp-ink);
+}
+.sp-hub {
+  fill: var(--sp-soft);
+  stroke: var(--sp-ink);
+  stroke-width: 3;
+}
+.sp-result {
+  align-items: flex-start;
+}
+
+/* Dashed gray placeholders for parts that are not chosen yet. */
+.sp-ph {
+  background: var(--background-neutral-tertiary);
+  border: 2px dashed var(--border-neutral-secondary);
+  border-radius: var(--sp-radius);
+  box-sizing: border-box;
+}
+.sp-ph--circle {
+  width: 100%;
+  max-width: 14em;
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 50%;
+}
+.sp-ph--card {
+  min-height: 6em;
+}
+.sp-ph--tile {
+  min-height: 4em;
+}
+.sp-ph--bar {
+  height: 2.6em;
+}
+.sp-ph--button {
+  width: 8em;
+  height: 2.6em;
+}
+
+/* Footer */
+.sp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9em;
+  padding: 0 1em;
+}
+.sp-button {
+  padding: 0.7em 1.8em;
+  border-radius: var(--sp-radius);
+  background: var(--sp-accent);
+  color: var(--sp-on-accent);
+  font-weight: 800;
+  font-size: 1.05em;
+}
+.sp-note {
+  font-size: 0.9em;
+}
+
+/* Narrow pages (a phone) stack the wheel and its side card. */
+@container (max-width: 480px) {
+  .sp-stage--wheel {
+    grid-template-columns: 1fr;
+  }
+  .sp-title {
+    font-size: 1.7em;
+  }
+  .sp-badge {
+    white-space: normal;
+  }
+}
