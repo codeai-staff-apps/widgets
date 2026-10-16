@@ -22,7 +22,7 @@ body {
 }
 
 .pageHeader > div {
-  flex: 1 1 22rem;
+  flex: 1 1 16rem;
 }
 
 /* Destination chooser: let the segments wrap instead of overflowing on a phone. */
@@ -40,34 +40,38 @@ body {
   background: var(--background-brand-light);
 }
 
-.promptCard h2 {
-  margin: 0;
+/* Each switch has a letter and an accent color. The same letter and color mark
+   its prompt line and the page layer it fills in. */
+[data-slot='audience'] {
+  --slot: var(--brand-purple-70);
+  --slot-light: var(--brand-purple-5);
+}
+[data-slot='feel'] {
+  --slot: var(--brand-orange-70);
+  --slot-light: var(--brand-orange-5);
+}
+[data-slot='parts'] {
+  --slot: var(--brand-pink-70);
+  --slot-light: var(--brand-pink-5);
+}
+[data-slot='content'] {
+  --slot: var(--sentiment-success-70);
+  --slot-light: var(--sentiment-success-5);
 }
 
-.promptText {
-  margin: 0;
-  padding: var(--spacing-p-xs, 1rem);
-  border-radius: var(--shape-md, 0.5rem);
-  background: var(--background-neutral-primary);
-  border: 1px solid var(--border-neutral-primary);
-  color: var(--text-neutral-primary);
-  font-family: var(--font-family-main);
-  font-size: 1.125rem;
-  line-height: 1.5;
-}
-
-.clause {
-  border-radius: var(--shape-sm, 0.375rem);
-  background: var(--background-brand-light);
-  box-shadow: 0 0 0 2px var(--background-brand-light);
-  animation: clauseFlash 1.2s ease-out;
-}
-
-@keyframes clauseFlash {
-  from {
-    background: var(--background-brand-mid);
-    box-shadow: 0 0 0 2px var(--background-brand-mid);
-  }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--slot);
+  color: var(--neutral-base-white);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-black, 800);
+  line-height: 1;
 }
 
 /* The four chunky toggle chips. */
@@ -77,33 +81,102 @@ body {
   gap: var(--spacing-p-xxs, 0.5rem);
 }
 
+.chipCell {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  align-content: start;
+  padding: 0.75rem 0.5rem 0.25rem;
+  border: 2px dashed var(--border-neutral-secondary);
+  border-radius: var(--shape-md, 0.5rem);
+  background: var(--background-neutral-primary);
+}
+
+.chipCell[data-on='true'] {
+  border: 2px solid var(--slot);
+  background: var(--slot-light);
+}
+
+.chipCell > .badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 0.5rem;
+}
+
 .chip {
   width: 100%;
   min-height: 3.25rem;
   justify-content: center;
 }
 
-.swapGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-p-xxs, 0.5rem) var(--spacing-p-xs, 1rem);
+/* One small control per switch, to try the other option. Space is reserved so nothing jumps. */
+.swap {
+  display: flex;
+  justify-content: center;
+  min-height: 2.25rem;
+  text-align: center;
 }
 
-.swapRow {
-  display: grid;
-  gap: 0.25rem;
-  min-width: 0;
-}
-
-.swapLabel {
-  color: var(--text-neutral-secondary);
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-semi-bold, 600);
-}
-
-.swapRow > div {
-  flex-wrap: wrap;
+.swap button {
   height: auto;
+  white-space: normal;
+}
+
+.promptBox {
+  display: grid;
+  gap: 0.5rem;
+  padding: var(--spacing-p-xs, 1rem);
+  border-radius: var(--shape-md, 0.5rem);
+  background: var(--background-neutral-primary);
+  border: 1px solid var(--border-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-family: var(--font-family-main);
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
+.promptBase,
+.slotLine {
+  margin: 0;
+}
+
+.slotLine {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--shape-sm, 0.375rem);
+}
+
+.slotLine .badge {
+  margin-top: 0.1rem;
+}
+
+.slotFilled {
+  border-left: 4px solid var(--slot);
+  background: var(--slot-light);
+  animation: lineFlash 1s ease-out;
+}
+
+.slotBlank {
+  border: 2px dashed var(--border-neutral-primary);
+  color: var(--text-neutral-tertiary);
+}
+
+@keyframes lineFlash {
+  from {
+    box-shadow: 0 0 0 5px var(--slot);
+  }
+  to {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.steps {
+  margin: 0 0 var(--spacing-p-xxs, 0.5rem);
+  padding-left: 1.5rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
 /* The spark between the prompt and the page. */
@@ -163,15 +236,40 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .sparkDotPulse,
-  .clause {
+  .slotFilled {
     animation: none;
   }
 }
 
-.caption {
+/* What each switch fills in on the page, in the same letters and colors. */
+.layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin: var(--spacing-p-xxs, 0.5rem) 0 0;
-  color: var(--text-neutral-secondary);
-  font-size: 0.9375rem;
+  padding: 0;
+  list-style: none;
+}
+
+.layers li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.7rem 0.2rem 0.3rem;
+  border: 2px dashed var(--border-neutral-primary);
+  border-radius: 999px;
+  color: var(--text-neutral-tertiary);
+  font-size: 0.875rem;
+}
+
+.layers li[data-on='true'] {
+  border: 2px solid var(--slot);
+  background: var(--slot-light);
+  color: var(--text-neutral-primary);
+}
+
+.layers li[data-on='false'] .badge {
+  opacity: 0.55;
 }
 
 /* The finale. */
@@ -244,11 +342,6 @@ body {
   font-weight: var(--font-weight-semi-bold, 600);
 }
 
-.versionSummary {
-  color: var(--text-neutral-secondary);
-  font-size: 0.8125rem;
-}
-
 .reflection {
   display: grid;
   gap: var(--spacing-p-xxs, 0.5rem);
@@ -259,7 +352,4 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .swapGrid {
-    grid-template-columns: 1fr;
-  }
 }

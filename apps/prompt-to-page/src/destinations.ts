@@ -18,6 +18,25 @@ export const SLOT_LABEL: Record<Slot, string> = {
   content: 'The content',
 };
 
+/** The letter that ties a switch to its prompt line and its page layer. */
+export const SLOT_LETTER: Record<Slot, string> = {audience: 'A', feel: 'B', parts: 'C', content: 'D'};
+
+/** The faded blank a prompt line shows until its switch is on. */
+export const SLOT_BLANK: Record<Slot, string> = {
+  audience: "It's for ___.",
+  feel: 'It should feel ___.',
+  parts: 'Include ___.',
+  content: 'Use details like ___.',
+};
+
+/** What each switch fills in on the sample page. */
+export const SLOT_LAYER: Record<Slot, string> = {
+  audience: 'Audience',
+  feel: 'Colors',
+  parts: 'Parts',
+  content: 'Words',
+};
+
 /** What stays gray on the page while a switch is off (used in the page description). */
 export const SLOT_GRAY: Record<Slot, string> = {
   audience: 'the audience details',
