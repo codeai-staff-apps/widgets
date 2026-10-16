@@ -1,0 +1,300 @@
+/* Standalone/preview builds render without the org app shell's chrome, so the
+   page needs its own background. */
+body {
+  background: var(--background-neutral-primary);
+}
+
+.page {
+  display: grid;
+  gap: var(--spacing-p-xs, 1rem);
+  max-width: 820px;
+  margin: 0 auto;
+  padding: var(--spacing-p-xs, 1rem) var(--spacing-p-xs, 1rem) var(--spacing-p-l, 2.5rem);
+  box-sizing: border-box;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-p-xxs, 0.5rem) var(--spacing-p-xs, 1rem);
+}
+
+.pageHeader > div {
+  flex: 1 1 16rem;
+}
+
+/* Destination chooser: let the segments wrap instead of overflowing on a phone. */
+.destinationButtons {
+  flex-wrap: wrap;
+  height: auto;
+}
+
+.promptCard {
+  display: grid;
+  gap: var(--spacing-p-xs, 1rem);
+  padding: var(--spacing-p-xs, 1rem);
+  border: 3px solid var(--border-brand-primary);
+  border-radius: var(--shape-lg, 0.625rem);
+  background: var(--background-brand-light);
+}
+
+/* Each switch has an accent color (design-system tokens). Its highlighted text
+   in the prompt, its chip outline and its option row all share it. */
+[data-slot='audience'] {
+  --slot: var(--brand-purple-70);
+  --slot-light: var(--brand-purple-10);
+}
+[data-slot='feel'] {
+  --slot: var(--brand-orange-70);
+  --slot-light: var(--brand-orange-10);
+}
+[data-slot='parts'] {
+  --slot: var(--brand-pink-70);
+  --slot-light: var(--brand-pink-10);
+}
+[data-slot='content'] {
+  --slot: var(--sentiment-success-70);
+  --slot-light: var(--sentiment-success-10);
+}
+
+.promptText {
+  margin: 0;
+  padding: var(--spacing-p-xs, 1rem);
+  border-radius: var(--shape-md, 0.5rem);
+  background: var(--background-neutral-primary);
+  border: 1px solid var(--border-neutral-primary);
+  color: var(--text-neutral-primary);
+  font-family: var(--font-family-main);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.clause {
+  padding: 0.1em 0.35em;
+  border-radius: var(--shape-sm, 0.375rem);
+  background: var(--slot-light);
+  box-shadow: inset 0 -3px 0 var(--slot);
+  animation: clauseFlash 1.2s ease-out;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@keyframes clauseFlash {
+  from {
+    box-shadow:
+      0 0 0 4px var(--slot),
+      inset 0 -3px 0 var(--slot);
+  }
+}
+
+/* The four chunky toggle chips, outlined in their accent color while on. */
+.chipRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-p-xxs, 0.5rem);
+}
+
+.chipCell {
+  padding: 4px;
+  border: 3px solid transparent;
+  border-radius: var(--shape-lg, 0.625rem);
+}
+
+.chipCell[data-on='true'] {
+  border-color: var(--slot);
+}
+
+.chip {
+  width: 100%;
+  min-height: 3.25rem;
+  justify-content: center;
+}
+
+/* For each switch that is on, both options at once so students see every choice. */
+.swapGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-p-xxs, 0.5rem) var(--spacing-p-xs, 1rem);
+}
+
+.swapRow {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding-left: 0.5rem;
+  border-left: 4px solid var(--slot);
+}
+
+.swapLabel {
+  color: var(--text-neutral-secondary);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-semi-bold, 600);
+}
+
+.swapRow > div {
+  flex-wrap: wrap;
+  height: auto;
+}
+
+.steps {
+  margin: 0 0 var(--spacing-p-xxs, 0.5rem);
+  padding-left: 1.5rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+/* The spark between the prompt and the page. */
+.spark {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-p-xxs, 0.5rem);
+}
+
+.sparkLine {
+  flex: 1;
+  height: 2px;
+  background: var(--border-brand-light);
+}
+
+.sparkText {
+  color: var(--text-neutral-secondary);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* A four-point star drawn with clip-path, on a brand-colored dot. */
+.sparkDot {
+  position: relative;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--background-brand-primary);
+}
+
+.sparkDot::after {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  background: var(--background-neutral-primary);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
+.sparkDotPulse {
+  animation: sparkPulse 0.7s ease-out;
+}
+
+@keyframes sparkPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--border-brand-mid);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 1.25rem transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkDotPulse,
+  .clause {
+    animation: none;
+  }
+}
+
+.caption {
+  margin: var(--spacing-p-xxs, 0.5rem) 0 0;
+  color: var(--text-neutral-secondary);
+  font-size: 0.9375rem;
+}
+
+/* The finale. */
+.finale {
+  display: grid;
+  gap: var(--spacing-p-xs, 1rem);
+  margin-top: var(--spacing-p-xs, 1rem);
+}
+
+.finale h2 {
+  margin: 0;
+}
+
+.versions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-p-xs, 1rem);
+}
+
+.version {
+  display: grid;
+  gap: 0.25rem;
+  width: 232px;
+  padding: 6px;
+  border: 3px solid var(--border-neutral-primary);
+  border-radius: var(--shape-lg, 0.625rem);
+  background: var(--background-neutral-primary);
+  color: var(--text-neutral-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.version:hover {
+  border-color: var(--border-brand-mid);
+}
+
+.version:focus-visible {
+  outline: 3px solid var(--border-focused-primary);
+  outline-offset: 2px;
+}
+
+.version[aria-pressed='true'] {
+  border-color: var(--border-brand-primary);
+  background: var(--background-brand-light);
+}
+
+/* A scaled-down copy of the whole sample page: 600px wide, shown at 220px. */
+.versionThumb {
+  display: block;
+  width: 220px;
+  height: 170px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.versionPage {
+  display: block;
+  width: 600px;
+  transform: scale(0.3667);
+  transform-origin: top left;
+}
+
+/* Pages differ in height; fill the thumbnail so all three line up. */
+.versionPage .sp {
+  height: 464px;
+}
+
+.versionName {
+  font-weight: var(--font-weight-semi-bold, 600);
+}
+
+.reflection {
+  display: grid;
+  gap: var(--spacing-p-xxs, 0.5rem);
+}
+
+@media (max-width: 560px) {
+  .chipRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .swapGrid {
+    grid-template-columns: 1fr;
+  }
+
+}
